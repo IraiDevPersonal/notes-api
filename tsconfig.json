@@ -3,7 +3,7 @@
     "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
+    "allowImportingTsExtensions": false,
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
@@ -12,7 +12,7 @@
     "outDir": "dist",
     "rootDir": "src",
     "removeComments": true,
-    "noEmit": true,
+    "noEmit": false,
     "isolatedModules": true,
     "allowArbitraryExtensions": false,
     "forceConsistentCasingInFileNames": true,
@@ -31,7 +31,11 @@
     "noUnusedParameters": true,
     "exactOptionalPropertyTypes": true,
     "noFallthroughCasesInSwitch": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
   "include": [
     "src/**/*"
