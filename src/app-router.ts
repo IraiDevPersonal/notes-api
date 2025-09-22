@@ -12,7 +12,7 @@ export class AppRouter {
     router.get("/health", (_, res) => {
       res.json({
         status: "healthy",
-        service: "Signal Watcher API",
+        service: "Notes API",
         version: "1.0.0",
         timestamp: currentDate.toISOString()
       });

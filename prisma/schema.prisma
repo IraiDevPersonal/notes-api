@@ -20,7 +20,7 @@ enum Permission {
 }
 
 model User {
-  id           String   @id @default(cuid())
+  id           String   @id @default(uuid())
   email        String   @unique
   userName     String   @unique
   name         String
@@ -42,7 +42,7 @@ model User {
 }
 
 model Folder {
-  id       String   @id @default(cuid())
+  id       String   @id @default(uuid())
   name     String
 
   // Jerarquía de carpetas
@@ -70,7 +70,7 @@ model Folder {
 }
 
 model Note {
-  id       String  @id @default(cuid())
+  id       String  @id @default(uuid())
   title    String
   content  String
 
@@ -100,7 +100,7 @@ model Note {
 }
 
 model Share {
-  id         String     @id @default(cuid())
+  id         String     @id @default(uuid())
 
   // Usuario con quien se comparte
   userId     String
@@ -129,7 +129,7 @@ model Share {
 }
 
 model Tag {
-  id        String   @id @default(cuid())
+  id        String   @id @default(uuid())
   name      String   @unique
   color     String?  @default("#6366f1")
 
