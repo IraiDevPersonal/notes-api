@@ -3,18 +3,19 @@
   "version": "1.0.0",
   "description": "",
   "type": "module",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
+    "dev": "tsx watch src/main.ts",
     "build": "tsc --noEmit false",
-    "start": "node dist/index.js",
+    "start": "node dist/main.js",
     "lint": "biome lint src/",
     "lint:fix": "biome lint --write src/",
     "format": "biome format src/",
     "format:write": "biome format --write src/",
     "check": "biome check src/",
     "check:fix": "biome check --write src/",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "db-seed": "docker exec -i notes-postgres-db psql -U postgres -d notes-db < scripts\\init-db\\seed-data.sql"
   },
   "keywords": [],
   "author": "",
@@ -22,8 +23,20 @@
   "packageManager": "pnpm@10.16.1",
   "devDependencies": {
     "@biomejs/biome": "^2.2.4",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
     "@types/node": "^24.5.2",
+    "prisma": "^6.16.2",
     "tsx": "^4.20.5",
     "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "@prisma/client": "6.16.2",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.2",
+    "env-var": "^7.5.0",
+    "express": "^5.1.0",
+    "helmet": "^8.1.0",
+    "winston": "^3.17.0"
   }
 }

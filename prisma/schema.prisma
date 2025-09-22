@@ -1,0 +1,152 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Permission {
+  READ
+  WRITE
+  OWNER
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  userName     String   @unique
+  name         String
+  lastName     String
+  password     String
+  avatar       String?
+
+  // Relaciones de propiedad
+  ownedFolders Folder[] @relation("OwnedFolders")
+  ownedNotes   Note[]   @relation("OwnedNotes")
+
+  // Relaciones de compartir
+  shares       Share[]
+  sharedBy     Share[]  @relation("SharedBy")
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  deletedAt    DateTime?
+}
+
+model Folder {
+  id       String   @id @default(cuid())
+  name     String
+
+  // Jerarquía de carpetas
+  parentId String?
+  parent   Folder?  @relation("Subfolders", fields: [parentId], references: [id])
+  children Folder[] @relation("Subfolders")
+
+  // Propietario
+  ownerId  String
+  owner    User     @relation("OwnedFolders", fields: [ownerId], references: [id])
+
+  // Contenido y compartir
+  notes    Note[]
+  shares   Share[]
+
+  // Orden y organización
+  order    Int      @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+
+  @@index([ownerId])
+  @@index([parentId])
+}
+
+model Note {
+  id       String  @id @default(cuid())
+  title    String
+  content  String
+
+  // Carpeta contenedora
+  folderId String?
+  folder   Folder? @relation(fields: [folderId], references: [id])
+
+  // Propietario
+  ownerId  String
+  owner    User    @relation("OwnedNotes", fields: [ownerId], references: [id])
+
+  // Compartir
+  shares   Share[]
+
+  // Orden y organización
+  order    Int     @default(0)
+
+  // Tags para mejor organización
+  tags     NoteTag[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+
+  @@index([ownerId])
+  @@index([folderId])
+}
+
+model Share {
+  id         String     @id @default(cuid())
+
+  // Usuario con quien se comparte
+  userId     String
+  user       User       @relation(fields: [userId], references: [id])
+
+  // Usuario que comparte
+  sharedBy   String?
+  sharedByUser User?    @relation("SharedBy", fields: [sharedBy], references: [id])
+
+  // Recurso compartido (nota o carpeta, no ambos)
+  noteId     String?
+  note       Note?      @relation(fields: [noteId], references: [id])
+
+  folderId   String?
+  folder     Folder?    @relation(fields: [folderId], references: [id])
+
+  permission Permission
+  createdAt  DateTime   @default(now())
+
+  // Constraints para asegurar integridad
+  @@unique([userId, noteId])
+  @@unique([userId, folderId])
+  @@index([userId])
+  @@index([noteId])
+  @@index([folderId])
+}
+
+model Tag {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  color     String?  @default("#6366f1")
+
+  // Relación con notas
+  notes     NoteTag[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Tabla de unión para la relación many-to-many entre Note y Tag
+model NoteTag {
+  noteId String
+  note   Note   @relation(fields: [noteId], references: [id], onDelete: Cascade)
+
+  tagId  String
+  tag    Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([noteId, tagId])
+}
