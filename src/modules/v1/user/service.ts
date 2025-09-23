@@ -1,6 +1,7 @@
-import { PrismaClient } from '@prisma/client';
+import { type Prisma, PrismaClient } from '@prisma/client';
+import type { UserRepository } from './repository';
 
-export class UserService {
+export class UserService implements UserRepository {
   private readonly bd: PrismaClient;
 
   constructor() {
@@ -9,6 +10,15 @@ export class UserService {
 
   getUserResources = async (userId: string) => {
     try {
+      const userSelect: Prisma.UserSelect = {
+        id: true,
+        name: true,
+        email: true,
+        avatar: true,
+        userName: true,
+        lastName: true,
+      };
+
       return await this.bd.user.findFirst({
         where: { id: userId },
         select: {
@@ -20,18 +30,13 @@ export class UserService {
                 include: {
                   shareFolders: {
                     omit: {
+                      id: true,
                       userId: true,
                       folderId: true,
-                      id: true,
                       permission: true,
                     },
                     include: {
-                      user: {
-                        select: {
-                          id: true,
-                          userName: true,
-                        },
-                      },
+                      user: { select: userSelect },
                     },
                   },
                 },
@@ -44,18 +49,13 @@ export class UserService {
                 include: {
                   shareNotes: {
                     omit: {
+                      id: true,
                       userId: true,
                       noteId: true,
-                      id: true,
                       permission: true,
                     },
                     include: {
-                      user: {
-                        select: {
-                          id: true,
-                          userName: true,
-                        },
-                      },
+                      user: { select: userSelect },
                     },
                   },
                 },
@@ -65,7 +65,7 @@ export class UserService {
         },
       });
     } catch (_) {
-      throw new Error('Error queuing user resources');
+      throw new Error('Error to get user resources');
     }
   };
 }
