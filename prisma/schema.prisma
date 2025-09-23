@@ -27,43 +27,30 @@ model User {
   lastName     String
   password     String
   avatar       String?
-
-  // Relaciones de propiedad
-  ownedFolders Folder[] @relation("OwnedFolders")
-  ownedNotes   Note[]   @relation("OwnedNotes")
-
-  // Relaciones de compartir
-  shares       Share[]
-  sharedBy     Share[]  @relation("SharedBy")
-
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   deletedAt    DateTime?
+
+  shareFolders ShareFolder[]
+  shareNotes ShareNote[]
+
+  notes Note[]
+  folders Folder[]
 }
 
 model Folder {
   id       String   @id @default(uuid())
   name     String
-
-  // Jerarquía de carpetas
+  description String?
   parentId String?
-  parent   Folder?  @relation("Subfolders", fields: [parentId], references: [id])
-  children Folder[] @relation("Subfolders")
-
-  // Propietario
   ownerId  String
-  owner    User     @relation("OwnedFolders", fields: [ownerId], references: [id])
-
-  // Contenido y compartir
-  notes    Note[]
-  shares   Share[]
-
-  // Orden y organización
+  owner User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   order    Int      @default(0)
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   deletedAt DateTime?
+  comments Comment[]
+  shareFolders ShareFolder[]
 
   @@index([ownerId])
   @@index([parentId])
@@ -73,79 +60,69 @@ model Note {
   id       String  @id @default(uuid())
   title    String
   content  String
-
-  // Carpeta contenedora
   folderId String?
-  folder   Folder? @relation(fields: [folderId], references: [id])
-
-  // Propietario
   ownerId  String
-  owner    User    @relation("OwnedNotes", fields: [ownerId], references: [id])
-
-  // Compartir
-  shares   Share[]
-
-  // Orden y organización
+  owner User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   order    Int     @default(0)
-
-  // Tags para mejor organización
-  tags     NoteTag[]
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   deletedAt DateTime?
+  tags     NoteTag[]
+  comments Comment[]
+  shareNotes ShareNote[]
 
   @@index([ownerId])
   @@index([folderId])
 }
 
-model Share {
-  id         String     @id @default(uuid())
-
-  // Usuario con quien se comparte
-  userId     String
-  user       User       @relation(fields: [userId], references: [id])
-
-  // Usuario que comparte
-  sharedBy   String?
-  sharedByUser User?    @relation("SharedBy", fields: [sharedBy], references: [id])
-
-  // Recurso compartido (nota o carpeta, no ambos)
-  noteId     String?
-  note       Note?      @relation(fields: [noteId], references: [id])
-
-  folderId   String?
-  folder     Folder?    @relation(fields: [folderId], references: [id])
-
+model ShareFolder {
+  id Int @id @default(autoincrement())
+  folderId String
+  folder Folder @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   permission Permission
-  createdAt  DateTime   @default(now())
 
-  // Constraints para asegurar integridad
-  @@unique([userId, noteId])
-  @@unique([userId, folderId])
-  @@index([userId])
-  @@index([noteId])
   @@index([folderId])
 }
 
+model ShareNote {
+  id Int @id @default(autoincrement())
+  noteId String
+  note Note @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  permission Permission
+
+  @@index([noteId])
+}
+
+model Comment {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  userId      String
+  noteId      String?
+  note        Note?    @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  folderId    String?
+  folder      Folder?  @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
 model Tag {
-  id        String   @id @default(uuid())
+  id        Int @id @default(autoincrement())
   name      String   @unique
   color     String?  @default("#6366f1")
-
-  // Relación con notas
   notes     NoteTag[]
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-// Tabla de unión para la relación many-to-many entre Note y Tag
 model NoteTag {
   noteId String
   note   Note   @relation(fields: [noteId], references: [id], onDelete: Cascade)
-
-  tagId  String
+  tagId  Int
   tag    Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
 
   @@id([noteId, tagId])

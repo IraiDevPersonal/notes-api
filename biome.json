@@ -24,6 +24,8 @@
       "recommended": true,
       "complexity": {
         "noExtraBooleanCast": "error",
+        "noStaticOnlyClass": "off",
+        "noThisInStatic": "off",
         "noUselessCatch": "error"
       },
       "correctness": {
