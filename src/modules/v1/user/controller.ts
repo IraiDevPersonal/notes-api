@@ -15,8 +15,7 @@ export class UserController {
 		const responseController = new ResponseController(res);
 
 		try {
-			const [error, statusCode, data] =
-				await this.getUserResourceUseCase.execute(userId);
+			const [error, statusCode, data] = await this.getUserResourceUseCase.execute(userId);
 
 			if (error) {
 				responseController.error(error, statusCode);

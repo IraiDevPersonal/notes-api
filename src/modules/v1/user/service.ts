@@ -9,9 +9,7 @@ export class UserService implements UserRepository {
 		this.bd = new PrismaClient();
 	}
 
-	getUserResources = async (
-		userId: string
-	): Promise<DBUserResources | null> => {
+	getUserResources = async (userId: string): Promise<DBUserResources | null> => {
 		try {
 			const userSelect: Prisma.UserSelect = {
 				id: true,
