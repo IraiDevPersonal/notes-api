@@ -1,26 +1,32 @@
-import type { Request, Response } from 'express';
-import type { UserService } from './service';
+import type { Request, Response } from "express";
+import { ResponseController } from "@/lib/controllers/response.controller";
+import type { UserRepository } from "./repository";
+import { GetUserResourcesUseCase } from "./use-cases/get-user-resources.use-case";
 
 export class UserController {
-  private readonly service: UserService;
+	private readonly getUserResourceUseCase: GetUserResourcesUseCase;
 
-  constructor(service: UserService) {
-    this.service = service;
-  }
+	constructor(service: UserRepository) {
+		this.getUserResourceUseCase = new GetUserResourcesUseCase(service);
+	}
 
-  getUserResources = async (req: Request, res: Response) => {
-    try {
-      const userId = req.params.userId;
-      if (!userId) throw new Error('User ID is required');
+	getUserResources = async (req: Request, res: Response) => {
+		const userId = req.params.id;
+		const responseController = new ResponseController(res);
 
-      const result = await this.service.getUserResources(userId);
+		try {
+			const [error, statusCode, data] =
+				await this.getUserResourceUseCase.execute(userId);
 
-      if (!result) throw new Error('User not found');
+			if (error) {
+				responseController.error(error, statusCode);
+				return;
+			}
 
-      res.json(result);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Failed to get user resources' });
-    }
-  };
+			responseController.json({ data }, statusCode);
+		} catch (error) {
+			console.error(error);
+			responseController.error("Failed to get user resources", 500);
+		}
+	};
 }
