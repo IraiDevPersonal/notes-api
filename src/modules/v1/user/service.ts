@@ -1,26 +1,14 @@
-import { type Prisma, PrismaClient } from "@prisma/client";
+import { DbClient } from "@/lib/db-client";
 import type { DBUserResources } from "./models/db/db-user-resources.model";
 import type { UserRepository } from "./repository";
+import { NOTE_USER_SELECTOR } from "./utils/constants";
 
-export class UserService implements UserRepository {
-	private readonly bd: PrismaClient;
-
-	constructor() {
-		this.bd = new PrismaClient();
-	}
+export class UserService extends DbClient implements UserRepository {
+	private readonly noteUserSelector = NOTE_USER_SELECTOR;
 
 	getUserResources = async (userId: string): Promise<DBUserResources | null> => {
 		try {
-			const userSelect: Prisma.UserSelect = {
-				id: true,
-				name: true,
-				email: true,
-				avatar: true,
-				userName: true,
-				lastName: true,
-			};
-
-			return await this.bd.user.findFirst({
+			return await this.db.user.findFirst({
 				where: { id: userId },
 				select: {
 					folders: true,
@@ -31,7 +19,7 @@ export class UserService implements UserRepository {
 								include: {
 									shareFolders: {
 										select: {
-											user: { select: userSelect },
+											user: { select: this.noteUserSelector },
 										},
 									},
 								},
@@ -44,7 +32,7 @@ export class UserService implements UserRepository {
 								include: {
 									shareNotes: {
 										select: {
-											user: { select: userSelect },
+											user: { select: this.noteUserSelector },
 										},
 									},
 								},
@@ -53,7 +41,8 @@ export class UserService implements UserRepository {
 					},
 				},
 			});
-		} catch (_) {
+		} catch (error) {
+			console.log(error);
 			throw new Error("Error to get user resources");
 		}
 	};

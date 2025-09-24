@@ -59,7 +59,7 @@ export class GetUserResourcesUseCase {
 			{
 				id: folderId,
 				name: "/",
-				description: "",
+				description: null,
 				notes: looseNotes,
 				subfolders: nestedFolders,
 			},

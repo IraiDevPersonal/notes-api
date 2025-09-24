@@ -4,10 +4,10 @@ import type { UserRepository } from "./repository";
 import { GetUserResourcesUseCase } from "./use-cases/get-user-resources.use-case";
 
 export class UserController {
-	private readonly getUserResourceUseCase: GetUserResourcesUseCase;
+	private readonly getUserResourcesUseCase: GetUserResourcesUseCase;
 
 	constructor(service: UserRepository) {
-		this.getUserResourceUseCase = new GetUserResourcesUseCase(service);
+		this.getUserResourcesUseCase = new GetUserResourcesUseCase(service);
 	}
 
 	getUserResources = async (req: Request, res: Response) => {
@@ -15,7 +15,8 @@ export class UserController {
 		const responseController = new ResponseController(res);
 
 		try {
-			const [error, statusCode, data] = await this.getUserResourceUseCase.execute(userId);
+			const [error, statusCode, data] =
+				await this.getUserResourcesUseCase.execute(userId);
 
 			if (error) {
 				responseController.error(error, statusCode);

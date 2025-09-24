@@ -1,4 +1,5 @@
 import type { Prisma } from "@prisma/client";
+import { NOTE_USER_SELECTOR } from "@/modules/v1/user/utils/constants";
 
 export const NOTE_SELECTOR: Prisma.NoteSelect = {
 	id: true,
@@ -9,22 +10,10 @@ export const NOTE_SELECTOR: Prisma.NoteSelect = {
 	createdAt: true,
 	updatedAt: true,
 	lastModifiedBy: {
-		select: {
-			name: true,
-			email: true,
-			avatar: true,
-			userName: true,
-			lastName: true,
-		},
+		select: NOTE_USER_SELECTOR,
 	},
 	owner: {
-		select: {
-			name: true,
-			email: true,
-			avatar: true,
-			userName: true,
-			lastName: true,
-		},
+		select: NOTE_USER_SELECTOR,
 	},
 	comments: {
 		select: {
