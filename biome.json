@@ -55,7 +55,8 @@
 				"noNegationElse": "off",
 				"useConst": "error",
 				"useExportType": "error",
-				"useImportType": "error"
+				"useImportType": "error",
+				"noNonNullAssertion": "off"
 			},
 			"suspicious": {
 				"noExplicitAny": "info",
