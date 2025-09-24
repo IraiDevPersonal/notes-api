@@ -1,7 +1,13 @@
 export type FolderTree = {
 	id: string;
 	name: string;
+	notes: NoteTree[];
 	subfolders: FolderTree[];
 	description?: string | null;
-	notes: { id: string; title: string; content: string }[];
+};
+
+export type NoteTree = {
+	id: string;
+	title: string;
+	content: string;
 };
