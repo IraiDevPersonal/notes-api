@@ -1,10 +1,10 @@
 import { DbClient } from "@/lib/db-client";
 import type { DBUserResources } from "./models/db/db-user-resources.model";
 import type { UserRepository } from "./repository";
-import { USER_RESOURCE_SELECTOR } from "./utils/constants";
+import { USER_RESOURCES_SELECTOR } from "./utils/constants";
 
 export class UserService extends DbClient implements UserRepository {
-	private readonly userResourceSelector = USER_RESOURCE_SELECTOR;
+	private readonly userResourceSelector = USER_RESOURCES_SELECTOR;
 
 	getUserResources = async (userId: string): Promise<DBUserResources | null> => {
 		try {

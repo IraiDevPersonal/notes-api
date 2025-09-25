@@ -1,86 +1,17 @@
 import type { Prisma } from "@prisma/client";
+import { FOLDER_SELECTOR } from "../../folders/utils/constants";
+import { NOTE_SELECTOR } from "../../notes/utils/constants";
 
-export const RESOURCE_USER_SELECTOR = {
+export const SHARED_USER_SELECTOR = {
 	id: true,
 	name: true,
 	email: true,
-	// avatar: true,
 	userName: true,
 	lastName: true,
+	// avatar: true,
 } satisfies Prisma.UserSelect;
 
-export const FOLDER_SELECTOR = {
-	id: true,
-	name: true,
-	order: true,
-	parentId: true,
-	updatedAt: true,
-	createdAt: true,
-	description: true,
-	owner: {
-		select: RESOURCE_USER_SELECTOR,
-	},
-	lastModifiedBy: {
-		select: RESOURCE_USER_SELECTOR,
-	},
-	comments: {
-		select: {
-			id: true,
-			title: true,
-			createdAt: true,
-			updatedAt: true,
-			description: true,
-		},
-	},
-	shareFolders: {
-		select: {
-			user: { select: RESOURCE_USER_SELECTOR },
-		},
-	},
-} satisfies Prisma.FolderSelect;
-
-export const NOTE_SELECTOR = {
-	id: true,
-	title: true,
-	order: true,
-	content: true,
-	folderId: true,
-	createdAt: true,
-	updatedAt: true,
-	owner: {
-		select: RESOURCE_USER_SELECTOR,
-	},
-	lastModifiedBy: {
-		select: RESOURCE_USER_SELECTOR,
-	},
-	comments: {
-		select: {
-			id: true,
-			title: true,
-			createdAt: true,
-			updatedAt: true,
-			description: true,
-		},
-	},
-	tags: {
-		select: {
-			tag: {
-				select: {
-					id: true,
-					name: true,
-					color: true,
-				},
-			},
-		},
-	},
-	shareNotes: {
-		select: {
-			user: { select: RESOURCE_USER_SELECTOR },
-		},
-	},
-} satisfies Prisma.NoteSelect;
-
-export const USER_RESOURCE_SELECTOR = {
+export const USER_RESOURCES_SELECTOR = {
 	folders: {
 		select: FOLDER_SELECTOR,
 	},

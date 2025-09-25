@@ -1,16 +1,16 @@
-import type { Note } from "./note.model";
+import type { ResourceNote } from "@/modules/v1/notes/models/resource-note.model";
 import type { SharedUser } from "./shared-user.model";
 
-export type FolderTree = {
+export type ResourceFolder = {
 	id: string;
 	name: string;
 	order?: number;
 	createdAt?: Date;
 	updatedAt?: Date;
-	notes: Note[];
+	notes: ResourceNote[];
 	owner?: SharedUser;
 	parentId?: string | null;
-	subfolders: FolderTree[];
+	subfolders: ResourceFolder[];
 	sharedWith?: SharedUser[];
 	description?: string | null;
 	modifiedBy?: SharedUser | null;

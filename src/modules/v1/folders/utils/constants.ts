@@ -1,14 +1,14 @@
 import type { Prisma } from "@prisma/client";
-import { SHARED_USER_SELECTOR } from "@/modules/v1/user/utils/constants";
+import { SHARED_USER_SELECTOR } from "../../user/utils/constants";
 
-export const NOTE_SELECTOR = {
+export const FOLDER_SELECTOR = {
 	id: true,
-	title: true,
+	name: true,
 	order: true,
-	content: true,
-	folderId: true,
-	createdAt: true,
+	parentId: true,
 	updatedAt: true,
+	createdAt: true,
+	description: true,
 	owner: {
 		select: SHARED_USER_SELECTOR,
 	},
@@ -19,25 +19,14 @@ export const NOTE_SELECTOR = {
 		select: {
 			id: true,
 			title: true,
-			description: true,
 			createdAt: true,
 			updatedAt: true,
+			description: true,
 		},
 	},
-	tags: {
-		select: {
-			tag: {
-				select: {
-					id: true,
-					name: true,
-					color: true,
-				},
-			},
-		},
-	},
-	shareNotes: {
+	shareFolders: {
 		select: {
 			user: { select: SHARED_USER_SELECTOR },
 		},
 	},
-} satisfies Prisma.NoteSelect;
+} satisfies Prisma.FolderSelect;

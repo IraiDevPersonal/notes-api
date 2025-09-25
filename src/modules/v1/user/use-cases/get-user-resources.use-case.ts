@@ -1,13 +1,14 @@
-import type { DbSharedUser } from "../models/db/db-shared-user.model";
-import type { DBUserResources } from "../models/db/db-user-resources.model";
-import type { FolderTree } from "../models/folter-tree.model";
-import type { Note } from "../models/note.model";
-import type { SharedUser } from "../models/shared-user.model";
+import type { ResourceNote } from "@/modules/v1/notes/models/resource-note.model";
+import type { DbFolder } from "../../folders/models/db/db-folder.model";
+import { ResourceNoteMapper } from "../../notes/mappers/resource-note.mapper";
+import type { DbNote } from "../../notes/models/db/db-note.model";
+import { SharedUserMapper } from "../mappers/shared-user.mapper";
+import type { ResourceFolder } from "../models/resource-folter.model";
 import type { UserRepository } from "../repository";
 
 type Data = {
-	ownFolders: FolderTree[];
-	sharedFolders: FolderTree[];
+	ownFolders: ResourceFolder[];
+	sharedFolders: ResourceFolder[];
 };
 
 type ExecuteResponse = [errorMessage: string | null, statusCode: number, Data | null];
@@ -55,9 +56,9 @@ export class GetUserResourcesUseCase {
 
 	private buildRootFolder = (
 		folderId: string,
-		looseNotes: Note[],
-		nestedFolders: FolderTree[]
-	): FolderTree[] => {
+		looseNotes: ResourceNote[],
+		nestedFolders: ResourceFolder[]
+	): ResourceFolder[] => {
 		return [
 			{
 				name: "/",
@@ -68,15 +69,15 @@ export class GetUserResourcesUseCase {
 		];
 	};
 
-	private getUnfolderedNotes = (notes: DBUserResources["notes"]): Note[] => {
-		return notes.filter((n) => n.folderId === null).map(this.mapNote);
+	private getUnfolderedNotes = (notes: DbNote[]): ResourceNote[] => {
+		return notes.filter((n) => n.folderId === null).map(ResourceNoteMapper.map);
 	};
 
 	private buildFolderTree = (
-		folders: DBUserResources["folders"],
-		notes: DBUserResources["notes"],
+		folders: DbFolder[],
+		notes: DbNote[],
 		parentId: string | null = null
-	): FolderTree[] => {
+	): ResourceFolder[] => {
 		return folders
 			.filter((f) => f.parentId === parentId)
 			.map((f) => ({
@@ -87,35 +88,11 @@ export class GetUserResourcesUseCase {
 				createdAt: f.createdAt,
 				updatedAt: f.updatedAt,
 				description: f.description,
-				owner: this.mapShareUser(f.owner),
-				sharedWith: f.shareFolders.map((s) => this.mapShareUser(s.user)),
-				modifiedBy: f.lastModifiedBy ? this.mapShareUser(f.lastModifiedBy) : null,
-				notes: notes.filter((n) => n.folderId === f.id).map(this.mapNote),
+				owner: SharedUserMapper.map(f.owner),
+				sharedWith: SharedUserMapper.toArray(f.shareFolders.flatMap((f) => f.user)),
+				modifiedBy: f.lastModifiedBy ? SharedUserMapper.map(f.lastModifiedBy) : null,
+				notes: notes.filter((n) => n.folderId === f.id).map(ResourceNoteMapper.map),
 				subfolders: this.buildFolderTree(folders, notes, f.id),
 			}));
-	};
-
-	private mapNote = (note: DBUserResources["notes"][number]): Note => {
-		return {
-			id: note.id,
-			order: note.order,
-			title: note.title,
-			content: note.content,
-			folderId: note.folderId,
-			updatedAt: note.updatedAt,
-			createdAt: note.createdAt,
-			owner: this.mapShareUser(note.owner),
-			sharedWith: note.shareNotes.map((n) => this.mapShareUser(n.user)),
-			modifiedBy: note.lastModifiedBy ? this.mapShareUser(note.lastModifiedBy) : null,
-		};
-	};
-
-	private mapShareUser = (user: DbSharedUser): SharedUser => {
-		return {
-			id: user.id,
-			email: user.email,
-			userName: user.userName,
-			fullName: `${user.name} ${user.lastName}`,
-		};
 	};
 }

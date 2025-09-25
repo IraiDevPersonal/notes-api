@@ -1,6 +1,6 @@
-import type { SharedUser } from "./shared-user.model";
+import type { SharedUser } from "../../user/models/shared-user.model";
 
-export type Note = {
+export type ResourceNote = {
 	id: string;
 	title: string;
 	order: number;
