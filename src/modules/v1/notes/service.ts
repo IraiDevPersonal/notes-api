@@ -1,11 +1,11 @@
 import { DbClient } from "@/lib/db-client";
 import type { DbNote } from "./models/db/db-note.model";
-import type { NoteComment } from "./models/note-comment.model";
-import type { NoteTag } from "./models/note-tag.model";
+import type { NoteComment } from "./models/domain/note-comment.model";
+import type { NoteTag } from "./models/domain/note-tag.model";
 import type {
 	CreateNotePayload,
 	UpdateNotePayload,
-} from "./models/upsert-note-payload.model";
+} from "./models/domain/upsert-note-payload.model";
 import type { NotesRepository } from "./respository";
 import { NOTE_QUERY_SELECTOR } from "./utils/query-selectors/note.query-selector";
 

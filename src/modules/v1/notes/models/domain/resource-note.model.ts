@@ -1,4 +1,4 @@
-import type { SharedUser } from "../../user/models/shared-user.model";
+import type { SharedUser } from "../../../user/models/domain/shared-user.model";
 
 export type ResourceNote = {
 	id: string;

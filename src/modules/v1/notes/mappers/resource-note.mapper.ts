@@ -1,6 +1,6 @@
 import { SharedUserMapper } from "../../user/mappers/shared-user.mapper";
 import type { DbNote } from "../models/db/db-note.model";
-import type { ResourceNote } from "../models/resource-note.model";
+import type { ResourceNote } from "../models/domain/resource-note.model";
 
 export class ResourceNoteMapper {
 	static map = (note: DbNote): ResourceNote => {

@@ -1,5 +1,5 @@
-import type { ResourceNote } from "@/modules/v1/notes/models/resource-note.model";
-import type { SharedUser } from "../../user/models/shared-user.model";
+import type { ResourceNote } from "@/modules/v1/notes/models/domain/resource-note.model";
+import type { SharedUser } from "@/modules/v1/user/models/domain/shared-user.model";
 
 export type ResourceFolder = {
 	id: string;

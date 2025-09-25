@@ -1,5 +1,5 @@
 import type { DbSharedUser } from "../models/db/db-shared-user.model";
-import type { SharedUser } from "../models/shared-user.model";
+import type { SharedUser } from "../models/domain/shared-user.model";
 
 export class SharedUserMapper {
 	static map = (user: DbSharedUser): SharedUser => {

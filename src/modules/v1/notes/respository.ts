@@ -2,7 +2,7 @@ import type { DbNote } from "./models/db/db-note.model";
 import type {
 	CreateNotePayload,
 	UpdateNotePayload,
-} from "./models/upsert-note-payload.model";
+} from "./models/domain/upsert-note-payload.model";
 
 export abstract class NotesRepository {
 	abstract deleteNote(id: string): Promise<void>;
