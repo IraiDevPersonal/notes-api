@@ -1,5 +1,6 @@
 import type { ResourceNote } from "@/modules/v1/notes/models/resource-note.model";
 import type { DbFolder } from "../../folders/models/db/db-folder.model";
+import type { RootFolder } from "../../folders/models/root-folder.model";
 import { ResourceNoteMapper } from "../../notes/mappers/resource-note.mapper";
 import type { DbNote } from "../../notes/models/db/db-note.model";
 import { SharedUserMapper } from "../mappers/shared-user.mapper";
@@ -7,8 +8,8 @@ import type { ResourceFolder } from "../models/resource-folter.model";
 import type { UserRepository } from "../repository";
 
 type Data = {
-	ownFolders: ResourceFolder[];
-	sharedFolders: ResourceFolder[];
+	ownFolders: RootFolder;
+	sharedFolders: RootFolder;
 };
 
 type ExecuteResponse = [errorMessage: string | null, statusCode: number, Data | null];
@@ -58,15 +59,13 @@ export class GetUserResourcesUseCase {
 		folderId: string,
 		looseNotes: ResourceNote[],
 		nestedFolders: ResourceFolder[]
-	): ResourceFolder[] => {
-		return [
-			{
-				name: "/",
-				id: folderId,
-				notes: looseNotes,
-				subfolders: nestedFolders,
-			},
-		];
+	): RootFolder => {
+		return {
+			name: "/",
+			id: folderId,
+			notes: looseNotes,
+			subfolders: nestedFolders,
+		};
 	};
 
 	private getUnfolderedNotes = (notes: DbNote[]): ResourceNote[] => {

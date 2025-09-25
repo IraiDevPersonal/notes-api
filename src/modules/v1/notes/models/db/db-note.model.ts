@@ -1,6 +1,6 @@
 import type { Prisma } from "@prisma/client";
-import type { NOTE_SELECTOR } from "../../utils/constants";
+import type { NOTE_QUERY_SELECTOR } from "../../utils/query-selectors/note.query-selector";
 
 export type DbNote = Prisma.NoteGetPayload<{
-	select: typeof NOTE_SELECTOR;
+	select: typeof NOTE_QUERY_SELECTOR;
 }>;

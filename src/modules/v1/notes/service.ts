@@ -7,10 +7,10 @@ import type {
 	UpdateNotePayload,
 } from "./models/upsert-note-payload.model";
 import type { NotesRepository } from "./respository";
-import { NOTE_SELECTOR } from "./utils/constants";
+import { NOTE_QUERY_SELECTOR } from "./utils/query-selectors/note.query-selector";
 
 export class NotesService extends DbClient implements NotesRepository {
-	private readonly noteSelector = NOTE_SELECTOR;
+	private readonly noteSelector = NOTE_QUERY_SELECTOR;
 
 	deleteNote = async (id: string): Promise<void> => {
 		try {
