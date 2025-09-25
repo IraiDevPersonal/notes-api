@@ -22,14 +22,14 @@ enum Permission {
 model User {
   id           String   @id @default(uuid())
   email        String   @unique
-  userName     String   @unique
+  userName     String   @unique @map("user_name")
   name         String
-  lastName     String
+  lastName     String   @map("last_name")
   password     String
   avatar       String?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  deletedAt    DateTime?
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  deletedAt    DateTime? @map("deleted_at")
 
   shareFolders ShareFolder[]
   shareNotes ShareNote[]
@@ -39,98 +39,110 @@ model User {
 
   modifiedFolders Folder[] @relation("FolderLastModifiedBy")
   modifiedNotes   Note[]   @relation("NoteLastModifiedBy")
+
+  @@map("users")
 }
 
 model Folder {
   id       String   @id @default(uuid())
   name     String
   description String?
-  parentId String?
-  ownerId  String
+  parentId String? @map("parent_id")
+  ownerId  String @map("owner_id")
   owner User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   order    Int      @default(0)
-  lastModifiedById String?
+  lastModifiedById String? @map("last_modified_by_id")
   lastModifiedBy   User?    @relation("FolderLastModifiedBy", fields: [lastModifiedById], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  deletedAt DateTime?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
   comments Comment[]
   shareFolders ShareFolder[]
 
   @@index([ownerId])
   @@index([parentId])
+
+  @@map("folders")
 }
 
 model Note {
   id       String  @id @default(uuid())
   title    String
   content  String
-  folderId String?
-  ownerId  String
+  folderId String? @map("folder_id")
+  ownerId  String @map("owner_id")
   owner User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  lastModifiedById String?
+  lastModifiedById String? @map("last_modified_by_id")
   lastModifiedBy   User?   @relation("NoteLastModifiedBy", fields: [lastModifiedById], references: [id])
   order    Int     @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  deletedAt DateTime?
-  tags     NoteTag[]
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+  // tags     NoteTag[]
   comments Comment[]
   shareNotes ShareNote[]
 
   @@index([ownerId])
   @@index([folderId])
+
+  @@map("notes")
 }
 
 model ShareFolder {
   id Int @id @default(autoincrement())
-  folderId String
+  folderId String @map("folder_id")
   folder Folder @relation(fields: [folderId], references: [id], onDelete: Cascade)
-  userId String
+  userId String @map("user_id")
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   permission Permission
 
   @@index([folderId])
+
+  @@map("share_folders")
 }
 
 model ShareNote {
   id Int @id @default(autoincrement())
-  noteId String
+  noteId String @map("note_id")
   note Note @relation(fields: [noteId], references: [id], onDelete: Cascade)
-  userId String
+  userId String @map("user_id")
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   permission Permission
 
   @@index([noteId])
+
+  @@map("share_notes")
 }
 
 model Comment {
   id          Int      @id @default(autoincrement())
   title       String
   description String
-  userId      String
-  noteId      String?
+  userId      String @map("user_id")
+  noteId      String? @map("note_id")
   note        Note?    @relation(fields: [noteId], references: [id], onDelete: Cascade)
-  folderId    String?
+  folderId    String? @map("folder_id")
   folder      Folder?  @relation(fields: [folderId], references: [id], onDelete: Cascade)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  @@map("comments")
 }
 
-model Tag {
-  id        Int @id @default(autoincrement())
-  name      String   @unique
-  color     String?  @default("#6366f1")
-  notes     NoteTag[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
+// model Tag {
+//   id        Int @id @default(autoincrement())
+//   name      String   @unique
+//   color     String?  @default("#6366f1")
+//   notes     NoteTag[]
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
 
-model NoteTag {
-  noteId String
-  note   Note   @relation(fields: [noteId], references: [id], onDelete: Cascade)
-  tagId  Int
-  tag    Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+// model NoteTag {
+//   noteId String
+//   note   Note   @relation(fields: [noteId], references: [id], onDelete: Cascade)
+//   tagId  Int
+//   tag    Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
 
-  @@id([noteId, tagId])
-}
+//   @@id([noteId, tagId])
+// }

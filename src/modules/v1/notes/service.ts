@@ -2,7 +2,6 @@ import { DbClient } from "@/lib/db-client";
 import { logger } from "@/lib/logger";
 import type { DbNote } from "./models/db/db-note.model";
 import type { NoteComment } from "./models/domain/note-comment.model";
-import type { NoteTag } from "./models/domain/note-tag.model";
 import type {
 	CreateNotePayload,
 	UpdateNotePayload,
@@ -47,7 +46,6 @@ export class NotesService extends DbClient implements NotesRepository {
 	createNote = async (userId: string, payload: CreateNotePayload): Promise<DbNote> => {
 		try {
 			const folderId = payload.folderId || null;
-			const filteredTags = this.filterTags(payload.tags);
 			const mappedComments = this.mapComments(payload.comments, userId, folderId);
 
 			return await this.db.note.create({
@@ -58,9 +56,6 @@ export class NotesService extends DbClient implements NotesRepository {
 					folderId,
 					comments: {
 						create: mappedComments,
-					},
-					tags: {
-						create: filteredTags,
 					},
 				},
 				select: this.noteSelector,
@@ -97,20 +92,6 @@ export class NotesService extends DbClient implements NotesRepository {
 			});
 			throw new Error(errorMessage);
 		}
-	};
-
-	private filterTags = (tags: NoteTag[] | undefined) => {
-		return (
-			tags
-				?.filter((tag) => tag.id)
-				.map((tag) => ({
-					tagId: tag.id!,
-					tag: {
-						name: tag.name,
-						color: tag.color,
-					},
-				})) || []
-		);
 	};
 
 	private mapComments = (

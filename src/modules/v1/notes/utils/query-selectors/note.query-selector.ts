@@ -24,17 +24,6 @@ export const NOTE_QUERY_SELECTOR = {
 			updatedAt: true,
 		},
 	},
-	tags: {
-		select: {
-			tag: {
-				select: {
-					id: true,
-					name: true,
-					color: true,
-				},
-			},
-		},
-	},
 	shareNotes: {
 		select: {
 			user: { select: SHARED_USER_QUERY_SELECTOR },
