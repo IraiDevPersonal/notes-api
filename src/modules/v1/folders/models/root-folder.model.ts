@@ -1,5 +1,5 @@
-import type { ResourceNote } from "../../notes/models/resource-note.model";
-import type { ResourceFolder } from "../../user/models/resource-folter.model";
+import type { ResourceNote } from "@/modules/v1/notes/models/resource-note.model";
+import type { ResourceFolder } from "./resource-folter.model";
 
 export type RootFolder = {
 	id: string;
