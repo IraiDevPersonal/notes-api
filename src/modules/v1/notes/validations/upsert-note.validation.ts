@@ -4,7 +4,7 @@ import type {
 	CreateNotePayload,
 	UpdateNotePayload,
 } from "../models/domain/upsert-note-payload.model";
-import { CreateNoteSchema, UpdateNoteSchema } from "../models/schemas/upsert-note.schema";
+import { CreateNoteSchema, UpdateNoteSchema } from "../schemas/upsert-note.schema";
 
 export class UpsertNoteValidation {
 	static validateUpdatePayload = (raw: unknown): ValidationResult<UpdateNotePayload> => {
