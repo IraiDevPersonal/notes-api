@@ -71,15 +71,28 @@ export class NotesService extends DbClient implements NotesRepository {
 		}
 	};
 
-	updateNote = async (id: string, payload: UpdateNotePayload): Promise<DbNote> => {
+	updateNote = async (
+		userId: string,
+		noteId: string,
+		payload: UpdateNotePayload
+	): Promise<DbNote> => {
 		try {
 			const folderId = payload.folderId || null;
+			const adaptedPayload: Record<string, string> = {};
+
+			if (payload.title !== undefined) {
+				adaptedPayload.title = payload.title;
+			}
+			if (payload.content !== undefined) {
+				adaptedPayload.content = payload.content;
+			}
 
 			return await this.db.note.update({
-				where: { id: id },
+				where: { id: noteId },
 				data: {
-					...payload,
+					...adaptedPayload,
 					folderId,
+					lastModifiedById: userId,
 				},
 				select: this.noteSelector,
 			});

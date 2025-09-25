@@ -1,14 +1,5 @@
-import type { NoteComment } from "./note-comment.model";
+import type z from "zod";
+import type { CreateNoteSchema, UpdateNoteSchema } from "../schemas/upsert-note.schema";
 
-export type CreateNotePayload = {
-	title: string;
-	content: string;
-	folderId?: string;
-	comments?: NoteComment[];
-};
-
-export type UpdateNotePayload = Partial<
-	Pick<CreateNotePayload, "content" | "title" | "folderId">
-> & {
-	updaterUserId: string;
-};
+export type CreateNotePayload = z.infer<typeof CreateNoteSchema>;
+export type UpdateNotePayload = z.infer<typeof UpdateNoteSchema>;

@@ -23,6 +23,7 @@ export class Server {
 		this.app.use(helmet());
 		this.app.use(cors());
 		this.app.use(express.json());
+		this.app.use(express.urlencoded({ extended: true })); // x-www-form-urlencoded
 		// this.app.use(generalRateLimit);
 
 		//* Rutas de la aplicacion

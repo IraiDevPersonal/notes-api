@@ -7,6 +7,10 @@ import type {
 export abstract class NotesRepository {
 	abstract deleteNote(id: string): Promise<void>;
 	abstract getNoteById(id: string): Promise<DbNote | null>;
-	abstract updateNote(id: string, payload: UpdateNotePayload): Promise<DbNote>;
+	abstract updateNote(
+		userId: string,
+		noteId: string,
+		payload: UpdateNotePayload
+	): Promise<DbNote>;
 	abstract createNote(userId: string, payload: CreateNotePayload): Promise<DbNote>;
 }

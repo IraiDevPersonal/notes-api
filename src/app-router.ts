@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { NotesRoutesV1 } from "./modules/v1/notes/routes";
 import { UserRoutesV1 } from "./modules/v1/user/routes";
 
 export class AppRouter {
@@ -16,6 +17,7 @@ export class AppRouter {
 		});
 
 		router.use("/api/v1", UserRoutesV1.routes);
+		router.use("/api/v1", NotesRoutesV1.routes);
 
 		return router;
 	}
