@@ -8,8 +8,8 @@ import type { ResourceFolder } from "../models/resource-folter.model";
 import type { UserRepository } from "../repository";
 
 type Data = {
-	ownFolders: RootFolder;
-	sharedFolders: RootFolder;
+	ownResources: RootFolder;
+	sharedResources: RootFolder;
 };
 
 type ExecuteResponse = [errorMessage: string | null, statusCode: number, Data | null];
@@ -32,7 +32,7 @@ export class GetUserResourcesUseCase {
 			return ["User not found", 404, null];
 		}
 
-		const ownFolders = this.buildRootFolder(
+		const ownResources = this.buildRootFolder(
 			"own-root-folder",
 			this.getUnfolderedNotes(result.notes),
 			this.buildFolderTree(result.folders, result.notes)
@@ -41,15 +41,15 @@ export class GetUserResourcesUseCase {
 		const flattenedShareFolders = result.shareFolders.flatMap((f) => f.folder);
 		const flattenedShareNotes = result.shareNotes.flatMap((n) => n.note);
 
-		const sharedFolders = this.buildRootFolder(
+		const sharedResources = this.buildRootFolder(
 			"shared-root-folder",
 			this.getUnfolderedNotes(flattenedShareNotes),
 			this.buildFolderTree(flattenedShareFolders, flattenedShareNotes)
 		);
 
 		const data: Data = {
-			ownFolders,
-			sharedFolders,
+			ownResources,
+			sharedResources,
 		};
 
 		return [null, 200, data];
