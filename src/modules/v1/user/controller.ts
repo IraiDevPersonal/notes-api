@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import { ResponseController } from "@/lib/controllers/response.controller";
+import { logger } from "@/lib/logger";
 import type { UserRepository } from "./repository";
 import { GetUserResourcesUseCase } from "./use-cases/get-user-resources.use-case";
 
@@ -25,8 +26,13 @@ export class UserController {
 
 			responseController.json({ data }, statusCode);
 		} catch (error) {
-			console.error(error);
-			responseController.error("Failed to get user resources", 500);
+			const errorMessage = "Failed to get user resources";
+			logger.error({
+				source: "UserController/getUserResources",
+				message: errorMessage,
+				error,
+			});
+			responseController.error(errorMessage, 500);
 		}
 	};
 }

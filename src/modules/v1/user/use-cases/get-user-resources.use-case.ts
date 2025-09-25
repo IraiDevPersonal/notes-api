@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import type { DbFolder } from "@/modules/v1/folders/models/db/db-folder.model";
 import type { ResourceFolder } from "@/modules/v1/folders/models/domain/resource-folter.model";
 import type { RootFolder } from "@/modules/v1/folders/models/domain/root-folder.model";
@@ -16,6 +17,7 @@ type ExecuteResponse = [errorMessage: string | null, statusCode: number, Data | 
 
 export class GetUserResourcesUseCase {
 	private readonly respository: UserRepository;
+	private readonly sourceError = "GetUserResourcesUseCase/execute";
 
 	constructor(respository: UserRepository) {
 		this.respository = respository;
@@ -23,13 +25,23 @@ export class GetUserResourcesUseCase {
 
 	execute = async (userId: string | undefined): Promise<ExecuteResponse> => {
 		if (!userId) {
-			return ["User ID is required", 400, null];
+			const errorMessage = "User ID is required";
+			logger.error({
+				source: this.sourceError,
+				message: errorMessage,
+			});
+			return [errorMessage, 400, null];
 		}
 
 		const result = await this.respository.getUserResources(userId);
 
 		if (!result) {
-			return ["User not found", 404, null];
+			const errorMessage = "User not found";
+			logger.error({
+				source: this.sourceError,
+				message: errorMessage,
+			});
+			return [errorMessage, 404, null];
 		}
 
 		const ownResources = this.buildRootFolder(

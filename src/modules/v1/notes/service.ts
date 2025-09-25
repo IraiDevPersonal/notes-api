@@ -1,4 +1,5 @@
 import { DbClient } from "@/lib/db-client";
+import { logger } from "@/lib/logger";
 import type { DbNote } from "./models/db/db-note.model";
 import type { NoteComment } from "./models/domain/note-comment.model";
 import type { NoteTag } from "./models/domain/note-tag.model";
@@ -16,8 +17,13 @@ export class NotesService extends DbClient implements NotesRepository {
 		try {
 			await this.db.note.delete({ where: { id }, select: this.noteSelector });
 		} catch (error) {
-			console.log(error);
-			throw new Error("Error deleting note.");
+			const errorMessage = "Error deleting note.";
+			logger.error({
+				source: "NotesService/deleteNote",
+				message: errorMessage,
+				error,
+			});
+			throw new Error(errorMessage);
 		}
 	};
 
@@ -28,8 +34,13 @@ export class NotesService extends DbClient implements NotesRepository {
 				select: this.noteSelector,
 			});
 		} catch (error) {
-			console.log(error);
-			throw new Error("Error getting note.");
+			const errorMessage = "Error getting note.";
+			logger.error({
+				source: "NotesService/getNoteById",
+				message: errorMessage,
+				error,
+			});
+			throw new Error(errorMessage);
 		}
 	};
 
@@ -55,8 +66,13 @@ export class NotesService extends DbClient implements NotesRepository {
 				select: this.noteSelector,
 			});
 		} catch (error) {
-			console.log(error);
-			throw new Error("Error creating note.");
+			const errorMessage = "Error creating note.";
+			logger.error({
+				source: "NotesService/createNote",
+				message: errorMessage,
+				error,
+			});
+			throw new Error(errorMessage);
 		}
 	};
 
@@ -73,8 +89,13 @@ export class NotesService extends DbClient implements NotesRepository {
 				select: this.noteSelector,
 			});
 		} catch (error) {
-			console.log(error);
-			throw new Error("Error updating note.");
+			const errorMessage = "Error updating note.";
+			logger.error({
+				source: "NotesService/updateNote",
+				message: errorMessage,
+				error,
+			});
+			throw new Error(errorMessage);
 		}
 	};
 
