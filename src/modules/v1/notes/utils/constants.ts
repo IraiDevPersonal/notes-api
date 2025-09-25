@@ -1,7 +1,7 @@
 import type { Prisma } from "@prisma/client";
-import { NOTE_USER_SELECTOR } from "@/modules/v1/user/utils/constants";
+import { RESOURCE_USER_SELECTOR } from "@/modules/v1/user/utils/constants";
 
-export const NOTE_SELECTOR: Prisma.NoteSelect = {
+export const NOTE_SELECTOR = {
 	id: true,
 	title: true,
 	order: true,
@@ -10,10 +10,10 @@ export const NOTE_SELECTOR: Prisma.NoteSelect = {
 	createdAt: true,
 	updatedAt: true,
 	lastModifiedBy: {
-		select: NOTE_USER_SELECTOR,
+		select: RESOURCE_USER_SELECTOR,
 	},
 	owner: {
-		select: NOTE_USER_SELECTOR,
+		select: RESOURCE_USER_SELECTOR,
 	},
 	comments: {
 		select: {
@@ -35,4 +35,4 @@ export const NOTE_SELECTOR: Prisma.NoteSelect = {
 			},
 		},
 	},
-};
+} satisfies Prisma.NoteSelect;
