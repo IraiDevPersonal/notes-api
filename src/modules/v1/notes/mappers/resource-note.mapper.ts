@@ -3,18 +3,18 @@ import type { DbNote } from "../models/db/db-note.model";
 import type { ResourceNote } from "../models/domain/resource-note.model";
 
 export class ResourceNoteMapper {
-	static map = (note: DbNote): ResourceNote => {
+	static map = (raw: DbNote): ResourceNote => {
 		return {
-			id: note.id,
-			order: note.order,
-			title: note.title,
-			content: note.content,
-			folderId: note.folderId,
-			updatedAt: note.updatedAt,
-			createdAt: note.createdAt,
-			owner: SharedUserMapper.map(note.owner),
-			sharedWith: SharedUserMapper.toArray(note.shareNotes.flatMap((n) => n.user)),
-			modifiedBy: note.lastModifiedBy ? SharedUserMapper.map(note.lastModifiedBy) : null,
+			id: raw.id,
+			order: raw.order,
+			title: raw.title,
+			content: raw.content,
+			folderId: raw.folderId,
+			updatedAt: raw.updatedAt,
+			createdAt: raw.createdAt,
+			owner: SharedUserMapper.map(raw.owner),
+			sharedWith: SharedUserMapper.toArray(raw.shareNotes.flatMap((n) => n.user)),
+			modifiedBy: raw.lastModifiedBy ? SharedUserMapper.map(raw.lastModifiedBy) : null,
 		};
 	};
 }

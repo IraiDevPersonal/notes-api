@@ -5,7 +5,7 @@ import type { RootFolder } from "@/modules/v1/folders/models/domain/root-folder.
 import { ResourceNoteMapper } from "@/modules/v1/notes/mappers/resource-note.mapper";
 import type { DbNote } from "@/modules/v1/notes/models/db/db-note.model";
 import type { ResourceNote } from "@/modules/v1/notes/models/domain/resource-note.model";
-import { SharedUserMapper } from "../mappers/shared-user.mapper";
+import { ResourceFolderMapper } from "../../folders/mappers/resource-folder.mapper";
 import type { UserRepository } from "../repository";
 
 type Data = {
@@ -92,17 +92,7 @@ export class GetUserResourcesUseCase {
 		return folders
 			.filter((f) => f.parentId === parentId)
 			.map((f) => ({
-				id: f.id,
-				name: f.name,
-				order: f.order,
-				parentId: f.parentId,
-				createdAt: f.createdAt,
-				updatedAt: f.updatedAt,
-				description: f.description,
-				owner: SharedUserMapper.map(f.owner),
-				sharedWith: SharedUserMapper.toArray(f.shareFolders.flatMap((f) => f.user)),
-				modifiedBy: f.lastModifiedBy ? SharedUserMapper.map(f.lastModifiedBy) : null,
-				notes: notes.filter((n) => n.folderId === f.id).map(ResourceNoteMapper.map),
+				...ResourceFolderMapper.map(f, notes),
 				subfolders: this.buildFolderTree(folders, notes, f.id),
 			}));
 	};

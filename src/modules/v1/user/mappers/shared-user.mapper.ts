@@ -2,16 +2,16 @@ import type { DbSharedUser } from "../models/db/db-shared-user.model";
 import type { SharedUser } from "../models/domain/shared-user.model";
 
 export class SharedUserMapper {
-	static map = (user: DbSharedUser): SharedUser => {
+	static map = (raw: DbSharedUser): SharedUser => {
 		return {
-			id: user.id,
-			email: user.email,
-			userName: user.userName,
-			fullName: `${user.name} ${user.lastName}`,
+			id: raw.id,
+			email: raw.email,
+			userName: raw.userName,
+			fullName: `${raw.name} ${raw.lastName}`,
 		};
 	};
 
-	static toArray = (users: DbSharedUser[]): SharedUser[] => {
-		return users.map(this.map);
+	static toArray = (list: DbSharedUser[]): SharedUser[] => {
+		return list.map(this.map);
 	};
 }
