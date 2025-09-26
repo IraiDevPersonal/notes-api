@@ -15,13 +15,9 @@ export const NOTE_QUERY_SELECTOR = {
 	lastModifiedBy: {
 		select: SHARED_USER_QUERY_SELECTOR,
 	},
-	comments: {
+	_count: {
 		select: {
-			id: true,
-			title: true,
-			description: true,
-			createdAt: true,
-			updatedAt: true,
+			comments: true,
 		},
 	},
 	shareNotes: {

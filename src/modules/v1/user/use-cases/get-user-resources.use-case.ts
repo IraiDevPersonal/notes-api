@@ -2,9 +2,9 @@ import { logger } from "@/lib/logger";
 import type { DbFolder } from "@/modules/v1/folders/models/db/db-folder.model";
 import type { ResourceFolder } from "@/modules/v1/folders/models/domain/resource-folter.model";
 import type { RootFolder } from "@/modules/v1/folders/models/domain/root-folder.model";
-import { ResourceNoteMapper } from "@/modules/v1/notes/mappers/resource-note.mapper";
+import { NoteMapper } from "@/modules/v1/notes/mappers/note.mapper";
 import type { DbNote } from "@/modules/v1/notes/models/db/db-note.model";
-import type { ResourceNote } from "@/modules/v1/notes/models/domain/resource-note.model";
+import type { Note } from "@/modules/v1/notes/models/domain/note.model";
 import { ResourceFolderMapper } from "../../folders/mappers/resource-folder.mapper";
 import type { UserRepository } from "../repository";
 
@@ -69,7 +69,7 @@ export class GetUserResourcesUseCase {
 
 	private buildRootFolder = (
 		folderId: string,
-		looseNotes: ResourceNote[],
+		looseNotes: Note[],
 		nestedFolders: ResourceFolder[]
 	): RootFolder => {
 		return {
@@ -80,8 +80,8 @@ export class GetUserResourcesUseCase {
 		};
 	};
 
-	private getUnfolderedNotes = (notes: DbNote[]): ResourceNote[] => {
-		return notes.filter((n) => n.folderId === null).map(ResourceNoteMapper.map);
+	private getUnfolderedNotes = (notes: DbNote[]): Note[] => {
+		return notes.filter((n) => n.folderId === null).map(NoteMapper.map);
 	};
 
 	private buildFolderTree = (

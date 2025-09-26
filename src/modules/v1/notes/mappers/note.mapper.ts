@@ -1,9 +1,9 @@
 import { SharedUserMapper } from "../../user/mappers/shared-user.mapper";
 import type { DbNote } from "../models/db/db-note.model";
-import type { ResourceNote } from "../models/domain/resource-note.model";
+import type { Note } from "../models/domain/note.model";
 
-export class ResourceNoteMapper {
-	static map = (raw: DbNote): ResourceNote => {
+export class NoteMapper {
+	static map = (raw: DbNote): Note => {
 		return {
 			id: raw.id,
 			order: raw.order,
@@ -12,6 +12,7 @@ export class ResourceNoteMapper {
 			folderId: raw.folderId,
 			updatedAt: raw.updatedAt,
 			createdAt: raw.createdAt,
+			comentsCounts: raw._count.comments,
 			owner: SharedUserMapper.map(raw.owner),
 			sharedWith: SharedUserMapper.toArray(raw.shareNotes.flatMap((n) => n.user)),
 			modifiedBy: raw.lastModifiedBy ? SharedUserMapper.map(raw.lastModifiedBy) : null,
