@@ -1,17 +1,17 @@
-import type { ResourceNote } from "@/modules/v1/notes/models/domain/resource-note.model";
+import type { Note } from "@/modules/v1/notes/models/domain/note.model";
 import type { SharedUser } from "@/modules/v1/user/models/domain/shared-user.model";
 
 export type ResourceFolder = {
 	id: string;
 	name: string;
-	order?: number;
-	createdAt?: Date;
-	updatedAt?: Date;
-	notes: ResourceNote[];
-	owner?: SharedUser;
-	parentId?: string | null;
+	order: number;
+	notes: Note[];
+	owner: SharedUser;
+	sharedWith: SharedUser[];
 	subfolders: ResourceFolder[];
-	sharedWith?: SharedUser[];
-	description?: string | null;
-	modifiedBy?: SharedUser | null;
+	// createdAt: Date;
+	// updatedAt: Date;
+	// parentId: string | null;
+	// description?: string | null;
+	// modifiedBy: SharedUser | null;
 };
