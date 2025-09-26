@@ -12,7 +12,7 @@ export class UpsertNoteValidation {
 		if (success) {
 			return [null, data];
 		}
-		return [SchemaErrorHandler.safeParseErrorMessage(error), null];
+		return [SchemaErrorHandler.getErrorMessage(error), null];
 	};
 
 	static validateCreatePayload = (raw: unknown): ValidationResult<CreateNotePayload> => {
@@ -20,6 +20,6 @@ export class UpsertNoteValidation {
 		if (success) {
 			return [null, data];
 		}
-		return [SchemaErrorHandler.safeParseErrorMessage(error), null];
+		return [SchemaErrorHandler.getErrorMessage(error), null];
 	};
 }

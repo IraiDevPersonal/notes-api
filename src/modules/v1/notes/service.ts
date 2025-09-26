@@ -1,5 +1,6 @@
 import { DbClient } from "@/lib/db-client";
-import { logger } from "@/lib/logger";
+import { CustomError } from "@/lib/errors/custom-error";
+import { DBErrorHandler } from "@/lib/errors/db-error-hanlder";
 import type { DbNote } from "./models/db/db-note.model";
 import type { NoteComment } from "./models/domain/note-comment.model";
 import type {
@@ -14,32 +15,32 @@ export class NotesService extends DbClient implements NotesRepository {
 
 	deleteNote = async (id: string): Promise<void> => {
 		try {
-			await this.db.note.delete({ where: { id }, select: this.noteSelector });
-		} catch (error) {
-			const errorMessage = "Error deleting note.";
-			logger.error({
-				source: "NotesService/deleteNote",
-				message: errorMessage,
-				error,
+			await this.db.note.update({
+				where: { id },
+				data: { deletedAt: new Date() },
+				select: { id: true },
 			});
-			throw new Error(errorMessage);
+		} catch (error) {
+			const { message, statusCode } = DBErrorHandler.getErrorData(
+				error,
+				"Error deleting note."
+			);
+			throw new CustomError(message, statusCode);
 		}
 	};
 
 	getNoteById = async (id: string): Promise<DbNote | null> => {
 		try {
 			return await this.db.note.findUnique({
-				where: { id },
+				where: { id, deletedAt: null },
 				select: this.noteSelector,
 			});
 		} catch (error) {
-			const errorMessage = "Error getting note.";
-			logger.error({
-				source: "NotesService/getNoteById",
-				message: errorMessage,
+			const { message, statusCode } = DBErrorHandler.getErrorData(
 				error,
-			});
-			throw new Error(errorMessage);
+				"Error getting note."
+			);
+			throw new CustomError(message, statusCode);
 		}
 	};
 
@@ -61,13 +62,11 @@ export class NotesService extends DbClient implements NotesRepository {
 				select: this.noteSelector,
 			});
 		} catch (error) {
-			const errorMessage = "Error creating note.";
-			logger.error({
-				source: "NotesService/createNote",
-				message: errorMessage,
+			const { message, statusCode } = DBErrorHandler.getErrorData(
 				error,
-			});
-			throw new Error(errorMessage);
+				"Error creating note."
+			);
+			throw new CustomError(message, statusCode);
 		}
 	};
 
@@ -97,13 +96,11 @@ export class NotesService extends DbClient implements NotesRepository {
 				select: this.noteSelector,
 			});
 		} catch (error) {
-			const errorMessage = "Error updating note.";
-			logger.error({
-				source: "NotesService/updateNote",
-				message: errorMessage,
+			const { message, statusCode } = DBErrorHandler.getErrorData(
 				error,
-			});
-			throw new Error(errorMessage);
+				"Error updating note."
+			);
+			throw new CustomError(message, statusCode);
 		}
 	};
 
