@@ -1,10 +1,11 @@
 import { logger } from "@/lib/logger";
 import type { UseCaseResult } from "@/types/global";
-import type { DbNote } from "../models/db/db-note.model";
+import { NoteMapper } from "../mappers/note.mapper";
+import type { Note } from "../models/domain/note.model";
 import type { NotesRepository } from "../respository";
 import { UpsertNoteValidation } from "../validations/upsert-note.validation";
 
-type ExecuteResponse = UseCaseResult<DbNote>;
+type ExecuteResponse = UseCaseResult<Note>;
 
 export class UpsertNoteUseCase {
 	private readonly repository: NotesRepository;
@@ -26,7 +27,7 @@ export class UpsertNoteUseCase {
 		}
 
 		const note = await this.repository.createNote(userId, payload!);
-		return [null, 201, note];
+		return [null, 201, NoteMapper.map(note)];
 	};
 
 	executeUpdate = async (
@@ -54,6 +55,6 @@ export class UpsertNoteUseCase {
 		}
 
 		const note = await this.repository.updateNote(userId, noteId, payload!);
-		return [null, 201, note];
+		return [null, 201, NoteMapper.map(note)];
 	};
 }

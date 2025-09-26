@@ -87,7 +87,7 @@ export class NotesService extends DbClient implements NotesRepository {
 			}
 
 			return await this.db.note.update({
-				where: { id: noteId },
+				where: { id: noteId, deletedAt: null },
 				data: {
 					...adaptedPayload,
 					folderId,

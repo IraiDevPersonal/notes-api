@@ -38,13 +38,16 @@ export class NotesController {
 			}
 			return responseController.json({ data: note }, statusCode);
 		} catch (error) {
-			const errorMessage = "Failed to create note";
+			const { message, statusCode } = CustomError.getErrorData(
+				error,
+				"Failed to create note"
+			);
 			logger.error({
 				source: errorSource,
-				message: errorMessage,
+				message,
 				error,
 			});
-			responseController.error(errorMessage, 500);
+			responseController.error(message, statusCode);
 		}
 	};
 
@@ -70,13 +73,16 @@ export class NotesController {
 			}
 			return responseController.json({ data: note }, statusCode);
 		} catch (error) {
-			const errorMessage = "Failed to update note";
+			const { message, statusCode } = CustomError.getErrorData(
+				error,
+				"Failed to update note"
+			);
 			logger.error({
 				source: errorSource,
-				message: errorMessage,
+				message,
 				error,
 			});
-			responseController.error(errorMessage, 500);
+			responseController.error(message, statusCode);
 		}
 	};
 
