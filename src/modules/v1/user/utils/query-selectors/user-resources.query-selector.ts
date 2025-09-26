@@ -8,6 +8,7 @@ export const USER_RESOURCES_QUERY_SELECTOR = {
 	},
 	notes: {
 		select: NOTE_QUERY_SELECTOR,
+		where: { deletedAt: null },
 	},
 	shareFolders: {
 		select: {
