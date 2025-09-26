@@ -8,3 +8,5 @@ export type UseCaseResult<T> = [
 ];
 
 export type ValidationResult<T> = [errorMessage: string | null, data: T | null];
+
+export type ErrorResult = { message: string; statusCode: number };
