@@ -1,4 +1,4 @@
-import type z from "zod";
+import z from "zod";
 
 export class SchemaErrorHandler {
 	static getErrorMessage(error: z.ZodError) {
@@ -9,5 +9,9 @@ export class SchemaErrorHandler {
 			.join(", ");
 
 		return issueMessages;
+	}
+
+	static isSchemaError(error: unknown): error is z.ZodError {
+		return error instanceof z.ZodError;
 	}
 }
