@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { NotesRoutesV1 } from "./modules/v1/notes/routes";
 import { UserRoutesV1 } from "./modules/v1/user/routes";
+import { FoldersRoutesV1 } from "./modules/v1/folders/routes";
 
 export class AppRouter {
 	static get routes(): Router {
@@ -18,6 +19,7 @@ export class AppRouter {
 
 		router.use("/api/v1", UserRoutesV1.routes);
 		router.use("/api/v1", NotesRoutesV1.routes);
+		router.use("/api/v1", FoldersRoutesV1.routes);
 
 		return router;
 	}

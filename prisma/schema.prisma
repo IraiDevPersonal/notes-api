@@ -58,6 +58,7 @@ model Folder {
   deletedAt DateTime? @map("deleted_at")
   comments Comment[]
   shareFolders ShareFolder[]
+  notes Note[]
 
   @@index([ownerId])
   @@index([parentId])
@@ -81,6 +82,7 @@ model Note {
   // tags     NoteTag[]
   comments Comment[]
   shareNotes ShareNote[]
+  folders Folder[]
 
   @@index([ownerId])
   @@index([folderId])
