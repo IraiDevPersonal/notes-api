@@ -9,6 +9,20 @@ export class CustomError extends Error {
 		this.statusCode = statusCode;
 	}
 
+	static notFound = (message: string = "Not found"): CustomError => {
+		return new CustomError(message, 404);
+	};
+
+	static badRequest = (message: string = "Bad request"): CustomError => {
+		return new CustomError(message, 400);
+	};
+
+	static internalServerError = (
+		message: string = "Internal server error"
+	): CustomError => {
+		return new CustomError(message, 500);
+	};
+
 	static getErrorData(error: unknown, defaultMessage?: string): ErrorResult {
 		if (error instanceof CustomError) {
 			return { message: error.message, statusCode: error.statusCode };
