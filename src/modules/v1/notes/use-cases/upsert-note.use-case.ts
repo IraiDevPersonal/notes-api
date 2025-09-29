@@ -2,7 +2,7 @@ import { logger } from "@/lib/logger";
 import type { UseCaseResult } from "@/types/global";
 import { NoteMapper } from "../mappers/note.mapper";
 import type { Note } from "../models/domain/note.model";
-import type { NotesRepository } from "../respository";
+import type { NotesRepository } from "../repositories/notes.respository";
 import { UpsertNoteValidation } from "../validations/upsert-note.validation";
 
 type ExecuteResponse = UseCaseResult<Note>;

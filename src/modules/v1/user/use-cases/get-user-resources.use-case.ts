@@ -6,7 +6,7 @@ import { NoteMapper } from "@/modules/v1/notes/mappers/note.mapper";
 import type { DbNote } from "@/modules/v1/notes/models/db/db-note.model";
 import type { Note } from "@/modules/v1/notes/models/domain/note.model";
 import { ResourceFolderMapper } from "../../folders/mappers/resource-folder.mapper";
-import type { UserRepository } from "../repository";
+import type { UserRepository } from "../repositories/user.repository";
 
 type Data = {
 	ownResources: RootFolder;

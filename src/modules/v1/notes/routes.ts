@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { NotesController } from "./controller";
-import { NotesService } from "./service";
+import { NotesRepositoryImpl } from "./repositories/notes.repository.impl";
 
 export class NotesRoutesV1 {
-	private static readonly service = new NotesService();
-	private static readonly controller = new NotesController(this.service);
+	private static readonly repository = new NotesRepositoryImpl();
+	private static readonly controller = new NotesController(this.repository);
 
 	static get routes(): Router {
 		const router = Router();

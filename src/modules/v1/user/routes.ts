@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { UserController } from "./controller";
-import { UserService } from "./service";
+import { UserRepositoryImpl } from "./repositories/user.respository.impl";
 
 export class UserRoutesV1 {
-	private static readonly service = new UserService();
-	private static readonly controller = new UserController(this.service);
+	private static readonly repository = new UserRepositoryImpl();
+	private static readonly controller = new UserController(this.repository);
 
 	static get routes(): Router {
 		const router = Router();

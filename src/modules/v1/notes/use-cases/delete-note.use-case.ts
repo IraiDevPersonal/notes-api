@@ -1,6 +1,6 @@
 import { logger } from "@/lib/logger";
 import type { UseCaseResult } from "@/types/global";
-import type { NotesRepository } from "../respository";
+import type { NotesRepository } from "../repositories/notes.respository";
 
 type ExecuteResponse = UseCaseResult<void>;
 

@@ -1,10 +1,10 @@
 import { DbClient } from "@/lib/db-client";
 import { CustomError } from "@/lib/errors/custom-error";
-import type { DBUserResources } from "./models/db/db-user-resources.model";
-import type { UserRepository } from "./repository";
-import { USER_RESOURCES_QUERY_SELECTOR } from "./utils/query-selectors/user-resources.query-selector";
+import type { DBUserResources } from "../models/db/db-user-resources.model";
+import { USER_RESOURCES_QUERY_SELECTOR } from "../utils/query-selectors/user-resources.query-selector";
+import type { UserRepository } from "./user.repository";
 
-export class UserService extends DbClient implements UserRepository {
+export class UserRepositoryImpl extends DbClient implements UserRepository {
 	private readonly userResourcesSelector = USER_RESOURCES_QUERY_SELECTOR;
 
 	getUserResources = async (userId: string): Promise<DBUserResources | null> => {

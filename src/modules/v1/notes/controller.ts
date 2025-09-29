@@ -2,7 +2,7 @@ import type { Request, Response } from "express";
 import { ResponseController } from "@/lib/controllers/response.controller";
 import { CustomError } from "@/lib/errors/custom-error";
 import { logger } from "@/lib/logger";
-import type { NotesRepository } from "./respository";
+import type { NotesRepository } from "./repositories/notes.respository";
 import { DeleteNoteUseCase } from "./use-cases/delete-note.use-case";
 import { GetNotesUseCase } from "./use-cases/get-notes.use-case";
 import { UpsertNoteUseCase } from "./use-cases/upsert-note.use-case";

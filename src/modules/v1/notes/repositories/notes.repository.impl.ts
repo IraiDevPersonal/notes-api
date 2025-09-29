@@ -1,16 +1,16 @@
 import { DbClient } from "@/lib/db-client";
 import { CustomError } from "@/lib/errors/custom-error";
 import { DBErrorHandler } from "@/lib/errors/db-error-hanlder";
-import type { DbNote } from "./models/db/db-note.model";
-import type { NoteComment } from "./models/domain/note-comment.model";
+import type { DbNote } from "../models/db/db-note.model";
+import type { NoteComment } from "../models/domain/note-comment.model";
 import type {
 	CreateNotePayload,
 	UpdateNotePayload,
-} from "./models/domain/upsert-note-payload.model";
-import type { NotesRepository } from "./respository";
-import { NOTE_QUERY_SELECTOR } from "./utils/query-selectors/note.query-selector";
+} from "../models/domain/upsert-note-payload.model";
+import { NOTE_QUERY_SELECTOR } from "../utils/query-selectors/note.query-selector";
+import type { NotesRepository } from "./notes.respository";
 
-export class NotesService extends DbClient implements NotesRepository {
+export class NotesRepositoryImpl extends DbClient implements NotesRepository {
 	private readonly noteSelector = NOTE_QUERY_SELECTOR;
 
 	deleteNote = async (id: string): Promise<void> => {
