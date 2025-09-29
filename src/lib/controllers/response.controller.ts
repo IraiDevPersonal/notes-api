@@ -11,6 +11,10 @@ export class ResponseController {
 		this.response.status(statusCode).json(data);
 	}
 
+	noContent() {
+		this.response.status(204).json({});
+	}
+
 	error(message: string, statusCode: number) {
 		this.response.status(statusCode).json({ error: message });
 	}

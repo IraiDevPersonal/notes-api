@@ -1,10 +1,8 @@
 import { logger } from "@/lib/logger";
-import type { UseCaseResult } from "@/types/global";
+import { CustomError } from "../../../../lib/errors/custom-error";
 import { NoteMapper } from "../mappers/note.mapper";
 import type { Note } from "../models/domain/note.model";
 import type { NotesRepository } from "../repositories/notes.respository";
-
-type ExecuteResponse = UseCaseResult<Note>;
 
 export class GetNotesUseCase {
 	private readonly repository: NotesRepository;
@@ -13,16 +11,7 @@ export class GetNotesUseCase {
 		this.repository = repository;
 	}
 
-	executeFindUnique = async (noteId: string | undefined): Promise<ExecuteResponse> => {
-		if (!noteId) {
-			const errorMessage = "Note ID is required";
-			logger.error({
-				source: "GetNotesUseCase/executeFindUnique",
-				message: errorMessage,
-			});
-			return [errorMessage, 400, null];
-		}
-
+	executeFindUnique = async (noteId: string): Promise<Note> => {
 		const result = await this.repository.getNoteById(noteId);
 
 		if (!result) {
@@ -31,9 +20,9 @@ export class GetNotesUseCase {
 				source: "GetNotesUseCase/execute",
 				message: errorMessage,
 			});
-			return [errorMessage, 404, null];
+			throw CustomError.notFound(errorMessage);
 		}
 
-		return [null, 200, NoteMapper.map(result)];
+		return NoteMapper.map(result);
 	};
 }

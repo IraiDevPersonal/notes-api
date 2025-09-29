@@ -19,31 +19,19 @@ export class NotesController {
 	}
 
 	createNote = async (req: Request, res: Response) => {
-		const errorSource = "NotesController/createNote";
 		const userId = "550e8400-e29b-41d4-a716-446655440000";
 		const responseController = new ResponseController(res);
 
 		try {
-			const [error, statusCode, note] = await this.upsertNoteUseCase.executeCreate(
-				userId,
-				req.body
-			);
-
-			if (error) {
-				logger.error({
-					source: errorSource,
-					message: error,
-				});
-				return responseController.error(error, statusCode);
-			}
-			return responseController.json({ data: note }, statusCode);
+			const note = await this.upsertNoteUseCase.executeCreate(userId, req.body);
+			return responseController.json({ data: note }, 201);
 		} catch (error) {
 			const { message, statusCode } = CustomError.getErrorData(
 				error,
 				"Failed to create note"
 			);
 			logger.error({
-				source: errorSource,
+				source: "NotesController/createNote",
 				message,
 				error,
 			});
@@ -53,32 +41,19 @@ export class NotesController {
 
 	updateNote = async (req: Request, res: Response) => {
 		const noteId = req.params.id;
-		const errorSource = "NotesController/updateNote";
 		const userId = "550e8400-e29b-41d4-a716-446655440000";
 		const responseController = new ResponseController(res);
 
 		try {
-			const [error, statusCode, note] = await this.upsertNoteUseCase.executeUpdate(
-				userId,
-				noteId,
-				req.body
-			);
-
-			if (error) {
-				logger.error({
-					source: errorSource,
-					message: error,
-				});
-				return responseController.error(error, statusCode);
-			}
-			return responseController.json({ data: note }, statusCode);
+			const note = await this.upsertNoteUseCase.executeUpdate(userId, noteId!, req.body);
+			return responseController.json({ data: note }, 200);
 		} catch (error) {
 			const { message, statusCode } = CustomError.getErrorData(
 				error,
 				"Failed to update note"
 			);
 			logger.error({
-				source: errorSource,
+				source: "NotesController/updateNote",
 				message,
 				error,
 			});
@@ -87,28 +62,19 @@ export class NotesController {
 	};
 
 	deleteNote = async (req: Request, res: Response) => {
-		const noteId = req.params.id;
+		const noteId = req.params.id!;
 		const responseController = new ResponseController(res);
-		const errorSource = "NotesController/deleteNote";
 
 		try {
-			const [error, statusCode, note] = await this.deleteNoteUseCase.execute(noteId);
-
-			if (error) {
-				logger.error({
-					source: errorSource,
-					message: error,
-				});
-				return responseController.error(error, statusCode);
-			}
-			return responseController.json({ data: note }, statusCode);
+			await this.deleteNoteUseCase.execute(noteId);
+			return responseController.noContent();
 		} catch (error) {
 			const { message, statusCode } = CustomError.getErrorData(
 				error,
 				"Failed to delete note"
 			);
 			logger.error({
-				source: errorSource,
+				source: "NotesController/deleteNote",
 				message,
 				error,
 			});
@@ -119,27 +85,17 @@ export class NotesController {
 	getNoteById = async (req: Request, res: Response) => {
 		const noteId = req.params.id;
 		const responseController = new ResponseController(res);
-		const errorSource = "NotesController/getNote";
 
 		try {
-			const [error, statusCode, note] =
-				await this.getNoteUseCase.executeFindUnique(noteId);
-
-			if (error) {
-				logger.error({
-					source: errorSource,
-					message: error,
-				});
-				return responseController.error(error, statusCode);
-			}
-			return responseController.json({ data: note }, statusCode);
+			const note = await this.getNoteUseCase.executeFindUnique(noteId!);
+			return responseController.json({ data: note });
 		} catch (error) {
 			const { message, statusCode } = CustomError.getErrorData(
 				error,
 				"Failed to get note"
 			);
 			logger.error({
-				source: errorSource,
+				source: "NotesController/getNoteById",
 				message,
 				error,
 			});
