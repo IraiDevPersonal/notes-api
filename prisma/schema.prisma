@@ -1,9 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -20,21 +17,21 @@ enum Permission {
 }
 
 model User {
-  id           String   @id @default(uuid())
-  email        String   @unique
-  userName     String   @unique @map("user_name")
-  name         String
-  lastName     String   @map("last_name")
-  password     String
-  avatar       String?
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
-  deletedAt    DateTime? @map("deleted_at")
+  id        String    @id @default(uuid())
+  email     String    @unique
+  userName  String    @unique @map("user_name")
+  name      String
+  lastName  String    @map("last_name")
+  password  String
+  avatar    String?
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
 
   shareFolders ShareFolder[]
-  shareNotes ShareNote[]
+  shareNotes   ShareNote[]
 
-  notes Note[]
+  notes   Note[]
   folders Folder[]
 
   modifiedFolders Folder[] @relation("FolderLastModifiedBy")
@@ -44,100 +41,123 @@ model User {
 }
 
 model Folder {
-  id       String   @id @default(uuid())
-  name     String
+  id          String    @id @default(uuid())
+  name        String
   description String?
-  parentId String? @map("parent_id")
-  ownerId  String @map("owner_id")
-  owner User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  order    Int      @default(0)
+  order       Int       @default(0)
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
+
   lastModifiedById String? @map("last_modified_by_id")
-  lastModifiedBy   User?    @relation("FolderLastModifiedBy", fields: [lastModifiedById], references: [id])
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  deletedAt DateTime? @map("deleted_at")
-  comments Comment[]
+  lastModifiedBy   User?   @relation("FolderLastModifiedBy", fields: [lastModifiedById], references: [id])
+
+  ownerId String @map("owner_id")
+  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  // Relación auto-referencial para jerarquía de carpetas
+  parentId String?  @map("parent_id")
+  parent   Folder?  @relation("FolderHierarchy", fields: [parentId], references: [id], onDelete: Cascade)
+  children Folder[] @relation("FolderHierarchy")
+
+  // Relaciones con otras entidades
+  comments     Comment[]
   shareFolders ShareFolder[]
-  notes Note[]
+  notes        Note[]
 
   @@index([ownerId])
   @@index([parentId])
-
   @@map("folders")
 }
 
 model Note {
-  id       String  @id @default(uuid())
-  title    String
-  content  String
+  id      String @id @default(uuid())
+  title   String
+  content String
+  order   Int    @default(0)
+
+  // Relación con carpeta (opcional - puede estar suelta)
   folderId String? @map("folder_id")
-  ownerId  String @map("owner_id")
-  owner User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  folder   Folder? @relation(fields: [folderId], references: [id], onDelete: SetNull)
+
+  // Owner y modificación
+  ownerId          String  @map("owner_id")
+  owner            User    @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   lastModifiedById String? @map("last_modified_by_id")
   lastModifiedBy   User?   @relation("NoteLastModifiedBy", fields: [lastModifiedById], references: [id])
-  order    Int     @default(0)
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Timestamps
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
-  // tags     NoteTag[]
-  comments Comment[]
+
+  // Relaciones
+  comments   Comment[]
   shareNotes ShareNote[]
-  folders Folder[]
 
   @@index([ownerId])
   @@index([folderId])
-
   @@map("notes")
 }
 
 model ShareFolder {
-  id Int @id @default(autoincrement())
-  folderId String @map("folder_id")
-  folder Folder @relation(fields: [folderId], references: [id], onDelete: Cascade)
-  userId String @map("user_id")
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id         Int        @id @default(autoincrement())
+  folderId   String     @map("folder_id")
+  folder     Folder     @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  userId     String     @map("user_id")
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   permission Permission
 
+  @@unique([folderId, userId])
   @@index([folderId])
-
+  @@index([userId])
   @@map("share_folders")
 }
 
 model ShareNote {
-  id Int @id @default(autoincrement())
-  noteId String @map("note_id")
-  note Note @relation(fields: [noteId], references: [id], onDelete: Cascade)
-  userId String @map("user_id")
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id         Int        @id @default(autoincrement())
+  noteId     String     @map("note_id")
+  note       Note       @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  userId     String     @map("user_id")
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   permission Permission
 
+  @@unique([noteId, userId])
   @@index([noteId])
-
+  @@index([userId])
   @@map("share_notes")
 }
 
 model Comment {
-  id          Int      @id @default(autoincrement())
+  id          Int    @id @default(autoincrement())
   title       String
   description String
   userId      String @map("user_id")
-  noteId      String? @map("note_id")
-  note        Note?    @relation(fields: [noteId], references: [id], onDelete: Cascade)
-  folderId    String? @map("folder_id")
-  folder      Folder?  @relation(fields: [folderId], references: [id], onDelete: Cascade)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
 
+  // Puede estar asociado a una nota O a una carpeta
+  noteId   String? @map("note_id")
+  note     Note?   @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  folderId String? @map("folder_id")
+  folder   Folder? @relation(fields: [folderId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([noteId])
+  @@index([folderId])
   @@map("comments")
 }
 
+// Modelos comentados para tags (descomentar si los necesitas)
 // model Tag {
-//   id        Int @id @default(autoincrement())
-//   name      String   @unique
-//   color     String?  @default("#6366f1")
+//   id        Int       @id @default(autoincrement())
+//   name      String    @unique
+//   color     String?   @default("#6366f1")
 //   notes     NoteTag[]
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
+//   createdAt DateTime  @default(now()) @map("created_at")
+//   updatedAt DateTime  @updatedAt @map("updated_at")
+//
+//   @@map("tags")
 // }
 
 // model NoteTag {
@@ -145,6 +165,7 @@ model Comment {
 //   note   Note   @relation(fields: [noteId], references: [id], onDelete: Cascade)
 //   tagId  Int
 //   tag    Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
-
+//
 //   @@id([noteId, tagId])
+//   @@map("note_tags")
 // }
