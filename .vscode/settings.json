@@ -1,56 +1,59 @@
 {
-  // Configurar Biome como formateador predeterminado
-  "editor.defaultFormatter": "biomejs.biome",
+	// Configurar Biome como formateador predeterminado
+	"editor.defaultFormatter": "biomejs.biome",
 
-  // Formatear al guardar
-  "editor.formatOnSave": true,
+	// Formatear al guardar
+	"editor.formatOnSave": true,
 
-  // Formatear al pegar
-  "editor.formatOnPaste": true,
+	// Formatear al pegar
+	"editor.formatOnPaste": true,
 
-  // Organizar imports al guardar
-  "editor.codeActionsOnSave": {
-    "source.organizeImports.biome": "explicit",
-    "quickfix.biome": "explicit"
-  },
+	// Organizar imports al guardar
+	"editor.codeActionsOnSave": {
+		"source.fixAll.biome": "explicit"
+	},
 
-  // Configuración específica para TypeScript y JavaScript
-  "[typescript]": {
-    "editor.defaultFormatter": "biomejs.biome",
-    "editor.formatOnSave": true
-  },
-  "[javascript]": {
-    "editor.defaultFormatter": "biomejs.biome",
-    "editor.formatOnSave": true
-  },
-  "[json]": {
-    "editor.defaultFormatter": "biomejs.biome",
-    "editor.formatOnSave": true
-  },
-  "[jsonc]": {
-    "editor.defaultFormatter": "biomejs.biome",
-    "editor.formatOnSave": true
-  },
+	// Configuración específica para TypeScript y JavaScript
+	"[typescript]": {
+		"editor.defaultFormatter": "biomejs.biome",
+		"editor.formatOnSave": true
+	},
+	"[javascript]": {
+		"editor.defaultFormatter": "biomejs.biome",
+		"editor.formatOnSave": true
+	},
+	"[json]": {
+		"editor.defaultFormatter": "biomejs.biome",
+		"editor.formatOnSave": true
+	},
+	"[jsonc]": {
+		"editor.defaultFormatter": "biomejs.biome",
+		"editor.formatOnSave": true
+	},
+	"[prisma]": {
+		"editor.formatOnSave": true,
+		"editor.defaultFormatter": "Prisma.prisma"
+	},
 
-  // Deshabilitar otros formateadores que puedan interferir
-  "typescript.format.enable": false,
-  "javascript.format.enable": false,
+	// Deshabilitar otros formateadores que puedan interferir
+	"typescript.format.enable": false,
+	"javascript.format.enable": false,
 
-  // Configurar Biome como linter predeterminado
-  "biome.lspBin": "biome",
-  "biome.enabled": true,
+	// Configurar Biome como linter predeterminado
+	"biome.lspBin": "biome",
+	"biome.enabled": true,
 
-  // Mostrar errores y warnings en línea
-  "editor.inlineSuggest.enabled": true,
+	// Mostrar errores y warnings en línea
+	"editor.inlineSuggest.enabled": true,
 
-  // Configuración del terminal para usar el PATH correcto
-  "terminal.integrated.env.osx": {
-    "PATH": "${workspaceFolder}/node_modules/.bin:${env:PATH}"
-  },
-  "terminal.integrated.env.linux": {
-    "PATH": "${workspaceFolder}/node_modules/.bin:${env:PATH}"
-  },
-  "terminal.integrated.env.windows": {
-    "PATH": "${workspaceFolder}\\node_modules\\.bin;${env:PATH}"
-  }
+	// Configuración del terminal para usar el PATH correcto
+	"terminal.integrated.env.osx": {
+		"PATH": "${workspaceFolder}/node_modules/.bin:${env:PATH}"
+	},
+	"terminal.integrated.env.linux": {
+		"PATH": "${workspaceFolder}/node_modules/.bin:${env:PATH}"
+	},
+	"terminal.integrated.env.windows": {
+		"PATH": "${workspaceFolder}\\node_modules\\.bin;${env:PATH}"
+	}
 }
