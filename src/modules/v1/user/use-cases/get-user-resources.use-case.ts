@@ -5,7 +5,7 @@ import { NoteMapper } from "@/modules/v1/notes/mappers/note.mapper";
 import type { DbNote } from "@/modules/v1/notes/models/db/db-note.model";
 import type { Note } from "@/modules/v1/notes/models/domain/note.model";
 import { ResourceFolderMapper } from "../../folders/mappers/resource-folder.mapper";
-import { BuildFolderTreeUseCase } from "../../folders/use-cases/build-folder-tree.use-case";
+import type { ResourceFolderDbModel } from "../../folders/models/db/resource-folder.db.model";
 import type { UserRepository } from "../repositories/user.repository";
 
 type Data = {
@@ -18,11 +18,9 @@ type ExecuteResponse = [errorMessage: string | null, statusCode: number, Data | 
 export class GetUserResourcesUseCase {
 	private readonly respository: UserRepository;
 	private readonly sourceError = "GetUserResourcesUseCase/execute";
-	private readonly buildFolderTreeUseCase: BuildFolderTreeUseCase<ResourceFolderDomainModel>;
 
 	constructor(respository: UserRepository) {
 		this.respository = respository;
-		this.buildFolderTreeUseCase = new BuildFolderTreeUseCase(ResourceFolderMapper.map);
 	}
 
 	execute = async (userId: string | undefined): Promise<ExecuteResponse> => {
@@ -49,7 +47,7 @@ export class GetUserResourcesUseCase {
 		const ownResources = this.buildRootFolder(
 			"own-root-folder",
 			this.getUnfolderedNotes(result.notes),
-			this.buildFolderTreeUseCase.execute(result.folders, result.notes)
+			this.buildFolderTree(result.folders, result.notes)
 		);
 
 		const flattenedShareFolders = result.shareFolders.flatMap((f) => f.folder);
@@ -58,7 +56,7 @@ export class GetUserResourcesUseCase {
 		const sharedResources = this.buildRootFolder(
 			"shared-root-folder",
 			this.getUnfolderedNotes(flattenedShareNotes),
-			this.buildFolderTreeUseCase.execute(flattenedShareFolders, flattenedShareNotes)
+			this.buildFolderTree(flattenedShareFolders, flattenedShareNotes)
 		);
 
 		const data: Data = {
@@ -84,5 +82,18 @@ export class GetUserResourcesUseCase {
 
 	private getUnfolderedNotes = (notes: DbNote[]): Note[] => {
 		return notes.filter((n) => n.folderId === null).map(NoteMapper.map);
+	};
+
+	private buildFolderTree = (
+		folders: ResourceFolderDbModel[],
+		notes: DbNote[],
+		parentId: string | null = null
+	): ResourceFolderDomainModel[] => {
+		return folders
+			.filter((f) => f.parentId === parentId)
+			.map((f) => ({
+				...ResourceFolderMapper.map(f, notes),
+				subfolders: this.buildFolderTree(folders, notes, f.id),
+			}));
 	};
 }
