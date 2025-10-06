@@ -1,9 +1,9 @@
 import { NoteMapper } from "../mappers/note.mapper";
-import type { Note } from "../models/domain/note.model";
+import type { NoteDomainModel } from "../models/domain/note.domain.model";
 import type {
 	CreateNotePayload,
 	UpdateNotePayload,
-} from "../models/domain/upsert-note-payload.model";
+} from "../models/domain/upsert-note-payload";
 import type { NotesRepository } from "../repositories/notes.respository";
 
 type UpsertPayload = {
@@ -19,14 +19,14 @@ export class UpsertNoteUseCase {
 		this.repository = repository;
 	}
 
-	execute = async ({ userId, noteId, body }: UpsertPayload): Promise<Note> => {
+	execute = async ({ userId, noteId, body }: UpsertPayload): Promise<NoteDomainModel> => {
 		if (noteId) {
 			return this.update(userId, noteId, body);
 		}
 		return this.create(userId, body);
 	};
 
-	private create = async (userId: string, body: unknown): Promise<Note> => {
+	private create = async (userId: string, body: unknown): Promise<NoteDomainModel> => {
 		const note = await this.repository.createNote(userId, body as CreateNotePayload);
 		return NoteMapper.map(note);
 	};
@@ -35,7 +35,7 @@ export class UpsertNoteUseCase {
 		userId: string,
 		noteId: string,
 		body: unknown
-	): Promise<Note> => {
+	): Promise<NoteDomainModel> => {
 		const note = await this.repository.updateNote(
 			userId,
 			noteId,

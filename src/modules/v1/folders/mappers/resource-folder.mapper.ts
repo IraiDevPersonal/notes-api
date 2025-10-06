@@ -1,5 +1,5 @@
 import { NoteMapper } from "../../notes/mappers/note.mapper";
-import type { DbNote } from "../../notes/models/db/db-note.model";
+import type { NoteDbModel } from "../../notes/models/db/note.db..model";
 import { SharedUserMapper } from "../../user/mappers/shared-user.mapper";
 import type { ResourceFolderDbModel } from "../models/db/resource-folder.db.model";
 import type { ResourceFolderDomainModel } from "../models/domain/resource-folter.domain.model";
@@ -7,7 +7,7 @@ import type { ResourceFolderDomainModel } from "../models/domain/resource-folter
 export class ResourceFolderMapper {
 	static map(
 		folderRaw: ResourceFolderDbModel,
-		notesRaw: DbNote[]
+		notesRaw: NoteDbModel[]
 	): Omit<ResourceFolderDomainModel, "subfolders"> {
 		return {
 			id: folderRaw.id,

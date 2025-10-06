@@ -1,9 +1,9 @@
 import { SharedUserMapper } from "../../user/mappers/shared-user.mapper";
-import type { DbNote } from "../models/db/db-note.model";
-import type { Note } from "../models/domain/note.model";
+import type { NoteDbModel } from "../models/db/note.db..model";
+import type { NoteDomainModel } from "../models/domain/note.domain.model";
 
 export class NoteMapper {
-	static map = (raw: DbNote): Note => {
+	static map = (raw: NoteDbModel): NoteDomainModel => {
 		return {
 			id: raw.id,
 			order: raw.order,

@@ -1,11 +1,11 @@
-import type { DbNote } from "../../notes/models/db/db-note.model";
+import type { NoteDbModel } from "../../notes/models/db/note.db..model";
 import type { ResourceFolderDbModel } from "../models/db/resource-folder.db.model";
 import type { FolderDomainModel } from "../models/domain/folder.domain.model";
 import type { ResourceFolderDomainModel } from "../models/domain/resource-folter.domain.model";
 
 type FolderMapper<T> = (
 	folder: ResourceFolderDbModel,
-	notes: DbNote[]
+	notes: NoteDbModel[]
 ) => Omit<T, "subfolders">;
 
 export class BuildFolderTreeUseCase<
@@ -19,7 +19,7 @@ export class BuildFolderTreeUseCase<
 
 	execute = (
 		folders: ResourceFolderDbModel[],
-		notes: DbNote[],
+		notes: NoteDbModel[],
 		parentId: string | null = null
 	): T[] => {
 		return folders

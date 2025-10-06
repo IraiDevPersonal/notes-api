@@ -2,8 +2,8 @@ import { HttpError } from "@/lib/errors/http-error";
 import type { ResourceFolderDomainModel } from "@/modules/v1/folders/models/domain/resource-folter.domain.model";
 import type { RootFolderDomainModel } from "@/modules/v1/folders/models/domain/root-folder.domain.model";
 import { NoteMapper } from "@/modules/v1/notes/mappers/note.mapper";
-import type { DbNote } from "@/modules/v1/notes/models/db/db-note.model";
-import type { Note } from "@/modules/v1/notes/models/domain/note.model";
+import type { NoteDbModel } from "@/modules/v1/notes/models/db/note.db..model";
+import type { NoteDomainModel } from "@/modules/v1/notes/models/domain/note.domain.model";
 import { ResourceFolderMapper } from "../../folders/mappers/resource-folder.mapper";
 import type { ResourceFolderDbModel } from "../../folders/models/db/resource-folder.db.model";
 import type { UserRepository } from "../repositories/user.repository";
@@ -50,13 +50,13 @@ export class GetUserResourcesUseCase {
 		return data;
 	};
 
-	private getUnfolderedNotes = (notes: DbNote[]): Note[] => {
+	private getUnfolderedNotes = (notes: NoteDbModel[]): NoteDomainModel[] => {
 		return notes.filter((n) => n.folderId === null).map(NoteMapper.map);
 	};
 
 	private buildRootFolder = (
 		folderId: string,
-		looseNotes: Note[],
+		looseNotes: NoteDomainModel[],
 		nestedFolders: ResourceFolderDomainModel[]
 	): RootFolderDomainModel => {
 		return {
@@ -69,7 +69,7 @@ export class GetUserResourcesUseCase {
 
 	private buildFolderTree = (
 		folders: ResourceFolderDbModel[],
-		notes: DbNote[],
+		notes: NoteDbModel[],
 		parentId: string | null = null
 	): ResourceFolderDomainModel[] => {
 		return folders

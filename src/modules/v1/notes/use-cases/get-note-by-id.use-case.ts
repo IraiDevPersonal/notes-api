@@ -1,6 +1,6 @@
 import { HttpError } from "../../../../lib/errors/http-error";
 import { NoteMapper } from "../mappers/note.mapper";
-import type { Note } from "../models/domain/note.model";
+import type { NoteDomainModel } from "../models/domain/note.domain.model";
 import type { NotesRepository } from "../repositories/notes.respository";
 
 export class GetNoteByIdUseCase {
@@ -10,7 +10,7 @@ export class GetNoteByIdUseCase {
 		this.repository = repository;
 	}
 
-	execute = async (noteId: string): Promise<Note> => {
+	execute = async (noteId: string): Promise<NoteDomainModel> => {
 		const result = await this.repository.getNoteById(noteId);
 
 		if (!result) {

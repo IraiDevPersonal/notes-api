@@ -2,7 +2,7 @@ import type { FolderDbModel } from "../models/db/folder.db.model";
 import type {
 	CreateFolderPayload,
 	UpdateFolderPayload,
-} from "../models/domain/upsert-folder-payload.model";
+} from "../models/domain/upsert-folder-payload";
 
 export abstract class FoldersRepository {
 	abstract deleteFolder(id: string): Promise<void>;

@@ -3,7 +3,7 @@ import type { FolderDomainModel } from "../models/domain/folder.domain.model";
 import type {
 	CreateFolderPayload,
 	UpdateFolderPayload,
-} from "../models/domain/upsert-folder-payload.model";
+} from "../models/domain/upsert-folder-payload";
 import type { FoldersRepository } from "../repositories/folders.repository";
 
 type UpsertPayload = {
