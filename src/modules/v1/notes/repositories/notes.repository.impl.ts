@@ -1,6 +1,5 @@
-import { DbClient } from "@/lib/db-client";
-import { CustomError } from "@/lib/errors/custom-error";
-import { DBErrorHandler } from "@/lib/errors/db-error-hanlder";
+import { DatabaseClient } from "@/lib/database-client";
+import { DatabaseErrorhandler } from "@/lib/errors/database-error-handler";
 import type { DbNote } from "../models/db/db-note.model";
 import type { NoteComment } from "../models/domain/note-comment.model";
 import type {
@@ -10,7 +9,7 @@ import type {
 import { NOTE_QUERY_SELECTOR } from "../utils/query-selectors/note.query-selector";
 import type { NotesRepository } from "./notes.respository";
 
-export class NotesRepositoryImpl extends DbClient implements NotesRepository {
+export class NotesRepositoryImpl extends DatabaseClient implements NotesRepository {
 	private readonly noteSelector = NOTE_QUERY_SELECTOR;
 
 	deleteNote = async (id: string): Promise<void> => {
@@ -21,11 +20,7 @@ export class NotesRepositoryImpl extends DbClient implements NotesRepository {
 				select: { id: true },
 			});
 		} catch (error) {
-			const { message, statusCode } = DBErrorHandler.getErrorData(
-				error,
-				"Error deleting note."
-			);
-			throw new CustomError(message, statusCode);
+			throw DatabaseErrorhandler.toHttpError(error);
 		}
 	};
 
@@ -36,11 +31,7 @@ export class NotesRepositoryImpl extends DbClient implements NotesRepository {
 				select: this.noteSelector,
 			});
 		} catch (error) {
-			const { message, statusCode } = DBErrorHandler.getErrorData(
-				error,
-				"Error getting note."
-			);
-			throw new CustomError(message, statusCode);
+			throw DatabaseErrorhandler.toHttpError(error);
 		}
 	};
 
@@ -62,11 +53,7 @@ export class NotesRepositoryImpl extends DbClient implements NotesRepository {
 				select: this.noteSelector,
 			});
 		} catch (error) {
-			const { message, statusCode } = DBErrorHandler.getErrorData(
-				error,
-				"Error creating note."
-			);
-			throw new CustomError(message, statusCode);
+			throw DatabaseErrorhandler.toHttpError(error);
 		}
 	};
 
@@ -96,11 +83,7 @@ export class NotesRepositoryImpl extends DbClient implements NotesRepository {
 				select: this.noteSelector,
 			});
 		} catch (error) {
-			const { message, statusCode } = DBErrorHandler.getErrorData(
-				error,
-				"Error updating note."
-			);
-			throw new CustomError(message, statusCode);
+			throw DatabaseErrorhandler.toHttpError(error);
 		}
 	};
 

@@ -6,16 +6,16 @@ import type { ResourceFolderDomainModel } from "../models/domain/resource-folter
 
 export class ResourceFolderMapper {
 	static map(
-		raw: ResourceFolderDbModel,
+		folderRaw: ResourceFolderDbModel,
 		notesRaw: DbNote[]
 	): Omit<ResourceFolderDomainModel, "subfolders"> {
 		return {
-			id: raw.id,
-			name: raw.name,
-			order: raw.order,
-			owner: SharedUserMapper.map(raw.owner),
-			sharedWith: SharedUserMapper.toArray(raw.shareFolders.flatMap((f) => f.user)),
-			notes: notesRaw.filter((n) => n.folderId === raw.id).map(NoteMapper.map),
+			id: folderRaw.id,
+			name: folderRaw.name,
+			order: folderRaw.order,
+			owner: SharedUserMapper.map(folderRaw.owner),
+			sharedWith: SharedUserMapper.toArray(folderRaw.shareFolders.flatMap((f) => f.user)),
+			notes: notesRaw.filter((n) => n.folderId === folderRaw.id).map(NoteMapper.map),
 		};
 	}
 }

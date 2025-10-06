@@ -1,4 +1,4 @@
-import { logger } from "@/lib/logger";
+import { HttpError } from "@/lib/errors/http-error";
 import type { ResourceFolderDomainModel } from "@/modules/v1/folders/models/domain/resource-folter.domain.model";
 import type { RootFolderDomainModel } from "@/modules/v1/folders/models/domain/root-folder.domain.model";
 import { NoteMapper } from "@/modules/v1/notes/mappers/note.mapper";
@@ -13,39 +13,22 @@ type Data = {
 	sharedResources: RootFolderDomainModel;
 };
 
-type ExecuteResponse = [errorMessage: string | null, statusCode: number, Data | null];
-
 export class GetUserResourcesUseCase {
 	private readonly respository: UserRepository;
-	private readonly sourceError = "GetUserResourcesUseCase/execute";
 
 	constructor(respository: UserRepository) {
 		this.respository = respository;
 	}
 
-	execute = async (userId: string | undefined): Promise<ExecuteResponse> => {
-		if (!userId) {
-			const errorMessage = "User ID is required";
-			logger.error({
-				source: this.sourceError,
-				message: errorMessage,
-			});
-			return [errorMessage, 400, null];
-		}
-
+	execute = async (userId: string): Promise<Data> => {
 		const result = await this.respository.getUserResources(userId);
 
 		if (!result) {
-			const errorMessage = "User not found";
-			logger.error({
-				source: this.sourceError,
-				message: errorMessage,
-			});
-			return [errorMessage, 404, null];
+			throw HttpError.notFound("User not found");
 		}
 
 		const ownResources = this.buildRootFolder(
-			"own-root-folder",
+			"own-folder-id",
 			this.getUnfolderedNotes(result.notes),
 			this.buildFolderTree(result.folders, result.notes)
 		);
@@ -54,7 +37,7 @@ export class GetUserResourcesUseCase {
 		const flattenedShareNotes = result.shareNotes.flatMap((n) => n.note);
 
 		const sharedResources = this.buildRootFolder(
-			"shared-root-folder",
+			"shared-folder-id",
 			this.getUnfolderedNotes(flattenedShareNotes),
 			this.buildFolderTree(flattenedShareFolders, flattenedShareNotes)
 		);
@@ -64,7 +47,11 @@ export class GetUserResourcesUseCase {
 			sharedResources,
 		};
 
-		return [null, 200, data];
+		return data;
+	};
+
+	private getUnfolderedNotes = (notes: DbNote[]): Note[] => {
+		return notes.filter((n) => n.folderId === null).map(NoteMapper.map);
 	};
 
 	private buildRootFolder = (
@@ -78,10 +65,6 @@ export class GetUserResourcesUseCase {
 			notes: looseNotes,
 			subfolders: nestedFolders,
 		};
-	};
-
-	private getUnfolderedNotes = (notes: DbNote[]): Note[] => {
-		return notes.filter((n) => n.folderId === null).map(NoteMapper.map);
 	};
 
 	private buildFolderTree = (

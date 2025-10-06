@@ -1,21 +1,21 @@
 import type { Request, Response } from "express";
 import { ResponseController } from "@/lib/controllers/response.controller";
-import { CustomError } from "@/lib/errors/custom-error";
+import { HttpError } from "@/lib/errors/http-error";
 import { logger } from "@/lib/logger";
 import type { NotesRepository } from "./repositories/notes.respository";
 import { DeleteNoteUseCase } from "./use-cases/delete-note.use-case";
-import { GetNotesUseCase } from "./use-cases/get-notes.use-case";
+import { GetNoteByIdUseCase } from "./use-cases/get-note-by-id.use-case";
 import { UpsertNoteUseCase } from "./use-cases/upsert-note.use-case";
 
 export class NotesController {
 	private readonly upsertNoteUseCase: UpsertNoteUseCase;
 	private readonly deleteNoteUseCase: DeleteNoteUseCase;
-	private readonly getNoteUseCase: GetNotesUseCase;
+	private readonly getNoteByIdUseCase: GetNoteByIdUseCase;
 
 	constructor(service: NotesRepository) {
 		this.upsertNoteUseCase = new UpsertNoteUseCase(service);
 		this.deleteNoteUseCase = new DeleteNoteUseCase(service);
-		this.getNoteUseCase = new GetNotesUseCase(service);
+		this.getNoteByIdUseCase = new GetNoteByIdUseCase(service);
 	}
 
 	createNote = async (req: Request, res: Response) => {
@@ -23,10 +23,13 @@ export class NotesController {
 		const responseController = new ResponseController(res);
 
 		try {
-			const note = await this.upsertNoteUseCase.executeCreate(userId, req.body);
+			const note = await this.upsertNoteUseCase.execute({
+				userId,
+				body: req.body,
+			});
 			return responseController.json({ data: note }, 201);
 		} catch (error) {
-			const { message, statusCode } = CustomError.getErrorData(
+			const { message, statusCode } = HttpError.parseError(
 				error,
 				"Failed to create note"
 			);
@@ -40,15 +43,19 @@ export class NotesController {
 	};
 
 	updateNote = async (req: Request, res: Response) => {
-		const noteId = req.params.id;
+		const noteId = req.params.id!;
 		const userId = "550e8400-e29b-41d4-a716-446655440000";
 		const responseController = new ResponseController(res);
 
 		try {
-			const note = await this.upsertNoteUseCase.executeUpdate(userId, noteId!, req.body);
+			const note = await this.upsertNoteUseCase.execute({
+				body: req.body,
+				userId,
+				noteId,
+			});
 			return responseController.json({ data: note }, 200);
 		} catch (error) {
-			const { message, statusCode } = CustomError.getErrorData(
+			const { message, statusCode } = HttpError.parseError(
 				error,
 				"Failed to update note"
 			);
@@ -69,7 +76,7 @@ export class NotesController {
 			await this.deleteNoteUseCase.execute(noteId);
 			return responseController.noContent();
 		} catch (error) {
-			const { message, statusCode } = CustomError.getErrorData(
+			const { message, statusCode } = HttpError.parseError(
 				error,
 				"Failed to delete note"
 			);
@@ -83,17 +90,14 @@ export class NotesController {
 	};
 
 	getNoteById = async (req: Request, res: Response) => {
-		const noteId = req.params.id;
+		const noteId = req.params.id!;
 		const responseController = new ResponseController(res);
 
 		try {
-			const note = await this.getNoteUseCase.executeFindUnique(noteId!);
+			const note = await this.getNoteByIdUseCase.execute(noteId);
 			return responseController.json({ data: note });
 		} catch (error) {
-			const { message, statusCode } = CustomError.getErrorData(
-				error,
-				"Failed to get note"
-			);
+			const { message, statusCode } = HttpError.parseError(error, "Failed to get note");
 			logger.error({
 				source: "NotesController/getNoteById",
 				message,

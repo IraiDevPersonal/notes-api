@@ -1,8 +1,5 @@
-import { DbClient } from "@/lib/db-client";
-import { CustomError } from "@/lib/errors/custom-error";
-import { DBErrorHandler } from "@/lib/errors/db-error-hanlder";
-import type { DbNote } from "@/modules/v1/notes/models/db/db-note.model";
-import { NOTE_QUERY_SELECTOR } from "@/modules/v1/notes/utils/query-selectors/note.query-selector";
+import { DatabaseClient } from "@/lib/database-client";
+import { DatabaseErrorhandler } from "@/lib/errors/database-error-handler";
 import type { FolderDbModel } from "../models/db/folder.db.model";
 import type {
 	CreateFolderPayload,
@@ -11,7 +8,7 @@ import type {
 import { FOLDER_QUERY_SELECTOR } from "../utils/query-selectors/folder.query-selector";
 import type { FoldersRepository } from "./folders.repository";
 
-export class FoldersRepositoryImpl extends DbClient implements FoldersRepository {
+export class FoldersRepositoryImpl extends DatabaseClient implements FoldersRepository {
 	private readonly folderSelector = FOLDER_QUERY_SELECTOR;
 
 	deleteFolder = async (id: string): Promise<void> => {
@@ -22,27 +19,18 @@ export class FoldersRepositoryImpl extends DbClient implements FoldersRepository
 				select: { id: true },
 			});
 		} catch (error) {
-			const { message, statusCode } = DBErrorHandler.getErrorData(
-				error,
-				"Error deleting folder."
-			);
-			throw new CustomError(message, statusCode);
+			throw DatabaseErrorhandler.toHttpError(error);
 		}
 	};
 
-	getFoldersByParentId = async (id: string): Promise<FolderDbModel[]> => {
+	getFolderById = async (id: string): Promise<FolderDbModel | null> => {
 		try {
-			// FIXME: buscar forma de obtener todo el árbol de carpetas
-			return await this.db.folder.findMany({
-				where: { parentId: id, AND: [{ id }] },
+			return await this.db.folder.findUnique({
+				where: { id, deletedAt: null },
 				select: this.folderSelector,
 			});
 		} catch (error) {
-			const { message, statusCode } = DBErrorHandler.getErrorData(
-				error,
-				"Error getting folder."
-			);
-			throw new CustomError(message, statusCode);
+			throw DatabaseErrorhandler.toHttpError(error);
 		}
 	};
 
@@ -62,11 +50,7 @@ export class FoldersRepositoryImpl extends DbClient implements FoldersRepository
 				select: this.folderSelector,
 			});
 		} catch (error) {
-			const { message, statusCode } = DBErrorHandler.getErrorData(
-				error,
-				"Error creating folder."
-			);
-			throw new CustomError(message, statusCode);
+			throw DatabaseErrorhandler.toHttpError(error);
 		}
 	};
 
@@ -94,26 +78,7 @@ export class FoldersRepositoryImpl extends DbClient implements FoldersRepository
 				select: this.folderSelector,
 			});
 		} catch (error) {
-			const { message, statusCode } = DBErrorHandler.getErrorData(
-				error,
-				"Error updating folder."
-			);
-			throw new CustomError(message, statusCode);
-		}
-	};
-
-	getNotesByFolder = async (folderId: string): Promise<DbNote[]> => {
-		try {
-			return await this.db.note.findMany({
-				where: { folderId, deletedAt: null },
-				select: NOTE_QUERY_SELECTOR,
-			});
-		} catch (error) {
-			const { message, statusCode } = DBErrorHandler.getErrorData(
-				error,
-				"Error getting folder notes."
-			);
-			throw new CustomError(message, statusCode);
+			throw DatabaseErrorhandler.toHttpError(error);
 		}
 	};
 }

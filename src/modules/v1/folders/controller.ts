@@ -1,21 +1,21 @@
 import type { Request, Response } from "express";
 import { ResponseController } from "@/lib/controllers/response.controller";
-import { CustomError } from "@/lib/errors/custom-error";
+import { HttpError } from "@/lib/errors/http-error";
 import { logger } from "@/lib/logger";
 import type { FoldersRepository } from "./repositories/folders.repository";
 import { DeleteFolderUseCase } from "./use-cases/delete-folder.use-case";
-import { GetFoldersUseCase } from "./use-cases/get-folders.use-case";
+import { GetFolderByIdUseCase } from "./use-cases/get-folder-by-id.use-case";
 import { UpsertFolderUseCase } from "./use-cases/upsert-folder.use-case";
 
 export class FoldersController {
 	private readonly upsertFolderUseCase: UpsertFolderUseCase;
 	private readonly deleteFolderUseCase: DeleteFolderUseCase;
-	private readonly getFolderUseCase: GetFoldersUseCase;
+	private readonly getFolderByIdUseCase: GetFolderByIdUseCase;
 
 	constructor(repository: FoldersRepository) {
 		this.upsertFolderUseCase = new UpsertFolderUseCase(repository);
 		this.deleteFolderUseCase = new DeleteFolderUseCase(repository);
-		this.getFolderUseCase = new GetFoldersUseCase(repository);
+		this.getFolderByIdUseCase = new GetFolderByIdUseCase(repository);
 	}
 
 	createFolder = async (req: Request, res: Response) => {
@@ -23,10 +23,10 @@ export class FoldersController {
 		const responseController = new ResponseController(res);
 
 		try {
-			const result = await this.upsertFolderUseCase.executeCreate(userId, req.body);
-			responseController.json({ data: result }, 201);
+			const folder = await this.upsertFolderUseCase.execute({ userId, body: req.body });
+			responseController.json({ data: folder }, 201);
 		} catch (error) {
-			const { message, statusCode } = CustomError.getErrorData(
+			const { message, statusCode } = HttpError.parseError(
 				error,
 				"Failed to create folder"
 			);
@@ -40,19 +40,19 @@ export class FoldersController {
 	};
 
 	updateFolder = async (req: Request, res: Response) => {
-		const folderId = req.params.id;
+		const folderId = req.params.id!;
 		const userId = "550e8400-e29b-41d4-a716-446655440000";
 		const responseController = new ResponseController(res);
 
 		try {
-			const result = await this.upsertFolderUseCase.executeUpdate(
+			const folder = await this.upsertFolderUseCase.execute({
+				body: req.body,
+				folderId,
 				userId,
-				folderId!,
-				req.body
-			);
-			responseController.json({ data: result }, 200);
+			});
+			responseController.json({ data: folder }, 200);
 		} catch (error) {
-			const { message, statusCode } = CustomError.getErrorData(
+			const { message, statusCode } = HttpError.parseError(
 				error,
 				"Failed to update folder"
 			);
@@ -73,7 +73,7 @@ export class FoldersController {
 			await this.deleteFolderUseCase.execute(folderId);
 			responseController.noContent();
 		} catch (error) {
-			const { message, statusCode } = CustomError.getErrorData(
+			const { message, statusCode } = HttpError.parseError(
 				error,
 				"Failed to delete folder"
 			);
@@ -86,18 +86,15 @@ export class FoldersController {
 		}
 	};
 
-	getFoldersByParetnId = async (req: Request, res: Response) => {
+	getFolderById = async (req: Request, res: Response) => {
 		const folderId = req.params.id;
 		const responseController = new ResponseController(res);
 
 		try {
-			const result = await this.getFolderUseCase.execute(folderId!);
-			responseController.json({ data: result });
+			const folder = await this.getFolderByIdUseCase.execute(folderId!);
+			responseController.json({ data: folder });
 		} catch (error) {
-			const { message, statusCode } = CustomError.getErrorData(
-				error,
-				"Failed to get folder"
-			);
+			const { message, statusCode } = HttpError.parseError(error, "Failed to get folder");
 			logger.error({
 				source: "FoldersController/getFolderById",
 				message,

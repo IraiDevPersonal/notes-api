@@ -1,10 +1,16 @@
-import { ResourceFolderMapper } from "../mappers/resource-folder.mapper";
-import type { ResourceFolderDomainModel } from "../models/domain/resource-folter.domain.model";
+import { FolderMapper } from "../mappers/folder.mapper";
+import type { FolderDomainModel } from "../models/domain/folder.domain.model";
 import type {
 	CreateFolderPayload,
 	UpdateFolderPayload,
 } from "../models/domain/upsert-folder-payload.model";
 import type { FoldersRepository } from "../repositories/folders.repository";
+
+type UpsertPayload = {
+	folderId?: string;
+	userId: string;
+	body: unknown;
+};
 
 export class UpsertFolderUseCase {
 	private readonly repository: FoldersRepository;
@@ -13,28 +19,35 @@ export class UpsertFolderUseCase {
 		this.repository = repository;
 	}
 
-	executeCreate = async (
-		userId: string,
-		body: unknown
-	): Promise<Omit<ResourceFolderDomainModel, "subfolders">> => {
-		const folder = await this.repository.createFolder(
+	execute = async ({
+		userId,
+		folderId,
+		body,
+	}: UpsertPayload): Promise<FolderDomainModel> => {
+		if (folderId) {
+			return this.update(userId, folderId, body);
+		}
+		return this.create(userId, body);
+	};
+
+	private create = async (userId: string, body: unknown): Promise<FolderDomainModel> => {
+		const result = await this.repository.createFolder(
 			userId,
 			body as CreateFolderPayload
 		);
-		return ResourceFolderMapper.map(folder, []);
+		return FolderMapper.map(result);
 	};
 
-	executeUpdate = async (
+	private update = async (
 		userId: string,
 		folderId: string,
 		body: unknown
-	): Promise<Omit<ResourceFolderDomainModel, "subfolders">> => {
-		const folder = await this.repository.updateFolder(
+	): Promise<FolderDomainModel> => {
+		const result = await this.repository.updateFolder(
 			userId,
 			folderId,
 			body as UpdateFolderPayload
 		);
-		const notes = await this.repository.getNotesByFolder(folderId);
-		return ResourceFolderMapper.map(folder, notes);
+		return FolderMapper.map(result);
 	};
 }

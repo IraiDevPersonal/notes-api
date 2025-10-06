@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 
-export class DbClient {
+export class DatabaseClient {
 	protected readonly db: PrismaClient;
 
 	constructor() {

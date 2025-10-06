@@ -17,7 +17,7 @@ export class FoldersRoutesV1 {
 		router.get(
 			"/folders/:id",
 			[validateRequest({ params: IdParamSchema })],
-			this.controller.getFoldersByParetnId
+			this.controller.getFolderById
 		);
 		router.post(
 			"/folders",
@@ -26,12 +26,7 @@ export class FoldersRoutesV1 {
 		);
 		router.put(
 			"/folders/:id",
-			[
-				validateRequest({
-					params: IdParamSchema,
-					body: UpdateFolderSchema,
-				}),
-			],
+			[validateRequest({ params: IdParamSchema, body: UpdateFolderSchema })],
 			this.controller.updateFolder
 		);
 		router.delete(

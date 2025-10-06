@@ -1,14 +1,12 @@
-import { NoteMapper } from "../../notes/mappers/note.mapper";
-import type { DbNote } from "../../notes/models/db/db-note.model";
-import { SharedUserMapper } from "../../user/mappers/shared-user.mapper";
-import type { ResourceFolderDbModel } from "../models/db/resource-folder.db.model";
+import { NoteMapper } from "@/modules/v1/notes/mappers/note.mapper";
+import { SharedUserMapper } from "@/modules/v1/user/mappers/shared-user.mapper";
+import type { FolderDbModel } from "../models/db/folder.db.model";
 import type { FolderDomainModel } from "../models/domain/folder.domain.model";
 
 export class FolderMapper {
-	static map(
-		raw: ResourceFolderDbModel,
-		notesRaw: DbNote[]
-	): Omit<FolderDomainModel, "subfolders"> {
+	private static baseMap(
+		raw: Omit<FolderDbModel, "children" | "notes">
+	): Omit<FolderDomainModel, "subfolders" | "notes"> {
 		return {
 			id: raw.id,
 			name: raw.name,
@@ -20,7 +18,14 @@ export class FolderMapper {
 			owner: SharedUserMapper.map(raw.owner),
 			sharedWith: SharedUserMapper.toArray(raw.shareFolders.flatMap((f) => f.user)),
 			modifiedBy: raw.lastModifiedBy ? SharedUserMapper.map(raw.lastModifiedBy) : null,
-			notes: notesRaw.filter((n) => n.folderId === raw.id).map(NoteMapper.map),
+		};
+	}
+
+	static map(raw: FolderDbModel): FolderDomainModel {
+		return {
+			...this.baseMap(raw),
+			notes: raw.notes.map(NoteMapper.map),
+			subfolders: raw.children.map(this.baseMap),
 		};
 	}
 }

@@ -1,6 +1,5 @@
 import type { Note } from "@/modules/v1/notes/models/domain/note.model";
 import type { SharedUser } from "@/modules/v1/user/models/domain/shared-user.model";
-import type { ResourceFolderDomainModel } from "./resource-folter.domain.model";
 
 export type FolderDomainModel = {
 	id: string;
@@ -13,6 +12,6 @@ export type FolderDomainModel = {
 	parentId: string | null;
 	sharedWith: SharedUser[];
 	description?: string | null;
-	subfolders: ResourceFolderDomainModel[];
 	modifiedBy: SharedUser | null;
+	subfolders: Omit<FolderDomainModel, "subfolders" | "notes">[];
 };

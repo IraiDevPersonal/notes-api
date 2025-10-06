@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import { ResponseController } from "@/lib/controllers/response.controller";
+import { HttpError } from "@/lib/errors/http-error";
 import { logger } from "@/lib/logger";
 import type { UserRepository } from "./repositories/user.repository";
 import { GetUserResourcesUseCase } from "./use-cases/get-user-resources.use-case";
@@ -12,27 +13,23 @@ export class UserController {
 	}
 
 	getUserResources = async (req: Request, res: Response) => {
-		const userId = req.params.id;
+		const userId = req.params.id!;
 		const responseController = new ResponseController(res);
 
 		try {
-			const [error, statusCode, data] =
-				await this.getUserResourcesUseCase.execute(userId);
-
-			if (error) {
-				responseController.error(error, statusCode);
-				return;
-			}
-
-			responseController.json({ data }, statusCode);
+			const resources = await this.getUserResourcesUseCase.execute(userId);
+			responseController.json({ data: resources }, 200);
 		} catch (error) {
-			const errorMessage = "Failed to get user resources";
+			const { message, statusCode } = HttpError.parseError(
+				error,
+				"Failed to get user resources"
+			);
 			logger.error({
 				source: "UserController/getUserResources",
-				message: errorMessage,
+				message,
 				error,
 			});
-			responseController.error(errorMessage, 500);
+			responseController.error(message, statusCode);
 		}
 	};
 }

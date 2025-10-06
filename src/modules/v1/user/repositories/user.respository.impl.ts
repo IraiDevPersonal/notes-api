@@ -1,10 +1,10 @@
-import { DbClient } from "@/lib/db-client";
-import { CustomError } from "@/lib/errors/custom-error";
+import { DatabaseClient } from "@/lib/database-client";
+import { HttpError } from "@/lib/errors/http-error";
 import type { DBUserResources } from "../models/db/db-user-resources.model";
 import { USER_RESOURCES_QUERY_SELECTOR } from "../utils/query-selectors/user-resources.query-selector";
 import type { UserRepository } from "./user.repository";
 
-export class UserRepositoryImpl extends DbClient implements UserRepository {
+export class UserRepositoryImpl extends DatabaseClient implements UserRepository {
 	private readonly userResourcesSelector = USER_RESOURCES_QUERY_SELECTOR;
 
 	getUserResources = async (userId: string): Promise<DBUserResources | null> => {
@@ -14,11 +14,11 @@ export class UserRepositoryImpl extends DbClient implements UserRepository {
 				select: { ...this.userResourcesSelector },
 			});
 		} catch (error) {
-			const { message, statusCode } = CustomError.getErrorData(
+			const { message, statusCode } = HttpError.parseError(
 				error,
 				"Error to get user resources"
 			);
-			throw new CustomError(message, statusCode);
+			throw new HttpError(message, statusCode);
 		}
 	};
 }

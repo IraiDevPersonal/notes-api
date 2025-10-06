@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import type z from "zod";
 import { ResponseController } from "../controllers/response.controller";
-import { SchemaErrorHandler } from "../errors/schema-error-handler";
+import { ZodErrorHandler } from "../errors/schema-error-handler";
 import { logger } from "../logger";
 
 export class ValidationMiddleware {
@@ -28,8 +28,8 @@ export class ValidationMiddleware {
 			} catch (error) {
 				const responseController = new ResponseController(res);
 
-				if (SchemaErrorHandler.isSchemaError(error)) {
-					const errorMessage = SchemaErrorHandler.getErrorMessage(error);
+				if (ZodErrorHandler.isZodError(error)) {
+					const errorMessage = ZodErrorHandler.formatErrorMessage(error);
 					logger.error({
 						source: "ValidationMiddleware/validateRequest",
 						message: errorMessage,
