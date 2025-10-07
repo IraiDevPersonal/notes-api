@@ -40,4 +40,9 @@ export class HttpError extends Error {
 		}
 		return { message: defaultMessage, statusCode: 500 };
 	}
+
+	static toHttpError(error: unknown, defaultMessage?: string): HttpError {
+		const { message, statusCode } = this.parseError(error, defaultMessage);
+		return new HttpError(message, statusCode);
+	}
 }
