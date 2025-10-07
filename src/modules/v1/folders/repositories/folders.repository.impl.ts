@@ -1,5 +1,5 @@
 import { DatabaseClient } from "@/lib/database-client";
-import { DatabaseErrorhandler } from "@/lib/errors/database-error-handler";
+import { DatabaseErrorhandler } from "@/lib/errors/prisma-error-handler";
 import { removeUndefined } from "@/lib/utils";
 import type { FolderDbModel } from "../models/db/folder.db.model";
 import type {

@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import type z from "zod";
 import { ResponseController } from "../controllers/response.controller";
-import { ZodErrorHandler } from "../errors/schema-error-handler";
+import { ZodErrorHandler } from "../errors/zod-error-handler";
 import { logger } from "../logger";
 
 export class ValidationMiddleware {

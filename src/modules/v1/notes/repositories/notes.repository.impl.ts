@@ -1,5 +1,5 @@
 import { DatabaseClient } from "@/lib/database-client";
-import { DatabaseErrorhandler } from "@/lib/errors/database-error-handler";
+import { DatabaseErrorhandler } from "@/lib/errors/prisma-error-handler";
 import { removeUndefined } from "@/lib/utils";
 import type { NoteDbModel } from "../models/db/note.db..model";
 import type {
