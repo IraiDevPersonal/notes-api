@@ -2,7 +2,7 @@ import { Router } from "express";
 import { ValidationMiddleware } from "@/lib/middlewares/validation.middleware";
 import { IdParamSchema } from "@/lib/schemas/shared";
 import { FoldersController } from "./controller";
-import { FoldersRepositoryImpl } from "./repositories/folders.repository.impl";
+import { FoldersRepositoryImpl } from "./repository";
 import { CreateFolderSchema, UpdateFolderSchema } from "./schemas/upsert-folder.schema";
 
 const validateRequest = ValidationMiddleware.validateRequest;

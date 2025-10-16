@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import { ResponseController } from "@/lib/controllers/response.controller";
-import type { FoldersRepository } from "./repositories/folders.repository";
+import type { FoldersRepository } from "./repository";
 import { DeleteFolderUseCase } from "./use-cases/delete-folder.use-case";
 import { GetFolderByIdUseCase } from "./use-cases/get-folder-by-id.use-case";
 import { UpsertFolderUseCase } from "./use-cases/upsert-folder.use-case";

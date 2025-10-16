@@ -4,7 +4,7 @@ import type {
 	CreateFolderPayload,
 	UpdateFolderPayload,
 } from "../models/domain/upsert-folder-payload";
-import type { FoldersRepository } from "../repositories/folders.repository";
+import type { FoldersRepository } from "../repository";
 
 type UpsertPayload = {
 	folderId?: string;

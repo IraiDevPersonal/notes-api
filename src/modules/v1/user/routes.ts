@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { UserController } from "./controller";
-import { UserRepositoryImpl } from "./repositories/user.respository.impl";
+import { UserRepositoryImpl } from "./repository";
 
 export class UserRoutesV1 {
 	private static readonly repository = new UserRepositoryImpl();

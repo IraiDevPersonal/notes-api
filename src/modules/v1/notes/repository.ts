@@ -1,13 +1,24 @@
 import { DatabaseClient } from "@/lib/database-client";
 import { DatabaseErrorhandler } from "@/lib/errors/prisma-error-handler";
 import { removeUndefined } from "@/lib/utils";
-import type { NoteDbModel } from "../models/db/note.db..model";
+import type { NoteDbModel } from "./models/db/note.db.model";
 import type {
 	CreateNotePayload,
 	UpdateNotePayload,
-} from "../models/domain/upsert-note-payload";
-import { NOTE_QUERY_SELECTOR } from "../utils/query-selectors/note.query-selector";
-import type { NotesRepository } from "./notes.respository";
+} from "./models/domain/upsert-note-payload";
+import { NOTE_QUERY_SELECTOR } from "./utils/query-selectors/note.query-selector";
+
+export interface NotesRepository {
+	deleteNote(id: string): Promise<void>;
+	getNoteById(id: string): Promise<NoteDbModel | null>;
+	updateNote(
+		userId: string,
+		noteId: string,
+		payload: UpdateNotePayload
+	): Promise<NoteDbModel>;
+	createNote(userId: string, payload: CreateNotePayload): Promise<NoteDbModel>;
+	syncNoteSharedUsers(noteId: string, sharedUsers: string[]): Promise<void>;
+}
 
 export class NotesRepositoryImpl extends DatabaseClient implements NotesRepository {
 	private readonly noteSelector = NOTE_QUERY_SELECTOR;
@@ -72,6 +83,21 @@ export class NotesRepositoryImpl extends DatabaseClient implements NotesReposito
 					...removeUndefined(payload),
 				},
 				select: this.noteSelector,
+			});
+		} catch (error) {
+			throw DatabaseErrorhandler.toHttpError(error);
+		}
+	};
+
+	syncNoteSharedUsers = async (noteId: string, sharedUsers: string[]): Promise<void> => {
+		try {
+			await this.db.note.update({
+				where: { id: noteId, deletedAt: null },
+				data: {
+					shareNotes: {
+						connect: sharedUsers.map((userId) => ({ noteId_userId: { noteId, userId } })),
+					},
+				},
 			});
 		} catch (error) {
 			throw DatabaseErrorhandler.toHttpError(error);

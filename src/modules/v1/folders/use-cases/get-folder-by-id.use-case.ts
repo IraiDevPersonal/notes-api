@@ -1,6 +1,6 @@
 import { HttpError } from "@/lib/errors/http-error";
 import { FolderMapper } from "../mappers/folder.mapper";
-import type { FoldersRepository } from "../repositories/folders.repository";
+import type { FoldersRepository } from "../repository";
 
 export class GetFolderByIdUseCase {
 	private readonly repository: FoldersRepository;

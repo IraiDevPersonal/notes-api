@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import { ResponseController } from "@/lib/controllers/response.controller";
-import type { NotesRepository } from "./repositories/notes.respository";
+import type { NotesRepository } from "./repository";
 import { DeleteNoteUseCase } from "./use-cases/delete-note.use-case";
 import { GetNoteByIdUseCase } from "./use-cases/get-note-by-id.use-case";
 import { UpsertNoteUseCase } from "./use-cases/upsert-note.use-case";

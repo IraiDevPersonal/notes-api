@@ -1,4 +1,4 @@
-import type { FoldersRepository } from "../repositories/folders.repository";
+import type { FoldersRepository } from "../repository";
 
 export class DeleteFolderUseCase {
 	private readonly repository: FoldersRepository;

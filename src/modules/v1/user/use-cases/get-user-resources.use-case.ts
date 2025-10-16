@@ -2,11 +2,11 @@ import { HttpError } from "@/lib/errors/http-error";
 import type { ResourceFolderDomainModel } from "@/modules/v1/folders/models/domain/resource-folter.domain.model";
 import type { RootFolderDomainModel } from "@/modules/v1/folders/models/domain/root-folder.domain.model";
 import { NoteMapper } from "@/modules/v1/notes/mappers/note.mapper";
-import type { NoteDbModel } from "@/modules/v1/notes/models/db/note.db..model";
+import type { NoteDbModel } from "@/modules/v1/notes/models/db/note.db.model";
 import type { NoteDomainModel } from "@/modules/v1/notes/models/domain/note.domain.model";
 import { ResourceFolderMapper } from "../../folders/mappers/resource-folder.mapper";
 import type { ResourceFolderDbModel } from "../../folders/models/db/resource-folder.db.model";
-import type { UserRepository } from "../repositories/user.repository";
+import type { UserRepository } from "../repository";
 
 type Data = {
 	ownResources: RootFolderDomainModel;

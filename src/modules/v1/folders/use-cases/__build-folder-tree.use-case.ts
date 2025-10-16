@@ -1,4 +1,4 @@
-import type { NoteDbModel } from "../../notes/models/db/note.db..model";
+import type { NoteDbModel } from "@/modules/v1/notes/models/db/note.db.model";
 import type { ResourceFolderDbModel } from "../models/db/resource-folder.db.model";
 import type { FolderDomainModel } from "../models/domain/folder.domain.model";
 import type { ResourceFolderDomainModel } from "../models/domain/resource-folter.domain.model";

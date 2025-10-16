@@ -1,13 +1,24 @@
 import { DatabaseClient } from "@/lib/database-client";
 import { DatabaseErrorhandler } from "@/lib/errors/prisma-error-handler";
 import { removeUndefined } from "@/lib/utils";
-import type { FolderDbModel } from "../models/db/folder.db.model";
+import type { FolderDbModel } from "./models/db/folder.db.model";
 import type {
 	CreateFolderPayload,
 	UpdateFolderPayload,
-} from "../models/domain/upsert-folder-payload";
-import { FOLDER_QUERY_SELECTOR } from "../utils/query-selectors/folder.query-selector";
-import type { FoldersRepository } from "./folders.repository";
+} from "./models/domain/upsert-folder-payload";
+import { FOLDER_QUERY_SELECTOR } from "./utils/query-selectors/folder.query-selector";
+
+export interface FoldersRepository {
+	deleteFolder(id: string): Promise<void>;
+	getFolderById(id: string): Promise<FolderDbModel | null>;
+	updateFolder(
+		userId: string,
+		folderId: string,
+		payload: UpdateFolderPayload
+	): Promise<FolderDbModel>;
+	createFolder(userId: string, payload: CreateFolderPayload): Promise<FolderDbModel>;
+	syncFolderSharedUsers: (folderId: string, userIds: string[]) => Promise<void>;
+}
 
 export class FoldersRepositoryImpl extends DatabaseClient implements FoldersRepository {
 	private readonly folderSelector = FOLDER_QUERY_SELECTOR;
@@ -68,6 +79,21 @@ export class FoldersRepositoryImpl extends DatabaseClient implements FoldersRepo
 					...removeUndefined(payload),
 				},
 				select: this.folderSelector,
+			});
+		} catch (error) {
+			throw DatabaseErrorhandler.toHttpError(error);
+		}
+	};
+
+	syncFolderSharedUsers = async (folderId: string, userIds: string[]): Promise<void> => {
+		try {
+			await this.db.folder.update({
+				where: { id: folderId, deletedAt: null },
+				data: {
+					shareFolders: {
+						connect: userIds.map((id) => ({ folderId_userId: { folderId, userId: id } })),
+					},
+				},
 			});
 		} catch (error) {
 			throw DatabaseErrorhandler.toHttpError(error);

@@ -4,7 +4,7 @@ import type {
 	CreateNotePayload,
 	UpdateNotePayload,
 } from "../models/domain/upsert-note-payload";
-import type { NotesRepository } from "../repositories/notes.respository";
+import type { NotesRepository } from "../repository";
 
 type UpsertPayload = {
 	noteId?: string;

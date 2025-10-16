@@ -1,7 +1,7 @@
 import { HttpError } from "../../../../lib/errors/http-error";
 import { NoteMapper } from "../mappers/note.mapper";
 import type { NoteDomainModel } from "../models/domain/note.domain.model";
-import type { NotesRepository } from "../repositories/notes.respository";
+import type { NotesRepository } from "../repository";
 
 export class GetNoteByIdUseCase {
 	private readonly repository: NotesRepository;

@@ -1,8 +1,11 @@
 import { DatabaseClient } from "@/lib/database-client";
 import { HttpError } from "@/lib/errors/http-error";
-import type { UserResourcesDbModel } from "../models/db/user-resources.db.model";
-import { USER_RESOURCES_QUERY_SELECTOR } from "../utils/query-selectors/user-resources.query-selector";
-import type { UserRepository } from "./user.repository";
+import type { UserResourcesDbModel } from "./models/db/user-resources.db.model";
+import { USER_RESOURCES_QUERY_SELECTOR } from "./utils/query-selectors/user-resources.query-selector";
+
+export interface UserRepository {
+	getUserResources(userId: string): Promise<UserResourcesDbModel | null>;
+}
 
 export class UserRepositoryImpl extends DatabaseClient implements UserRepository {
 	private readonly userResourcesSelector = USER_RESOURCES_QUERY_SELECTOR;
