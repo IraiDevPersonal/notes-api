@@ -1,7 +1,5 @@
 import type { Request, Response } from "express";
 import { ResponseController } from "@/lib/controllers/response.controller";
-import { HttpError } from "@/lib/errors/http-error";
-import { logger } from "@/lib/logger";
 import type { FoldersRepository } from "./repositories/folders.repository";
 import { DeleteFolderUseCase } from "./use-cases/delete-folder.use-case";
 import { GetFolderByIdUseCase } from "./use-cases/get-folder-by-id.use-case";
@@ -26,16 +24,10 @@ export class FoldersController {
 			const folder = await this.upsertFolderUseCase.execute({ userId, body: req.body });
 			responseController.json({ data: folder }, 201);
 		} catch (error) {
-			const { message, statusCode } = HttpError.parseError(
-				error,
-				"Failed to create folder"
-			);
-			logger.error({
+			responseController.errorHandler(error, {
 				source: "FoldersController/createFolder",
-				message,
-				error,
+				defaultMessage: "Failed to create folder",
 			});
-			responseController.error(message, statusCode);
 		}
 	};
 
@@ -52,16 +44,10 @@ export class FoldersController {
 			});
 			responseController.json({ data: folder }, 200);
 		} catch (error) {
-			const { message, statusCode } = HttpError.parseError(
-				error,
-				"Failed to update folder"
-			);
-			logger.error({
+			responseController.errorHandler(error, {
 				source: "FoldersController/updateFolder",
-				message,
-				error,
+				defaultMessage: "Failed to update folder",
 			});
-			responseController.error(message, statusCode);
 		}
 	};
 
@@ -73,16 +59,10 @@ export class FoldersController {
 			await this.deleteFolderUseCase.execute(folderId);
 			responseController.noContent();
 		} catch (error) {
-			const { message, statusCode } = HttpError.parseError(
-				error,
-				"Failed to delete folder"
-			);
-			logger.error({
+			responseController.errorHandler(error, {
 				source: "FoldersController/deleteFolder",
-				message,
-				error,
+				defaultMessage: "Failed to delete folder",
 			});
-			responseController.error(message, statusCode);
 		}
 	};
 
@@ -94,13 +74,10 @@ export class FoldersController {
 			const folder = await this.getFolderByIdUseCase.execute(folderId!);
 			responseController.json({ data: folder });
 		} catch (error) {
-			const { message, statusCode } = HttpError.parseError(error, "Failed to get folder");
-			logger.error({
+			responseController.errorHandler(error, {
 				source: "FoldersController/getFolderById",
-				message,
-				error,
+				defaultMessage: "Failed to get folder by id",
 			});
-			responseController.error(message, statusCode);
 		}
 	};
 }

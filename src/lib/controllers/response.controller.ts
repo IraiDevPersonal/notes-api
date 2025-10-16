@@ -1,4 +1,6 @@
 import type { Response } from "express";
+import { HttpError } from "../errors/http-error";
+import { logger } from "../logger";
 
 export class ResponseController {
 	private readonly response: Response;
@@ -17,5 +19,15 @@ export class ResponseController {
 
 	error(message: string, statusCode: number) {
 		this.response.status(statusCode).json({ error: message });
+	}
+
+	errorHandler(error: unknown, options?: { source?: string; defaultMessage?: string }) {
+		const { message, statusCode } = HttpError.parseError(error, options?.defaultMessage);
+		logger.error({
+			source: options?.source,
+			message,
+			error,
+		});
+		this.error(message, statusCode);
 	}
 }

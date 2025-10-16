@@ -1,8 +1,6 @@
 import type { Request, Response } from "express";
 import { ResponseController } from "@/lib/controllers/response.controller";
-import { HttpError } from "@/lib/errors/http-error";
 import type { HttpClient } from "@/lib/http-client";
-import { logger } from "@/lib/logger";
 import { GetMetadataByUrlUseCase } from "./use-cases/get-metadata-by-url.use-case";
 
 export class UtilitiesController {
@@ -20,16 +18,10 @@ export class UtilitiesController {
 			const metadata = await this.getMetadataByUrlUseCase.execute(url);
 			responseController.json({ data: metadata }, 200);
 		} catch (error) {
-			const { message, statusCode } = HttpError.parseError(
-				error,
-				"Failed to get metadata by URL"
-			);
-			logger.error({
+			responseController.errorHandler(error, {
 				source: "UtilitiesController/getMetadataByUrl",
-				message,
-				error,
+				defaultMessage: "Failed to get metadata by URL",
 			});
-			responseController.error(message, statusCode);
 		}
 	};
 }

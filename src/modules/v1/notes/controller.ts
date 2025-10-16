@@ -1,7 +1,5 @@
 import type { Request, Response } from "express";
 import { ResponseController } from "@/lib/controllers/response.controller";
-import { HttpError } from "@/lib/errors/http-error";
-import { logger } from "@/lib/logger";
 import type { NotesRepository } from "./repositories/notes.respository";
 import { DeleteNoteUseCase } from "./use-cases/delete-note.use-case";
 import { GetNoteByIdUseCase } from "./use-cases/get-note-by-id.use-case";
@@ -29,16 +27,10 @@ export class NotesController {
 			});
 			return responseController.json({ data: note }, 201);
 		} catch (error) {
-			const { message, statusCode } = HttpError.parseError(
-				error,
-				"Failed to create note"
-			);
-			logger.error({
+			responseController.errorHandler(error, {
 				source: "NotesController/createNote",
-				message,
-				error,
+				defaultMessage: "Failed to create note",
 			});
-			responseController.error(message, statusCode);
 		}
 	};
 
@@ -55,16 +47,10 @@ export class NotesController {
 			});
 			return responseController.json({ data: note }, 200);
 		} catch (error) {
-			const { message, statusCode } = HttpError.parseError(
-				error,
-				"Failed to update note"
-			);
-			logger.error({
+			responseController.errorHandler(error, {
 				source: "NotesController/updateNote",
-				message,
-				error,
+				defaultMessage: "Failed to update note",
 			});
-			responseController.error(message, statusCode);
 		}
 	};
 
@@ -76,16 +62,10 @@ export class NotesController {
 			await this.deleteNoteUseCase.execute(noteId);
 			return responseController.noContent();
 		} catch (error) {
-			const { message, statusCode } = HttpError.parseError(
-				error,
-				"Failed to delete note"
-			);
-			logger.error({
+			responseController.errorHandler(error, {
 				source: "NotesController/deleteNote",
-				message,
-				error,
+				defaultMessage: "Failed to delete note",
 			});
-			responseController.error(message, statusCode);
 		}
 	};
 
@@ -97,13 +77,10 @@ export class NotesController {
 			const note = await this.getNoteByIdUseCase.execute(noteId);
 			return responseController.json({ data: note });
 		} catch (error) {
-			const { message, statusCode } = HttpError.parseError(error, "Failed to get note");
-			logger.error({
+			responseController.errorHandler(error, {
 				source: "NotesController/getNoteById",
-				message,
-				error,
+				defaultMessage: "Failed to get note by id",
 			});
-			responseController.error(message, statusCode);
 		}
 	};
 }
