@@ -5,7 +5,7 @@ import type { HttpClient } from "@/lib/http-client";
 import { logger } from "@/lib/logger";
 import { GetMetadataByUrlUseCase } from "./use-cases/get-metadata-by-url.use-case";
 
-export class MetadataController {
+export class UtilitiesController {
 	private readonly getMetadataByUrlUseCase: GetMetadataByUrlUseCase;
 
 	constructor(httpClient: HttpClient) {
@@ -25,7 +25,7 @@ export class MetadataController {
 				"Failed to get metadata by URL"
 			);
 			logger.error({
-				source: "MetadataController/getMetadataByUrl",
+				source: "UtilitiesController/getMetadataByUrl",
 				message,
 				error,
 			});

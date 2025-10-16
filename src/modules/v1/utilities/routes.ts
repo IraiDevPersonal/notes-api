@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { HttpClient } from "@/lib/http-client";
 import { ValidationMiddleware } from "@/lib/middlewares/validation.middleware";
-import { MetadataController } from "./controller";
-import { MetadataQuerySchema } from "./schema/metadata-query.schema";
+import { UtilitiesController } from "./controller";
+import { MetadataQuerySchema } from "./schemas/metadata-query.schema";
 
 const validateRequest = ValidationMiddleware.validateRequest;
 
@@ -14,14 +14,14 @@ const httpClient = new HttpClient({
 	},
 });
 
-export class MetadataRoutesV1 {
-	private static readonly controller = new MetadataController(httpClient);
+export class UtilitiesRoutesV1 {
+	private static readonly controller = new UtilitiesController(httpClient);
 
 	static get routes(): Router {
 		const router = Router();
 
 		router.get(
-			"/metadata",
+			"/utilities/metadata",
 			validateRequest({ query: MetadataQuerySchema }),
 			this.controller.getMetadataByUrl
 		);

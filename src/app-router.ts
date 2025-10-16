@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { FoldersRoutesV1 } from "./modules/v1/folders/routes";
-import { MetadataRoutesV1 } from "./modules/v1/metadata/routes";
 import { NotesRoutesV1 } from "./modules/v1/notes/routes";
 import { UserRoutesV1 } from "./modules/v1/user/routes";
+import { UtilitiesRoutesV1 } from "./modules/v1/utilities/routes";
 
 export class AppRouter {
 	static get routes(): Router {
@@ -21,7 +21,7 @@ export class AppRouter {
 		router.use("/api/v1", UserRoutesV1.routes);
 		router.use("/api/v1", NotesRoutesV1.routes);
 		router.use("/api/v1", FoldersRoutesV1.routes);
-		router.use("/api/v1", MetadataRoutesV1.routes);
+		router.use("/api/v1", UtilitiesRoutesV1.routes);
 
 		return router;
 	}
