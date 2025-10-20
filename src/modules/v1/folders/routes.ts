@@ -3,6 +3,7 @@ import { ValidationMiddleware } from "@/lib/middlewares/validation.middleware";
 import { IdParamSchema } from "@/lib/schemas/shared";
 import { FoldersController } from "./controller";
 import { FoldersRepositoryImpl } from "./repository";
+import { FolderSharedUsersSchema } from "./schemas/folder-shared-users.schema";
 import { CreateFolderSchema, UpdateFolderSchema } from "./schemas/upsert-folder.schema";
 
 const validateRequest = ValidationMiddleware.validateRequest;
@@ -33,6 +34,11 @@ export class FoldersRoutesV1 {
 			"/folders/:id",
 			[validateRequest({ params: IdParamSchema })],
 			this.controller.deleteFolder
+		);
+		router.put(
+			"/folders/:id/shared-users",
+			[validateRequest({ params: IdParamSchema, body: FolderSharedUsersSchema })],
+			this.controller.syncFolderSharedUsers
 		);
 
 		return router;
