@@ -36,7 +36,7 @@ export class FoldersRoutesV1 {
 			this.controller.deleteFolder
 		);
 		router.put(
-			"/folders/:id/shared-users",
+			"/folders/:id/share",
 			[validateRequest({ params: IdParamSchema, body: FolderSharedUsersSchema })],
 			this.controller.syncFolderSharedUsers
 		);

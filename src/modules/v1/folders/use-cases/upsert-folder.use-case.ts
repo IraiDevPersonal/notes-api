@@ -6,7 +6,7 @@ import type {
 } from "../models/domain/upsert-folder-payload";
 import type { FoldersRepository } from "../repository";
 
-type UpsertPayload = {
+type ExecutePayload = {
 	folderId?: string;
 	userId: string;
 	body: unknown;
@@ -23,7 +23,7 @@ export class UpsertFolderUseCase {
 		userId,
 		folderId,
 		body,
-	}: UpsertPayload): Promise<FolderDomainModel> => {
+	}: ExecutePayload): Promise<FolderDomainModel> => {
 		if (folderId) {
 			return this.update(userId, folderId, body);
 		}

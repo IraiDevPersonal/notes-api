@@ -17,7 +17,10 @@ export class FoldersController {
 		this.upsertFolderUseCase = new UpsertFolderUseCase(repository);
 		this.deleteFolderUseCase = new DeleteFolderUseCase(repository);
 		this.getFolderByIdUseCase = new GetFolderByIdUseCase(repository);
-		this.syncFolderSharedUsersUseCase = new SyncFolderSharedUsersUseCase(repository);
+		this.syncFolderSharedUsersUseCase = new SyncFolderSharedUsersUseCase(
+			repository,
+			this.getFolderByIdUseCase
+		);
 	}
 
 	createFolder = async (req: Request, res: Response) => {
@@ -86,12 +89,18 @@ export class FoldersController {
 	};
 
 	syncFolderSharedUsers = async (req: Request, res: Response) => {
+		// const userId = "550e8400-e29b-41d4-a716-446655440001";
+		const userId = "550e8400-e29b-41d4-a716-446655440000";
 		const folderId = req.params.id!;
 		const payload = req.body as FolderSharedUsersDomainModel;
 		const responseController = new ResponseController(res);
 
 		try {
-			await this.syncFolderSharedUsersUseCase.execute(folderId, payload.userIds);
+			await this.syncFolderSharedUsersUseCase.execute({
+				sharedUsers: payload.userIds,
+				folderId,
+				userId,
+			});
 			responseController.noContent();
 		} catch (error) {
 			responseController.errorHandler(error, {
