@@ -2,7 +2,7 @@ import { Router } from "express";
 import { ValidationMiddleware } from "@/lib/middlewares/validation.middleware";
 import { IdParamSchema } from "@/lib/schemas/shared";
 import { NotesController } from "./controller";
-import { NotesRepositoryImpl } from "./repositories/notes.repository.impl";
+import { NotesRepositoryImpl } from "./repository";
 import { CreateNoteSchema, UpdateNoteSchema } from "./schemas/upsert-note.schema";
 
 const validateRequest = ValidationMiddleware.validateRequest;
