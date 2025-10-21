@@ -3,6 +3,7 @@ import { ValidationMiddleware } from "@/lib/middlewares/validation.middleware";
 import { IdParamSchema } from "@/lib/schemas/shared";
 import { NotesController } from "./controller";
 import { NotesRepositoryImpl } from "./repository";
+import { NoteSharedUsersSchema } from "./schemas/note-shared-users.schema";
 import { CreateNoteSchema, UpdateNoteSchema } from "./schemas/upsert-note.schema";
 
 const validateRequest = ValidationMiddleware.validateRequest;
@@ -38,6 +39,11 @@ export class NotesRoutesV1 {
 			"/notes/:id",
 			[validateRequest({ params: IdParamSchema })],
 			this.controller.deleteNote
+		);
+		router.put(
+			"/notes/:id/share",
+			[validateRequest({ params: IdParamSchema, body: NoteSharedUsersSchema })],
+			this.controller.syncNoteSharedUsers
 		);
 
 		return router;

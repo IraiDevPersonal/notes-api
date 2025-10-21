@@ -53,14 +53,51 @@ export class NotesRepositoryImpl extends DatabaseClient implements NotesReposito
 		try {
 			const folderId = payload.folderId || null;
 
-			return await this.db.note.create({
-				data: {
-					folderId,
-					ownerId: userId,
-					title: payload.title,
-					content: payload.content,
-				},
-				select: this.noteSelector,
+			// Si no está en una carpeta, crear directamente sin transacción
+			if (!folderId) {
+				return await this.db.note.create({
+					data: {
+						folderId: null,
+						ownerId: userId,
+						title: payload.title,
+						content: payload.content,
+					},
+					select: this.noteSelector,
+				});
+			}
+
+			// Si está en una carpeta, usar transacción para heredar permisos
+			return await this.db.$transaction(async (tx) => {
+				const note = await tx.note.create({
+					data: {
+						folderId,
+						ownerId: userId,
+						title: payload.title,
+						content: payload.content,
+					},
+					select: this.noteSelector,
+				});
+
+				const folderShares = await tx.shareFolder.findMany({
+					where: { folderId },
+					select: {
+						userId: true,
+						permission: true,
+					},
+				});
+
+				if (folderShares.length > 0) {
+					await tx.shareNote.createMany({
+						data: folderShares.map((share) => ({
+							noteId: note.id,
+							userId: share.userId,
+							permission: share.permission,
+						})),
+						skipDuplicates: true,
+					});
+				}
+
+				return note;
 			});
 		} catch (error) {
 			throw DatabaseErrorhandler.toHttpError(error);
@@ -95,7 +132,8 @@ export class NotesRepositoryImpl extends DatabaseClient implements NotesReposito
 				where: { id: noteId, deletedAt: null },
 				data: {
 					shareNotes: {
-						connect: sharedUsers.map((userId) => ({ noteId_userId: { noteId, userId } })),
+						deleteMany: {},
+						create: sharedUsers.map((userId) => ({ userId, permission: "READ" })),
 					},
 				},
 			});
