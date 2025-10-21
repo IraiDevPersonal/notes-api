@@ -52,15 +52,55 @@ export class FoldersRepositoryImpl extends DatabaseClient implements FoldersRepo
 		payload: CreateFolderPayload
 	): Promise<FolderDbModel> => {
 		try {
-			return await this.db.folder.create({
-				data: {
-					ownerId: userId,
-					name: payload.name,
-					description: payload.description || null,
-					parentId: payload.parentId || null,
-					order: payload.order ?? 0,
-				},
-				select: this.folderSelector,
+			const parentId = payload.parentId || null;
+
+			// Si no hay parentId, crear directamente sin transacción
+			if (!parentId) {
+				return await this.db.folder.create({
+					data: {
+						ownerId: userId,
+						name: payload.name,
+						description: payload.description || null,
+						parentId: null,
+						order: payload.order ?? 0,
+					},
+					select: this.folderSelector,
+				});
+			}
+
+			// Si hay parentId, usar transacción para heredar permisos
+			return await this.db.$transaction(async (tx) => {
+				const folder = await tx.folder.create({
+					data: {
+						ownerId: userId,
+						name: payload.name,
+						description: payload.description || null,
+						parentId: parentId,
+						order: payload.order ?? 0,
+					},
+					select: this.folderSelector,
+				});
+
+				const parentShares = await tx.shareFolder.findMany({
+					where: { folderId: parentId },
+					select: {
+						userId: true,
+						permission: true,
+					},
+				});
+
+				if (parentShares.length > 0) {
+					await tx.shareFolder.createMany({
+						data: parentShares.map((share) => ({
+							folderId: folder.id,
+							userId: share.userId,
+							permission: share.permission,
+						})),
+						skipDuplicates: true,
+					});
+				}
+
+				return folder;
 			});
 		} catch (error) {
 			throw DatabaseErrorhandler.toHttpError(error);
