@@ -2,14 +2,14 @@ import { Router } from "express";
 import { ValidationMiddleware } from "@/lib/middlewares/validation.middleware";
 import { IdParamSchema } from "@/lib/schemas/shared";
 import { NotesController } from "./controller";
-import { NotesRepositoryImpl } from "./repository";
-import { NoteSharedUsersSchema } from "./schemas/note-shared-users.schema";
-import { CreateNoteSchema, UpdateNoteSchema } from "./schemas/upsert-note.schema";
+import { NotesRepository } from "./repository";
+import { NoteSharedUsersSchema } from "./utils/schemas/note-shared-users.schema";
+import { CreateNoteSchema, UpdateNoteSchema } from "./utils/schemas/upsert-note.schema";
 
 const validateRequest = ValidationMiddleware.validateRequest;
 
 export class NotesRoutesV1 {
-	private static readonly repository = new NotesRepositoryImpl();
+	private static readonly repository = new NotesRepository();
 	private static readonly controller = new NotesController(this.repository);
 
 	static get routes(): Router {

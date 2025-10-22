@@ -8,19 +8,7 @@ import type {
 } from "./models/domain/upsert-note-payload";
 import { NOTE_QUERY_SELECTOR } from "./utils/query-selectors/note.query-selector";
 
-export interface NotesRepository {
-	deleteNote(id: string): Promise<void>;
-	getNoteById(id: string): Promise<NoteDbModel | null>;
-	updateNote(
-		userId: string,
-		noteId: string,
-		payload: UpdateNotePayload
-	): Promise<NoteDbModel>;
-	createNote(userId: string, payload: CreateNotePayload): Promise<NoteDbModel>;
-	syncNoteSharedUsers(noteId: string, sharedUsers: string[]): Promise<void>;
-}
-
-export class NotesRepositoryImpl extends DatabaseClient implements NotesRepository {
+export class NotesRepository extends DatabaseClient {
 	private readonly noteSelector = NOTE_QUERY_SELECTOR;
 
 	deleteNote = async (id: string): Promise<void> => {

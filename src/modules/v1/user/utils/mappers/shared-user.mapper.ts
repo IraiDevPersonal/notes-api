@@ -1,5 +1,5 @@
-import type { SharedUserDbModel } from "../models/db/shared-user.db.model";
-import type { SharedUserDomainModel } from "../models/domain/shared-user.domain.model";
+import type { SharedUserDbModel } from "../../models/db/shared-user.db.model";
+import type { SharedUserDomainModel } from "../../models/domain/shared-user.domain.model";
 
 export class SharedUserMapper {
 	static map = (raw: SharedUserDbModel): SharedUserDomainModel => {

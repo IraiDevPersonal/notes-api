@@ -9,19 +9,7 @@ import type {
 } from "./models/domain/upsert-folder-payload";
 import { FOLDER_QUERY_SELECTOR } from "./utils/query-selectors/folder.query-selector";
 
-export interface FoldersRepository {
-	deleteFolder(id: string): Promise<void>;
-	getFolderById(id: string): Promise<FolderDbModel | null>;
-	updateFolder(
-		userId: string,
-		folderId: string,
-		payload: UpdateFolderPayload
-	): Promise<FolderDbModel>;
-	createFolder(userId: string, payload: CreateFolderPayload): Promise<FolderDbModel>;
-	syncFolderSharedUsers: (folderId: string, userIds: string[]) => Promise<void>;
-}
-
-export class FoldersRepositoryImpl extends DatabaseClient implements FoldersRepository {
+export class FoldersRepository extends DatabaseClient {
 	private readonly folderSelector = FOLDER_QUERY_SELECTOR;
 
 	deleteFolder = async (id: string): Promise<void> => {

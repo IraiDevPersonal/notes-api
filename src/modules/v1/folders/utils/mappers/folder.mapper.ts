@@ -1,7 +1,7 @@
-import { NoteMapper } from "@/modules/v1/notes/mappers/note.mapper";
-import { SharedUserMapper } from "@/modules/v1/user/mappers/shared-user.mapper";
-import type { FolderDbModel } from "../models/db/folder.db.model";
-import type { FolderDomainModel } from "../models/domain/folder.domain.model";
+import { NoteMapper } from "@/modules/v1/notes/utils/mappers/note.mapper";
+import { SharedUserMapper } from "@/modules/v1/user/utils/mappers/shared-user.mapper";
+import type { FolderDbModel } from "../../models/db/folder.db.model";
+import type { FolderDomainModel } from "../../models/domain/folder.domain.model";
 
 export class FolderMapper {
 	private static baseMap(

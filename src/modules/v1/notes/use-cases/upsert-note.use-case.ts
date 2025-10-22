@@ -1,10 +1,10 @@
-import { NoteMapper } from "../mappers/note.mapper";
 import type { NoteDomainModel } from "../models/domain/note.domain.model";
 import type {
 	CreateNotePayload,
 	UpdateNotePayload,
 } from "../models/domain/upsert-note-payload";
 import type { NotesRepository } from "../repository";
+import { NoteMapper } from "../utils/mappers/note.mapper";
 
 type UpsertPayload = {
 	noteId?: string;

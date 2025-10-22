@@ -1,8 +1,8 @@
-import { NoteMapper } from "../../notes/mappers/note.mapper";
-import type { NoteDbModel } from "../../notes/models/db/note.db.model";
-import { SharedUserMapper } from "../../user/mappers/shared-user.mapper";
-import type { ResourceFolderDbModel } from "../models/db/resource-folder.db.model";
-import type { ResourceFolderDomainModel } from "../models/domain/resource-folter.domain.model";
+import type { NoteDbModel } from "../../../notes/models/db/note.db.model";
+import { NoteMapper } from "../../../notes/utils/mappers/note.mapper";
+import { SharedUserMapper } from "../../../user/utils/mappers/shared-user.mapper";
+import type { ResourceFolderDbModel } from "../../models/db/resource-folder.db.model";
+import type { ResourceFolderDomainModel } from "../../models/domain/resource-folter.domain.model";
 
 export class ResourceFolderMapper {
 	static map(

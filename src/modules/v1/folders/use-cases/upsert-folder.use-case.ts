@@ -1,10 +1,10 @@
-import { FolderMapper } from "../mappers/folder.mapper";
 import type { FolderDomainModel } from "../models/domain/folder.domain.model";
 import type {
 	CreateFolderPayload,
 	UpdateFolderPayload,
 } from "../models/domain/upsert-folder-payload";
 import type { FoldersRepository } from "../repository";
+import { FolderMapper } from "../utils/mappers/folder.mapper";
 
 type ExecutePayload = {
 	folderId?: string;
