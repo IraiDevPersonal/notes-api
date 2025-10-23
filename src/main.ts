@@ -1,11 +1,11 @@
-import { AppRouter } from "./app-router";
+import { AppRoutes } from "./app.routes";
 import { ENVS } from "./lib/config";
 import { Server } from "./server";
 
 (() => {
 	const server = new Server({
 		port: ENVS.PORT,
-		routes: AppRouter.routes,
+		routes: AppRoutes.routes,
 	});
 
 	server.start();

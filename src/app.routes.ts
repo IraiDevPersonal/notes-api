@@ -4,7 +4,7 @@ import { NotesRoutesV1 } from "./modules/v1/notes/presentation/routes";
 import { UserRoutesV1 } from "./modules/v1/user/presentation/routes";
 import { UtilitiesRoutesV1 } from "./modules/v1/utilities/presentation/routes";
 
-export class AppRouter {
+export class AppRoutes {
 	static get routes(): Router {
 		const router = Router();
 		const currentDate = new Date();

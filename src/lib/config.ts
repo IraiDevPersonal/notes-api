@@ -9,4 +9,6 @@ export const ENVS = {
 	DATABASE_URL: envVar.get("DATABASE_URL").required().asString(),
 	LOG_LEVEL: envVar.get("LOG_LEVEL").default("info").asString(),
 	GEMINI_API_KEY: envVar.get("GEMINI_API_KEY").required().asString(),
+	ALLOWED_ORIGINS: envVar.get("ALLOWED_ORIGINS").default("*").asArray(),
+	NODE_ENV: envVar.get("NODE_ENV").default("development").asString(),
 };
