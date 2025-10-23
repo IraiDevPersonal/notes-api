@@ -1,12 +1,12 @@
 import { NoteMapper } from "@/modules/v1/notes/utils/mappers/note.mapper";
 import { SharedUserMapper } from "@/modules/v1/user/utils/mappers/shared-user.mapper";
-import type { FolderDbModel } from "../../models/db/folder.db.model";
-import type { FolderDomainModel } from "../../models/domain/folder.domain.model";
+import type { FolderDbModel } from "../../data/models/folder-db.model";
+import type { FolderModel } from "../../domain/models/folder.model";
 
 export class FolderMapper {
 	private static baseMap(
 		raw: Omit<FolderDbModel, "children" | "notes">
-	): Omit<FolderDomainModel, "subfolders" | "notes"> {
+	): Omit<FolderModel, "subfolders" | "notes"> {
 		return {
 			id: raw.id,
 			name: raw.name,
@@ -21,7 +21,7 @@ export class FolderMapper {
 		};
 	}
 
-	static map(raw: FolderDbModel): FolderDomainModel {
+	static map(raw: FolderDbModel): FolderModel {
 		return {
 			...this.baseMap(raw),
 			notes: raw.notes.map(NoteMapper.map),

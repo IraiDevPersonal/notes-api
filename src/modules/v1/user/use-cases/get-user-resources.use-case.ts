@@ -4,8 +4,8 @@ import type { RootFolderDomainModel } from "@/modules/v1/folders/models/domain/r
 import type { NoteDbModel } from "@/modules/v1/notes/models/db/note.db.model";
 import type { NoteDomainModel } from "@/modules/v1/notes/models/domain/note.domain.model";
 import { NoteMapper } from "@/modules/v1/notes/utils/mappers/note.mapper";
-import type { ResourceFolderDbModel } from "../../folders/models/db/resource-folder.db.model";
-import { ResourceFolderMapper } from "../../folders/utils/mappers/resource-folder.mapper";
+import { ResourceFolderMapper } from "../../folders/application/mappers/resource-folder.mapper";
+import type { ResourceFolderDbModel } from "../../folders/data/models/resource-folder-db.model";
 import type { UserRepository } from "../repository";
 
 type Data = {

@@ -2,15 +2,15 @@ import type { Prisma } from "@prisma/client";
 import { DatabaseClient } from "@/lib/database-client";
 import { DatabaseErrorhandler } from "@/lib/errors/prisma-error-handler";
 import { removeUndefined } from "@/lib/utils";
-import type { FolderDbModel } from "./models/db/folder.db.model";
 import type {
-	CreateFolderPayload,
-	UpdateFolderPayload,
-} from "./models/domain/upsert-folder-payload";
-import { FOLDER_QUERY_SELECTOR } from "./utils/query-selectors/folder.query-selector";
+	CreateFolderModel,
+	UpdateFolderModel,
+} from "../domain/models/upsert-folder.model";
+import type { FolderDbModel } from "./models/folder-db.model";
+import { FOLDER_SELECTOR } from "./selectors/folder.selector";
 
-export class FoldersRepository extends DatabaseClient {
-	private readonly folderSelector = FOLDER_QUERY_SELECTOR;
+export class FolderRepository extends DatabaseClient {
+	private readonly folderSelector = FOLDER_SELECTOR;
 
 	deleteFolder = async (id: string): Promise<void> => {
 		try {
@@ -37,7 +37,7 @@ export class FoldersRepository extends DatabaseClient {
 
 	createFolder = async (
 		userId: string,
-		payload: CreateFolderPayload
+		payload: CreateFolderModel
 	): Promise<FolderDbModel> => {
 		try {
 			const parentId = payload.parentId || null;
@@ -98,7 +98,7 @@ export class FoldersRepository extends DatabaseClient {
 	updateFolder = async (
 		userId: string,
 		folderId: string,
-		payload: UpdateFolderPayload
+		payload: UpdateFolderModel
 	): Promise<FolderDbModel> => {
 		try {
 			return await this.db.folder.update({
