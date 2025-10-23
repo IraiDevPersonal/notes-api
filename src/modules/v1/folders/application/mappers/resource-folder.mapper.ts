@@ -1,6 +1,6 @@
-import type { NoteDbModel } from "@/modules/v1/notes/models/db/note.db.model";
-import { NoteMapper } from "@/modules/v1/notes/utils/mappers/note.mapper";
-import { SharedUserMapper } from "@/modules/v1/user/utils/mappers/shared-user.mapper";
+import { NoteMapper } from "@/modules/v1/notes/application/mappers/note.mapper";
+import type { NoteDbModel } from "@/modules/v1/notes/data/models/note-db.model";
+import { SharedUserMapper } from "@/modules/v1/user/application/mappers/shared-user.mapper";
 import type { ResourceFolderDbModel } from "../../data/models/resource-folder-db.model";
 import type { ResourceFolderModel } from "../../domain/models/resource-folter.model";
 

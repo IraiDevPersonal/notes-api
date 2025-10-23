@@ -1,5 +1,5 @@
-import { NoteMapper } from "@/modules/v1/notes/utils/mappers/note.mapper";
-import { SharedUserMapper } from "@/modules/v1/user/utils/mappers/shared-user.mapper";
+import { NoteMapper } from "@/modules/v1/notes/application/mappers/note.mapper";
+import { SharedUserMapper } from "@/modules/v1/user/application/mappers/shared-user.mapper";
 import type { FolderDbModel } from "../../data/models/folder-db.model";
 import type { FolderModel } from "../../domain/models/folder.model";
 

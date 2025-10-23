@@ -1,5 +1,5 @@
 import type { Prisma } from "@prisma/client";
-import { SHARED_USER_QUERY_SELECTOR } from "@/modules/v1/user/utils/query-selectors/shared-user.query-selector";
+import { SHARED_USER_SELECTOR } from "@/modules/v1/user/data/selectors/shared-user.selector";
 
 export const RESOURCE_FOLDER_SELECTOR = {
 	id: true,
@@ -10,14 +10,14 @@ export const RESOURCE_FOLDER_SELECTOR = {
 	createdAt: true,
 	description: true,
 	owner: {
-		select: SHARED_USER_QUERY_SELECTOR,
+		select: SHARED_USER_SELECTOR,
 	},
 	lastModifiedBy: {
-		select: SHARED_USER_QUERY_SELECTOR,
+		select: SHARED_USER_SELECTOR,
 	},
 	shareFolders: {
 		select: {
-			user: { select: SHARED_USER_QUERY_SELECTOR },
+			user: { select: SHARED_USER_SELECTOR },
 		},
 	},
 } satisfies Prisma.FolderSelect;

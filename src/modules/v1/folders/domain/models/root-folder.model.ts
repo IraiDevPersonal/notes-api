@@ -1,9 +1,9 @@
-import type { NoteDomainModel } from "@/modules/v1/notes/models/domain/note.domain.model";
+import type { NoteModel } from "@/modules/v1/notes/domain/models/note.model";
 import type { ResourceFolderModel } from "./resource-folter.model";
 
 export type RootFolderModel = {
 	id: string;
 	name: string;
-	notes: NoteDomainModel[];
+	notes: NoteModel[];
 	subfolders: ResourceFolderModel[];
 };

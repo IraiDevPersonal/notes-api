@@ -1,11 +1,11 @@
-import type { NoteDomainModel } from "@/modules/v1/notes/models/domain/note.domain.model";
-import type { SharedUserDomainModel } from "@/modules/v1/user/models/domain/shared-user.domain.model";
+import type { NoteModel } from "@/modules/v1/notes/domain/models/note.model";
+import type { SharedUserDomainModel } from "@/modules/v1/user/domain/models/shared-user.model";
 
 export type ResourceFolderModel = {
 	id: string;
 	name: string;
 	order: number;
-	notes: NoteDomainModel[];
+	notes: NoteModel[];
 	owner: SharedUserDomainModel;
 	sharedWith: SharedUserDomainModel[];
 	subfolders: ResourceFolderModel[];
