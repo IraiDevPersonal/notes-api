@@ -1,5 +1,5 @@
 import type { NoteModel } from "@/modules/v1/notes/domain/models/note.model";
-import type { SharedUserDomainModel } from "@/modules/v1/user/domain/models/shared-user.model";
+import type { SharedUserModel } from "@/modules/v1/user/domain/models/shared-user.model";
 
 export type FolderModel = {
 	id: string;
@@ -8,10 +8,10 @@ export type FolderModel = {
 	notes: NoteModel[];
 	createdAt: Date;
 	updatedAt: Date;
-	owner: SharedUserDomainModel;
+	owner: SharedUserModel;
 	parentId: string | null;
-	sharedWith: SharedUserDomainModel[];
+	sharedWith: SharedUserModel[];
 	description?: string | null;
-	modifiedBy: SharedUserDomainModel | null;
+	modifiedBy: SharedUserModel | null;
 	subfolders: Omit<FolderModel, "subfolders" | "notes">[];
 };

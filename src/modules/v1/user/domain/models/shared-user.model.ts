@@ -1,4 +1,4 @@
-export type SharedUserDomainModel = {
+export type SharedUserModel = {
 	id: string;
 	email: string;
 	userName: string;

@@ -1,8 +1,8 @@
 import type { SharedUserDbModel } from "../../data/models/shared-user-db.model";
-import type { SharedUserDomainModel } from "../../domain/models/shared-user.model";
+import type { SharedUserModel } from "../../domain/models/shared-user.model";
 
 export class SharedUserMapper {
-	static map = (raw: SharedUserDbModel): SharedUserDomainModel => {
+	static map = (raw: SharedUserDbModel): SharedUserModel => {
 		return {
 			id: raw.id,
 			email: raw.email,
@@ -11,7 +11,7 @@ export class SharedUserMapper {
 		};
 	};
 
-	static toArray = (list: SharedUserDbModel[]): SharedUserDomainModel[] => {
+	static toArray = (list: SharedUserDbModel[]): SharedUserModel[] => {
 		return list.map(this.map);
 	};
 }

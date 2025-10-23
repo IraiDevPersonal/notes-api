@@ -1,4 +1,4 @@
-import type { SharedUserDomainModel } from "../../../user/domain/models/shared-user.model";
+import type { SharedUserModel } from "@/modules/v1/user/domain/models/shared-user.model";
 
 export type NoteModel = {
 	id: string;
@@ -7,9 +7,9 @@ export type NoteModel = {
 	content: string;
 	createdAt: Date;
 	updatedAt: Date;
-	owner: SharedUserDomainModel;
+	owner: SharedUserModel;
 	comentsCounts: number;
 	folderId: string | null;
-	sharedWith: SharedUserDomainModel[];
-	modifiedBy: SharedUserDomainModel | null;
+	sharedWith: SharedUserModel[];
+	modifiedBy: SharedUserModel | null;
 };

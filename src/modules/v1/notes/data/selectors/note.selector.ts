@@ -1,5 +1,5 @@
 import type { Prisma } from "@prisma/client";
-import { SHARED_USER_SELECTOR } from "../../../user/data/selectors/shared-user.selector";
+import { SHARED_USER_SELECTOR } from "@/modules/v1/user/data/selectors/shared-user.selector";
 
 export const NOTE_SELECTOR = {
 	id: true,

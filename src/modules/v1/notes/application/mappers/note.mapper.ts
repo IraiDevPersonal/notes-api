@@ -1,4 +1,4 @@
-import { SharedUserMapper } from "../../../user/application/mappers/shared-user.mapper";
+import { SharedUserMapper } from "@/modules/v1/user/application/mappers/shared-user.mapper";
 import type { NoteDbModel } from "../../data/models/note-db.model";
 import type { NoteModel } from "../../domain/models/note.model";
 
