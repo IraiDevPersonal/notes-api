@@ -1,7 +1,7 @@
 import type { Prisma } from "@prisma/client";
 import { SHARED_USER_SELECTOR } from "../../../user/data/selectors/shared-user.selector";
 
-export const NOTE_QUERY_SELECTOR = {
+export const NOTE_SELECTOR = {
 	id: true,
 	title: true,
 	order: true,

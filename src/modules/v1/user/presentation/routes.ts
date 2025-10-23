@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { UserRepository } from "../data/repository";
+import { UserRepositoryImpl } from "../data/repository";
 import { UserController } from "./controller";
 
 export class UserRoutesV1 {
-	private static readonly repository = new UserRepository();
+	private static readonly repository = new UserRepositoryImpl();
 	private static readonly controller = new UserController(this.repository);
 
 	static get routes(): Router {

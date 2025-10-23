@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { ValidationMiddleware } from "@/lib/middlewares/validation.middleware";
 import { IdParamSchema } from "@/lib/schemas/shared";
-import { FolderRepository } from "../data/repository";
+import { FolderRepositoryImpl } from "../data/repository";
 import { FolderSharedUsersSchema } from "../domain/schemas/folder-shared-users.schema";
 import {
 	CreateFolderSchema,
@@ -12,7 +12,7 @@ import { FoldersController } from "./controller";
 const validateRequest = ValidationMiddleware.validateRequest;
 
 export class FoldersRoutesV1 {
-	private static readonly repository = new FolderRepository();
+	private static readonly repository = new FolderRepositoryImpl();
 	private static readonly controller = new FoldersController(this.repository);
 
 	static get routes(): Router {

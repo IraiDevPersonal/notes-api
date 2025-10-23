@@ -1,5 +1,5 @@
 import { HttpError } from "@/lib/errors/http-error";
-import type { NotesRepository } from "../../data/repository";
+import type { NotesRepository } from "../../domain/repository";
 import type { GetNoteByIdUseCase } from "./get-note-by-id.use-case";
 
 type ExecutePayload = {

@@ -4,7 +4,7 @@ import { DeleteFolderUseCase } from "../application/use-cases/delete-folder.use-
 import { GetFolderByIdUseCase } from "../application/use-cases/get-folder-by-id.use-case";
 import { SyncFolderSharedUsersUseCase } from "../application/use-cases/sync-folder-shared-users.use-case";
 import { UpsertFolderUseCase } from "../application/use-cases/upsert-folder.use-case";
-import type { FolderRepository } from "../data/repository";
+import type { FolderRepositoryImpl } from "../data/repository";
 import type { FolderSharedUsersModel } from "../domain/models/folder-shared-users.model";
 
 export class FoldersController {
@@ -13,7 +13,7 @@ export class FoldersController {
 	private readonly getFolderByIdUseCase: GetFolderByIdUseCase;
 	private readonly syncFolderSharedUsersUseCase: SyncFolderSharedUsersUseCase;
 
-	constructor(repository: FolderRepository) {
+	constructor(repository: FolderRepositoryImpl) {
 		this.upsertFolderUseCase = new UpsertFolderUseCase(repository);
 		this.deleteFolderUseCase = new DeleteFolderUseCase(repository);
 		this.getFolderByIdUseCase = new GetFolderByIdUseCase(repository);

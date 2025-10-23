@@ -1,9 +1,9 @@
-import type { FolderRepository } from "../../data/repository";
 import type { FolderModel } from "../../domain/models/folder.model";
 import type {
 	CreateFolderModel,
 	UpdateFolderModel,
 } from "../../domain/models/upsert-folder.model";
+import type { FoldersRepository } from "../../domain/repository";
 import { FolderMapper } from "../mappers/folder.mapper";
 
 type ExecutePayload = {
@@ -13,9 +13,9 @@ type ExecutePayload = {
 };
 
 export class UpsertFolderUseCase {
-	private readonly repository: FolderRepository;
+	private readonly repository: FoldersRepository;
 
-	constructor(repository: FolderRepository) {
+	constructor(repository: FoldersRepository) {
 		this.repository = repository;
 	}
 

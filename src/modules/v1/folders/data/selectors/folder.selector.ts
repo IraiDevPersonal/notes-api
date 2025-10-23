@@ -1,5 +1,5 @@
 import type { Prisma } from "@prisma/client";
-import { NOTE_QUERY_SELECTOR } from "@/modules/v1/notes/data/selectors/note.selector";
+import { NOTE_SELECTOR } from "@/modules/v1/notes/data/selectors/note.selector";
 import { SHARED_USER_SELECTOR } from "@/modules/v1/user/data/selectors/shared-user.selector";
 
 const BASE_FOLDER_SELECTOR = {
@@ -26,7 +26,7 @@ const BASE_FOLDER_SELECTOR = {
 export const FOLDER_SELECTOR = {
 	...BASE_FOLDER_SELECTOR,
 	notes: {
-		select: NOTE_QUERY_SELECTOR,
+		select: NOTE_SELECTOR,
 	},
 	children: {
 		select: BASE_FOLDER_SELECTOR,

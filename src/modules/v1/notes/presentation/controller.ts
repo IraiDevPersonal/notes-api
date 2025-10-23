@@ -4,7 +4,7 @@ import { DeleteNoteUseCase } from "../application/use-cases/delete-note.use-case
 import { GetNoteByIdUseCase } from "../application/use-cases/get-note-by-id.use-case";
 import { SyncNoteSharedUsersUseCase } from "../application/use-cases/sync-note-shared-users.use-case";
 import { UpsertNoteUseCase } from "../application/use-cases/upsert-note.use-case";
-import type { NotesRepository } from "../data/repository";
+import type { NotesRepositoryImpl } from "../data/repository";
 
 export class NotesController {
 	private readonly upsertNoteUseCase: UpsertNoteUseCase;
@@ -12,7 +12,7 @@ export class NotesController {
 	private readonly getNoteByIdUseCase: GetNoteByIdUseCase;
 	private readonly syncNoteSharedUsersUseCase: SyncNoteSharedUsersUseCase;
 
-	constructor(service: NotesRepository) {
+	constructor(service: NotesRepositoryImpl) {
 		this.upsertNoteUseCase = new UpsertNoteUseCase(service);
 		this.deleteNoteUseCase = new DeleteNoteUseCase(service);
 		this.getNoteByIdUseCase = new GetNoteByIdUseCase(service);

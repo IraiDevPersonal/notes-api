@@ -1,5 +1,5 @@
 import { HttpError } from "@/lib/errors/http-error";
-import type { FolderRepository } from "../../data/repository";
+import type { FoldersRepository } from "../../domain/repository";
 import type { GetFolderByIdUseCase } from "./get-folder-by-id.use-case";
 
 type ExecutePayload = {
@@ -9,10 +9,10 @@ type ExecutePayload = {
 };
 
 export class SyncFolderSharedUsersUseCase {
-	private readonly repository: FolderRepository;
+	private readonly repository: FoldersRepository;
 	private readonly getFolderByIdUseCase: GetFolderByIdUseCase;
 
-	constructor(repository: FolderRepository, getFolderByIdUseCase: GetFolderByIdUseCase) {
+	constructor(repository: FoldersRepository, getFolderByIdUseCase: GetFolderByIdUseCase) {
 		this.repository = repository;
 		this.getFolderByIdUseCase = getFolderByIdUseCase;
 	}

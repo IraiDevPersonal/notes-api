@@ -6,10 +6,11 @@ import type {
 	CreateNoteModel,
 	UpdateNoteModel,
 } from "../domain/models/upsert-note.model";
-import { NOTE_QUERY_SELECTOR } from "./selectors/note.selector";
+import type { NotesRepository } from "../domain/repository";
+import { NOTE_SELECTOR } from "./selectors/note.selector";
 
-export class NotesRepository extends DatabaseClient {
-	private readonly noteSelector = NOTE_QUERY_SELECTOR;
+export class NotesRepositoryImpl extends DatabaseClient implements NotesRepository {
+	private readonly noteSelector = NOTE_SELECTOR;
 
 	deleteNote = async (id: string): Promise<void> => {
 		try {

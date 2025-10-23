@@ -6,10 +6,11 @@ import type {
 	CreateFolderModel,
 	UpdateFolderModel,
 } from "../domain/models/upsert-folder.model";
+import type { FoldersRepository } from "../domain/repository";
 import type { FolderDbModel } from "./models/folder-db.model";
 import { FOLDER_SELECTOR } from "./selectors/folder.selector";
 
-export class FolderRepository extends DatabaseClient {
+export class FolderRepositoryImpl extends DatabaseClient implements FoldersRepository {
 	private readonly folderSelector = FOLDER_SELECTOR;
 
 	deleteFolder = async (id: string): Promise<void> => {

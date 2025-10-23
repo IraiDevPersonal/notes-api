@@ -1,4 +1,4 @@
-import type { NotesRepository } from "../../data/repository";
+import type { NotesRepository } from "../../domain/repository";
 
 export class DeleteNoteUseCase {
 	private readonly repository: NotesRepository;

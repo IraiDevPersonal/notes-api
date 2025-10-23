@@ -1,9 +1,9 @@
-import type { FolderRepository } from "../../data/repository";
+import type { FoldersRepository } from "../../domain/repository";
 
 export class DeleteFolderUseCase {
-	private readonly repository: FolderRepository;
+	private readonly repository: FoldersRepository;
 
-	constructor(repository: FolderRepository) {
+	constructor(repository: FoldersRepository) {
 		this.repository = repository;
 	}
 
