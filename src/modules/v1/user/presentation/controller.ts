@@ -1,13 +1,13 @@
-import type { Request, Response } from "express";
 import { ResponseController } from "@/lib/controllers/response.controller";
+import type { Request, Response } from "express";
 import { GetUserResourcesUseCase } from "../application/use-cases/get-user-resources.use-case";
-import type { UserRepositoryImpl } from "../data/repository";
+import { UserRepository } from "../domain/repository";
 
 export class UserController {
 	private readonly getUserResourcesUseCase: GetUserResourcesUseCase;
 
-	constructor(service: UserRepositoryImpl) {
-		this.getUserResourcesUseCase = new GetUserResourcesUseCase(service);
+	constructor(repository: UserRepository) {
+		this.getUserResourcesUseCase = new GetUserResourcesUseCase(repository);
 	}
 
 	getUserResources = async (req: Request, res: Response) => {

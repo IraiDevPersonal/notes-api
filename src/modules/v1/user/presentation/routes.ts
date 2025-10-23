@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { UserRepositoryImpl } from "../data/repository";
+import { UserRepositoryImpl } from "../data/repository.impl";
 import { UserController } from "./controller";
 
 export class UserRoutesV1 {
