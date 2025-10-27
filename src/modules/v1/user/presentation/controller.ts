@@ -1,7 +1,7 @@
-import { ResponseController } from "@/lib/controllers/response.controller";
 import type { Request, Response } from "express";
+import { ResponseController } from "@/lib/controllers/response.controller";
 import { GetUserResourcesUseCase } from "../application/use-cases/get-user-resources.use-case";
-import { UserRepository } from "../domain/repository";
+import type { UserRepository } from "../domain/repository";
 
 export class UserController {
 	private readonly getUserResourcesUseCase: GetUserResourcesUseCase;

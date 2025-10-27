@@ -4,9 +4,7 @@ import type { FolderDbModel } from "../../data/models/folder-db.model";
 import type { FolderModel } from "../../domain/models/folder.model";
 
 export class FolderMapper {
-	private static baseMap(
-		raw: Omit<FolderDbModel, "children" | "notes">
-	): Omit<FolderModel, "subfolders" | "notes"> {
+	static map(raw: FolderDbModel): FolderModel {
 		return {
 			id: raw.id,
 			name: raw.name,
@@ -15,17 +13,21 @@ export class FolderMapper {
 			createdAt: raw.createdAt,
 			updatedAt: raw.updatedAt,
 			description: raw.description,
-			owner: SharedUserMapper.map(raw.owner),
-			sharedWith: SharedUserMapper.toArray(raw.shareFolders.flatMap((f) => f.user)),
-			modifiedBy: raw.lastModifiedBy ? SharedUserMapper.map(raw.lastModifiedBy) : null,
-		};
-	}
-
-	static map(raw: FolderDbModel): FolderModel {
-		return {
-			...this.baseMap(raw),
+			commentsCount: raw._count.comments,
 			notes: raw.notes.map(NoteMapper.map),
-			subfolders: raw.children.map(this.baseMap),
+			owner: SharedUserMapper.map(raw.owner),
+			sharedWith: {
+				counts: raw._count.shareFolders,
+				users: SharedUserMapper.toArray(raw.shareFolders.flatMap((f) => f.user)),
+			},
+			modifiedBy: raw.lastModifiedBy ? SharedUserMapper.map(raw.lastModifiedBy) : null,
+			subfolders: raw.children.map((subFolder) => ({
+				id: subFolder.id,
+				name: subFolder.name,
+				order: subFolder.order,
+				createdAt: subFolder.createdAt,
+				updatedAt: subFolder.updatedAt,
+			})),
 		};
 	}
 }

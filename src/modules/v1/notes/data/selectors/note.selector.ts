@@ -18,11 +18,13 @@ export const NOTE_SELECTOR = {
 	_count: {
 		select: {
 			comments: true,
+			shareNotes: true,
 		},
 	},
 	shareNotes: {
 		select: {
 			user: { select: SHARED_USER_SELECTOR },
 		},
+		take: 3,
 	},
 } satisfies Prisma.NoteSelect;

@@ -1,11 +1,11 @@
-import { ResponseController } from "@/lib/controllers/response.controller";
 import type { Request, Response } from "express";
+import { ResponseController } from "@/lib/controllers/response.controller";
 import { DeleteFolderUseCase } from "../application/use-cases/delete-folder.use-case";
 import { GetFolderByIdUseCase } from "../application/use-cases/get-folder-by-id.use-case";
 import { SyncFolderSharedUsersUseCase } from "../application/use-cases/sync-folder-shared-users.use-case";
 import { UpsertFolderUseCase } from "../application/use-cases/upsert-folder.use-case";
 import type { FolderSharedUsersModel } from "../domain/models/folder-shared-users.model";
-import { FoldersRepository } from "../domain/repository";
+import type { FoldersRepository } from "../domain/repository";
 
 export class FoldersController {
 	private readonly upsertFolderUseCase: UpsertFolderUseCase;

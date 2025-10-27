@@ -10,6 +10,9 @@ export type NoteModel = {
 	owner: SharedUserModel;
 	comentsCounts: number;
 	folderId: string | null;
-	sharedWith: SharedUserModel[];
+	sharedWith: {
+		users: SharedUserModel[];
+		count: number;
+	};
 	modifiedBy: SharedUserModel | null;
 };

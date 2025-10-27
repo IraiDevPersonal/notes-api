@@ -1,10 +1,10 @@
-import { ResponseController } from "@/lib/controllers/response.controller";
 import type { Request, Response } from "express";
+import { ResponseController } from "@/lib/controllers/response.controller";
 import { DeleteNoteUseCase } from "../application/use-cases/delete-note.use-case";
 import { GetNoteByIdUseCase } from "../application/use-cases/get-note-by-id.use-case";
 import { SyncNoteSharedUsersUseCase } from "../application/use-cases/sync-note-shared-users.use-case";
 import { UpsertNoteUseCase } from "../application/use-cases/upsert-note.use-case";
-import { NotesRepository } from "../domain/repository";
+import type { NotesRepository } from "../domain/repository";
 
 export class NotesController {
 	private readonly upsertNoteUseCase: UpsertNoteUseCase;
