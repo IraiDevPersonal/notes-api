@@ -8,10 +8,14 @@ export type FolderModel = {
 	notes: NoteModel[];
 	createdAt: Date;
 	updatedAt: Date;
+	commentsCount: number;
 	owner: SharedUserModel;
 	parentId: string | null;
-	sharedWith: SharedUserModel[];
 	description?: string | null;
 	modifiedBy: SharedUserModel | null;
-	subfolders: Omit<FolderModel, "subfolders" | "notes">[];
+	sharedWith: {
+		counts: number;
+		users: SharedUserModel[];
+	};
+	subfolders: Pick<FolderModel, "id" | "name" | "order" | "createdAt" | "updatedAt">[];
 };

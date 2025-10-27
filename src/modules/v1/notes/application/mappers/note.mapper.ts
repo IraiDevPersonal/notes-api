@@ -14,7 +14,10 @@ export class NoteMapper {
 			createdAt: raw.createdAt,
 			comentsCounts: raw._count.comments,
 			owner: SharedUserMapper.map(raw.owner),
-			sharedWith: SharedUserMapper.toArray(raw.shareNotes.flatMap((n) => n.user)),
+			sharedWith: {
+				count: raw._count.shareNotes,
+				users: SharedUserMapper.toArray(raw.shareNotes.flatMap((n) => n.user)),
+			},
 			modifiedBy: raw.lastModifiedBy ? SharedUserMapper.map(raw.lastModifiedBy) : null,
 		};
 	};
