@@ -33,7 +33,7 @@ export class NotesController {
 			});
 			return responseController.json({ data: note }, 201);
 		} catch (error) {
-			responseController.errorHandler(error, {
+			responseController.error(error, {
 				source: "NotesController/createNote",
 				defaultMessage: "Failed to create note",
 			});
@@ -53,7 +53,7 @@ export class NotesController {
 			});
 			return responseController.json({ data: note }, 200);
 		} catch (error) {
-			responseController.errorHandler(error, {
+			responseController.error(error, {
 				source: "NotesController/updateNote",
 				defaultMessage: "Failed to update note",
 			});
@@ -68,7 +68,7 @@ export class NotesController {
 			await this.deleteNoteUseCase.execute(noteId);
 			return responseController.noContent();
 		} catch (error) {
-			responseController.errorHandler(error, {
+			responseController.error(error, {
 				source: "NotesController/deleteNote",
 				defaultMessage: "Failed to delete note",
 			});
@@ -83,7 +83,7 @@ export class NotesController {
 			const note = await this.getNoteByIdUseCase.execute(noteId);
 			return responseController.json({ data: note });
 		} catch (error) {
-			responseController.errorHandler(error, {
+			responseController.error(error, {
 				source: "NotesController/getNoteById",
 				defaultMessage: "Failed to get note by id",
 			});
@@ -104,7 +104,7 @@ export class NotesController {
 			});
 			return responseController.noContent();
 		} catch (error) {
-			responseController.errorHandler(error, {
+			responseController.error(error, {
 				source: "NotesController/syncNoteSharedUsers",
 				defaultMessage: "Failed to sync note shared users",
 			});

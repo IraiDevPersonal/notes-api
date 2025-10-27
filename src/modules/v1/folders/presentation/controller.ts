@@ -31,7 +31,7 @@ export class FoldersController {
 			const folder = await this.upsertFolderUseCase.execute({ userId, body: req.body });
 			responseController.json({ data: folder }, 201);
 		} catch (error) {
-			responseController.errorHandler(error, {
+			responseController.error(error, {
 				source: "FoldersController/createFolder",
 				defaultMessage: "Failed to create folder",
 			});
@@ -51,7 +51,7 @@ export class FoldersController {
 			});
 			responseController.json({ data: folder }, 200);
 		} catch (error) {
-			responseController.errorHandler(error, {
+			responseController.error(error, {
 				source: "FoldersController/updateFolder",
 				defaultMessage: "Failed to update folder",
 			});
@@ -66,7 +66,7 @@ export class FoldersController {
 			await this.deleteFolderUseCase.execute(folderId);
 			responseController.noContent();
 		} catch (error) {
-			responseController.errorHandler(error, {
+			responseController.error(error, {
 				source: "FoldersController/deleteFolder",
 				defaultMessage: "Failed to delete folder",
 			});
@@ -81,7 +81,7 @@ export class FoldersController {
 			const folder = await this.getFolderByIdUseCase.execute(folderId);
 			responseController.json({ data: folder });
 		} catch (error) {
-			responseController.errorHandler(error, {
+			responseController.error(error, {
 				source: "FoldersController/getFolderById",
 				defaultMessage: "Failed to get folder by id",
 			});
@@ -103,7 +103,7 @@ export class FoldersController {
 			});
 			responseController.noContent();
 		} catch (error) {
-			responseController.errorHandler(error, {
+			responseController.error(error, {
 				source: "FoldersController/syncFolderSharedUsers",
 				defaultMessage: "Failed to sync folder shared users",
 			});

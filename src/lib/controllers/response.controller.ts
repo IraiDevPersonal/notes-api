@@ -17,17 +17,13 @@ export class ResponseController {
 		this.response.status(204).json({});
 	}
 
-	error(message: string, statusCode: number) {
-		this.response.status(statusCode).json({ error: message });
-	}
-
-	errorHandler(error: unknown, options?: { source?: string; defaultMessage?: string }) {
+	error(error: unknown, options?: { source?: string; defaultMessage?: string }) {
 		const { message, statusCode } = HttpError.parseError(error, options?.defaultMessage);
 		logger.error({
 			source: options?.source,
 			message,
 			error,
 		});
-		this.error(message, statusCode);
+		this.response.status(statusCode).json({ error: message });
 	}
 }

@@ -18,7 +18,7 @@ export class UtilitiesController {
 			const metadata = await this.getMetadataByUrlUseCase.execute(url);
 			responseController.json({ data: metadata }, 200);
 		} catch (error) {
-			responseController.errorHandler(error, {
+			responseController.error(error, {
 				source: "UtilitiesController/getMetadataByUrl",
 				defaultMessage: "Failed to get metadata by URL",
 			});

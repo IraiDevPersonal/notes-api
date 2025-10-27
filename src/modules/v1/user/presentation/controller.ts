@@ -18,7 +18,7 @@ export class UserController {
 			const resources = await this.getUserResourcesUseCase.execute(userId);
 			responseController.json({ data: resources }, 200);
 		} catch (error) {
-			responseController.errorHandler(error, {
+			responseController.error(error, {
 				source: "UserController/getUserResources",
 				defaultMessage: "Failed to get user resources",
 			});
