@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import { ResponseController } from "@/lib/controllers/response.controller";
 import { GetUserResourcesUseCase } from "../application/use-cases/get-user-resources.use-case";
+import type { ResourceType } from "../data/models/resource-type.model";
 import type { UserRepository } from "../domain/repository";
 
 export class UserController {
@@ -12,10 +13,11 @@ export class UserController {
 
 	getUserResources = async (req: Request, res: Response) => {
 		const userId = req.params.id!;
+		const type = req.params.type! as ResourceType;
 		const responseController = new ResponseController(res);
 
 		try {
-			const resources = await this.getUserResourcesUseCase.execute(userId);
+			const resources = await this.getUserResourcesUseCase.execute(userId, type);
 			responseController.json({ data: resources }, 200);
 		} catch (error) {
 			responseController.error(error, {

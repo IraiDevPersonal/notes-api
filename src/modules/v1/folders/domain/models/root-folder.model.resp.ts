@@ -5,5 +5,5 @@ export type RootFolderModel = {
 	id: string;
 	name: string;
 	notes: NoteModel[];
-	folders: ResourceFolderModel[];
+	subfolders: ResourceFolderModel[];
 };

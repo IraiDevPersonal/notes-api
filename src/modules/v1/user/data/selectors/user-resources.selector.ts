@@ -23,3 +23,28 @@ export const USER_RESOURCES_SELECTOR = {
 		},
 	},
 } satisfies Prisma.UserSelect;
+
+export const OWN_USER_RESOURCES_SELECTOR = {
+	folders: {
+		select: RESOURCE_FOLDER_SELECTOR,
+	},
+	notes: {
+		select: NOTE_SELECTOR,
+		where: { deletedAt: null },
+	},
+} satisfies Prisma.UserSelect;
+
+export const SHARED_USER_RESOURCES_SELECTOR = {
+	shareFolders: {
+		select: {
+			permission: true,
+			folder: { select: RESOURCE_FOLDER_SELECTOR },
+		},
+	},
+	shareNotes: {
+		select: {
+			permission: true,
+			note: { select: NOTE_SELECTOR },
+		},
+	},
+} satisfies Prisma.UserSelect;
