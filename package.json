@@ -15,8 +15,8 @@
 		"check": "biome check src/",
 		"check:fix": "biome check --write src/",
 		"type-check": "tsc --noEmit",
-		"db-seed": "docker exec -i notes-postgres-db psql -U postgres -d notes-db < scripts\\init-db\\seed-data.sql",
-		"db-seed:users": "docker exec -i notes-postgres-db psql -U postgres -d notes-db < scripts\\init-db\\users-seed-data.sql"
+		"db-seed": "cat scripts/init-db/seed-data.sql | docker exec -i notes-postgres-db psql -U postgres -d notes-db",
+		"db-seed:users": "cat scripts/init-db/users-seed-data.sql | docker exec -i notes-postgres-db psql -U postgres -d notes-db"
 	},
 	"keywords": [],
 	"author": "",
