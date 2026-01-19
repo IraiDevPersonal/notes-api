@@ -20,7 +20,7 @@ export class ValidationMiddleware {
 				}
 
 				if (schemas.query) {
-					req.query = schemas.query.parse(req.query) as Request["query"];
+					schemas.query.parse(req.query);
 				}
 
 				next();

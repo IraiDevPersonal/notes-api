@@ -1,1 +1,1 @@
-export type ResourceType = "own" | "shared";
+export type ResourceType = "own" | "shared" | "fixed";

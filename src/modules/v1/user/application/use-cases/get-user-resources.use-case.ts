@@ -18,9 +18,33 @@ export class GetUserResourcesUseCase {
 		this.respository = respository;
 	}
 
-	execute = async (userId: string, type: ResourceType): Promise<Data> => {
-		if (type === "own") {
-			const result = await this.respository.getOwnUserResources(userId);
+	execute = async (userId: string, type?: ResourceType): Promise<Data> => {
+		switch (type) {
+			case "shared":
+				return await this.getSharedResources(userId)
+			case "own":
+				return await this.getOwnResources(userId)
+			case "fixed":
+				return this.getFixedResources(userId);
+			default:
+				return await this.getAllResources(userId)
+		}
+	};
+
+	private getAllResources = async (userId: string): Promise<Data> => {
+		const [ownResources, sharedResources] = await Promise.all([
+			this.getOwnResources(userId),
+			this.getSharedResources(userId)
+		])
+
+		const allNotes = ownResources.notes.concat(sharedResources.notes)
+		const allFolders = ownResources.folders.concat(sharedResources.folders)
+
+		return this.buildRootFolder("all-resources-id", allNotes, allFolders)
+	}
+
+	private getOwnResources = async (userId: string): Promise<Data> => {
+		const result = await this.respository.getOwnUserResources(userId);
 
 			if (!result) {
 				throw HttpError.notFound("User not found");
@@ -31,8 +55,9 @@ export class GetUserResourcesUseCase {
 				this.mappedNotes(result.notes),
 				this.mappedFolders(result.folders)
 			);
-		}
+	}
 
+	private getSharedResources = async (userId: string): Promise<Data> => {
 		const result = await this.respository.getSharedUserResources(userId);
 
 		if (!result) {
@@ -47,7 +72,12 @@ export class GetUserResourcesUseCase {
 			this.mappedNotes(flattenedShareNotes),
 			this.mappedFolders(flattenedShareFolders)
 		);
-	};
+	}
+
+	private getFixedResources = async (userId: string): Promise<Data> => {
+		// FIXME: trabajar en notas y carpetas fijadas
+		throw HttpError.badRequest("not implemented; userId: " + userId);
+	}
 
 	private buildRootFolder = (
 		folderId: string,

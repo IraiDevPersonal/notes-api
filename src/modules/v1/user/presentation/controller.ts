@@ -12,8 +12,8 @@ export class UserController {
 	}
 
 	getUserResources = async (req: Request, res: Response) => {
-		const userId = req.params.id!;
-		const type = req.params.type! as ResourceType;
+		const userId = req.params.id! as string;
+		const type = req.query.type as ResourceType | undefined;
 		const responseController = new ResponseController(res);
 
 		try {
