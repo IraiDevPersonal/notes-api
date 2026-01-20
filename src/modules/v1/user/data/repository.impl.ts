@@ -42,6 +42,8 @@ export class UserRepositoryImpl extends DatabaseClient implements UserRepository
 					OR: [
 						{ notes: { some: { isPinned: true } } },
 						{ folders: { some: { isPinned: true } } },
+						{ shareFolders: { some: { folder: { isPinned: true } } } },
+						{ shareNotes: { some: { note: { isPinned: true } } } },
 					],
 				},
 				select: {
@@ -53,6 +55,22 @@ export class UserRepositoryImpl extends DatabaseClient implements UserRepository
 					folders: {
 						...this.userResourcesSelector.folders,
 						where: { isPinned: true },
+					},
+					shareFolders: {
+						...this.userResourcesSelector.shareFolders,
+						where: {
+							folder: {
+								isPinned: true,
+							},
+						},
+					},
+					shareNotes: {
+						...this.userResourcesSelector.shareNotes,
+						where: {
+							note: {
+								isPinned: true,
+							},
+						},
 					},
 				},
 			});

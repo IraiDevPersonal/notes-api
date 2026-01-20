@@ -6,6 +6,7 @@ import type { RootFolderModel } from "@/modules/v1/folders/domain/models/root-fo
 import { NoteMapper } from "@/modules/v1/notes/application/mappers/note.mapper";
 import type { NoteDbModel } from "@/modules/v1/notes/data/models/note-db.model";
 import type { NoteModel } from "@/modules/v1/notes/domain/models/note.model";
+import type { SharedUserResourcesDbModel } from "../../data/models/user-resources-db.model";
 import type { ResoruceQueryModel } from "../../domain/models/resource-query.model";
 import type { UserRepository } from "../../domain/repository";
 
@@ -64,13 +65,12 @@ export class GetUserResourcesUseCase {
 			throw HttpError.notFound("User not found");
 		}
 
-		const flattenedShareFolders = result.shareFolders.flatMap((f) => f.folder);
-		const flattenedShareNotes = result.shareNotes.flatMap((n) => n.note);
+		const flattenedResources = this.flattedSharedResources(result);
 
 		return this.buildRootFolder(
 			"shared-folder-id",
-			this.mappedNotes(flattenedShareNotes),
-			this.mappedFolders(flattenedShareFolders)
+			this.mappedNotes(flattenedResources.notes),
+			this.mappedFolders(flattenedResources.folders)
 		);
 	};
 
@@ -81,10 +81,12 @@ export class GetUserResourcesUseCase {
 			throw HttpError.notFound("User not found");
 		}
 
+		const flattenedResources = this.flattedSharedResources(result);
+
 		return this.buildRootFolder(
 			"pinned-folder-id",
-			this.mappedNotes(result.notes),
-			this.mappedFolders(result.folders)
+			this.mappedNotes(result.notes.concat(flattenedResources.notes)),
+			this.mappedFolders(result.folders.concat(flattenedResources.folders))
 		);
 	};
 
@@ -107,5 +109,17 @@ export class GetUserResourcesUseCase {
 
 	private mappedNotes = (notes: NoteDbModel[]): NoteModel[] => {
 		return notes.map(NoteMapper.map);
+	};
+
+	private flattedSharedResources = (
+		resources: SharedUserResourcesDbModel
+	): { folders: ResourceFolderDbModel[]; notes: NoteDbModel[] } => {
+		const flattenedShareFolders = resources.shareFolders.flatMap((f) => f.folder);
+		const flattenedShareNotes = resources.shareNotes.flatMap((n) => n.note);
+
+		return {
+			folders: flattenedShareFolders,
+			notes: flattenedShareNotes,
+		};
 	};
 }

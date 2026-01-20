@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 import { ResponseController } from "@/lib/controllers/response.controller";
 import { GetUserResourcesUseCase } from "../application/use-cases/get-user-resources.use-case";
-import { GetUserTreeResourcesUseCase } from "../application/use-cases/get-user-resources.use-case.resp";
+import { GetUserTreeResourcesUseCase } from "../application/use-cases/get-user-tree-resources.use-case";
 import type { ResoruceQueryModel } from "../domain/models/resource-query.model";
 import type { UserRepository } from "../domain/repository";
 
