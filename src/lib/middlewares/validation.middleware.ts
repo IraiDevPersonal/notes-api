@@ -4,7 +4,7 @@ import { ResponseController } from "../controllers/response.controller";
 import { ZodErrorHandler } from "../errors/zod-error-handler";
 
 export class ValidationMiddleware {
-	static validateRequest = (schemas: {
+	validateRequest = (schemas: {
 		body?: z.ZodSchema;
 		params?: z.ZodSchema;
 		query?: z.ZodSchema;
@@ -38,3 +38,6 @@ export class ValidationMiddleware {
 		};
 	};
 }
+
+const validationMiddleware = new ValidationMiddleware();
+export const validateRequest = validationMiddleware.validateRequest;

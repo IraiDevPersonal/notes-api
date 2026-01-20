@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { ValidationMiddleware } from "@/lib/middlewares/validation.middleware";
+import { validateRequest } from "@/lib/middlewares/validation.middleware";
 import { IdParamSchema } from "@/lib/schemas/shared";
 import { FoldersRepositoryImpl } from "../data/repository.impl";
 import { FolderSharedUsersSchema } from "../domain/schemas/folder-shared-users.schema";
@@ -8,8 +8,6 @@ import {
 	UpdateFolderSchema,
 } from "../domain/schemas/upsert-folder.schema";
 import { FoldersController } from "./controller";
-
-const validateRequest = ValidationMiddleware.validateRequest;
 
 export class FoldersRoutesV1 {
 	private static readonly repository = new FoldersRepositoryImpl();

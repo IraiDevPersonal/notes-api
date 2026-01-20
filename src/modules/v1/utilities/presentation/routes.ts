@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { HttpClient } from "@/lib/http-client";
-import { ValidationMiddleware } from "@/lib/middlewares/validation.middleware";
+import {
+	validateRequest,
+} from "@/lib/middlewares/validation.middleware";
 import { MetadataQuerySchema } from "../domain/schemas/metadata-query.schema";
 import { UtilitiesController } from "./controller";
-
-const validateRequest = ValidationMiddleware.validateRequest;
 
 const httpClient = new HttpClient({
 	options: {

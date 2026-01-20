@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { ValidationMiddleware } from "@/lib/middlewares/validation.middleware";
+import {
+	validateRequest,
+} from "@/lib/middlewares/validation.middleware";
 import { UserRepositoryImpl } from "../data/repository.impl";
 import { ResourceQuerySchema } from "../domain/schemas/resource-query.schema";
 import { UserController } from "./controller";
-
-const validateRequest = ValidationMiddleware.validateRequest;
 
 export class UserRoutesV1 {
 	private static readonly repository = new UserRepositoryImpl();

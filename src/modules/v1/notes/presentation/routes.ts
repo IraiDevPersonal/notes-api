@@ -1,12 +1,12 @@
 import { Router } from "express";
-import { ValidationMiddleware } from "@/lib/middlewares/validation.middleware";
+import {
+	validateRequest,
+} from "@/lib/middlewares/validation.middleware";
 import { IdParamSchema } from "@/lib/schemas/shared";
 import { NotesRepositoryImpl } from "../data/repository.impl";
 import { NoteSharedUsersSchema } from "../domain/schemas/note-shared-users.schema";
 import { CreateNoteSchema, UpdateNoteSchema } from "../domain/schemas/upsert-note.schema";
 import { NotesController } from "./controller";
-
-const validateRequest = ValidationMiddleware.validateRequest;
 
 export class NotesRoutesV1 {
 	private static readonly repository = new NotesRepositoryImpl();

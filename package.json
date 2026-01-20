@@ -9,7 +9,7 @@
 		"build": "tsc --noEmit false",
 		"start": "node dist/main.js",
 		"lint": "biome lint src/",
-		"lint:fix": "biome lint --write src/",
+		"lint:fix": "biome lint --write --unsafe src/",
 		"format": "biome format src/",
 		"format:write": "biome format --write src/",
 		"check": "biome check src/",
