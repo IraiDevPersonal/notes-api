@@ -41,7 +41,7 @@ export class GetUserResourcesUseCase {
 		const allNotes = ownResources.notes.concat(sharedResources.notes);
 		const allFolders = ownResources.folders.concat(sharedResources.folders);
 
-		return this.buildRootFolder("all-resources-id", allNotes, allFolders);
+		return this.buildRootFolder("all", allNotes, allFolders);
 	};
 
 	private getOwnResources = async (userId: string): Promise<Data> => {
@@ -52,7 +52,7 @@ export class GetUserResourcesUseCase {
 		}
 
 		return this.buildRootFolder(
-			"own-folder-id",
+			"own",
 			this.mappedNotes(result.notes),
 			this.mappedFolders(result.folders)
 		);
@@ -65,10 +65,10 @@ export class GetUserResourcesUseCase {
 			throw HttpError.notFound("User not found");
 		}
 
-		const flattenedResources = this.flattedSharedResources(result);
+		const flattenedResources = this.flattenSharedResources(result);
 
 		return this.buildRootFolder(
-			"shared-folder-id",
+			"shared",
 			this.mappedNotes(flattenedResources.notes),
 			this.mappedFolders(flattenedResources.folders)
 		);
@@ -81,10 +81,10 @@ export class GetUserResourcesUseCase {
 			throw HttpError.notFound("User not found");
 		}
 
-		const flattenedResources = this.flattedSharedResources(result);
+		const flattenedResources = this.flattenSharedResources(result);
 
 		return this.buildRootFolder(
-			"pinned-folder-id",
+			"pinned",
 			this.mappedNotes(result.notes.concat(flattenedResources.notes)),
 			this.mappedFolders(result.folders.concat(flattenedResources.folders))
 		);
@@ -111,7 +111,7 @@ export class GetUserResourcesUseCase {
 		return notes.map(NoteMapper.map);
 	};
 
-	private flattedSharedResources = (
+	private flattenSharedResources = (
 		resources: SharedUserResourcesDbModel
 	): { folders: ResourceFolderDbModel[]; notes: NoteDbModel[] } => {
 		const flattenedShareFolders = resources.shareFolders.flatMap((f) => f.folder);
