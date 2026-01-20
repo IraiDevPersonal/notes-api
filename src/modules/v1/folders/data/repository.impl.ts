@@ -177,6 +177,17 @@ export class FoldersRepositoryImpl extends DatabaseClient implements FoldersRepo
 		}
 	};
 
+	toggleFolderPin = async (folderId: string, isPinned: boolean): Promise<void> => {
+		try {
+			await this.db.folder.update({
+				where: { id: folderId, deletedAt: null },
+				data: { isPinned },
+			});
+		} catch (error) {
+			throw DatabaseErrorhandler.toHttpError(error);
+		}
+	};
+
 	private getAllChildFolderIds = async (folderId: string): Promise<string[]> => {
 		const childFolders = await this.db.folder.findMany({
 			where: {

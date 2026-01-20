@@ -3,6 +3,7 @@ import { ResponseController } from "@/lib/controllers/response.controller";
 import { DeleteFolderUseCase } from "../application/use-cases/delete-folder.use-case";
 import { GetFolderByIdUseCase } from "../application/use-cases/get-folder-by-id.use-case";
 import { SyncFolderSharedUsersUseCase } from "../application/use-cases/sync-folder-shared-users.use-case";
+import { ToggleFolderPinUseCase } from "../application/use-cases/toggle-folder-pin.use-case";
 import { UpsertFolderUseCase } from "../application/use-cases/upsert-folder.use-case";
 import type { FolderSharedUsersModel } from "../domain/models/folder-shared-users.model";
 import type { FoldersRepository } from "../domain/repository";
@@ -12,12 +13,17 @@ export class FoldersController {
 	private readonly deleteFolderUseCase: DeleteFolderUseCase;
 	private readonly getFolderByIdUseCase: GetFolderByIdUseCase;
 	private readonly syncFolderSharedUsersUseCase: SyncFolderSharedUsersUseCase;
+	private readonly toggleFolderPinUseCase: ToggleFolderPinUseCase;
 
 	constructor(repository: FoldersRepository) {
 		this.upsertFolderUseCase = new UpsertFolderUseCase(repository);
 		this.deleteFolderUseCase = new DeleteFolderUseCase(repository);
 		this.getFolderByIdUseCase = new GetFolderByIdUseCase(repository);
 		this.syncFolderSharedUsersUseCase = new SyncFolderSharedUsersUseCase(
+			repository,
+			this.getFolderByIdUseCase
+		);
+		this.toggleFolderPinUseCase = new ToggleFolderPinUseCase(
 			repository,
 			this.getFolderByIdUseCase
 		);
@@ -39,7 +45,7 @@ export class FoldersController {
 	};
 
 	updateFolder = async (req: Request, res: Response) => {
-		const folderId = req.params.id!;
+		const folderId = req.params.id! as string;
 		const userId = "550e8400-e29b-41d4-a716-446655440000";
 		const responseController = new ResponseController(res);
 
@@ -59,7 +65,7 @@ export class FoldersController {
 	};
 
 	deleteFolder = async (req: Request, res: Response) => {
-		const folderId = req.params.id!;
+		const folderId = req.params.id! as string;
 		const responseController = new ResponseController(res);
 
 		try {
@@ -74,7 +80,7 @@ export class FoldersController {
 	};
 
 	getFolderById = async (req: Request, res: Response) => {
-		const folderId = req.params.id!;
+		const folderId = req.params.id! as string;
 		const responseController = new ResponseController(res);
 
 		try {
@@ -91,7 +97,7 @@ export class FoldersController {
 	syncFolderSharedUsers = async (req: Request, res: Response) => {
 		// const userId = "550e8400-e29b-41d4-a716-446655440001";
 		const userId = "550e8400-e29b-41d4-a716-446655440000";
-		const folderId = req.params.id!;
+		const folderId = req.params.id! as string;
 		const payload = req.body as FolderSharedUsersModel;
 		const responseController = new ResponseController(res);
 
@@ -106,6 +112,21 @@ export class FoldersController {
 			responseController.error(error, {
 				source: "FoldersController/syncFolderSharedUsers",
 				defaultMessage: "Failed to sync folder shared users",
+			});
+		}
+	};
+
+	toggleFolderPin = async (req: Request, res: Response) => {
+		const folderId = req.params.id! as string;
+		const responseController = new ResponseController(res);
+
+		try {
+			await this.toggleFolderPinUseCase.execute(folderId);
+			responseController.noContent();
+		} catch (error) {
+			responseController.error(error, {
+				source: "FoldersController/toggleFolderPin",
+				defaultMessage: "Failed to toggle folder pin",
 			});
 		}
 	};

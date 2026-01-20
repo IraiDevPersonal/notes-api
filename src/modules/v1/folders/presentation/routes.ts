@@ -38,10 +38,15 @@ export class FoldersRoutesV1 {
 			[validateRequest({ params: IdParamSchema })],
 			this.controller.deleteFolder
 		);
-		router.put(
+		router.patch(
 			"/folders/:id/share",
 			[validateRequest({ params: IdParamSchema, body: FolderSharedUsersSchema })],
 			this.controller.syncFolderSharedUsers
+		);
+		router.patch(
+			"/folders/:id/pin",
+			[validateRequest({ params: IdParamSchema })],
+			this.controller.toggleFolderPin
 		);
 
 		return router;

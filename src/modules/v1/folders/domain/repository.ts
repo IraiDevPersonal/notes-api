@@ -14,4 +14,5 @@ export abstract class FoldersRepository {
 	abstract getFolderById(folderId: string): Promise<FolderDbModel | null>;
 	abstract deleteFolder(folderId: string): Promise<void>;
 	abstract syncFolderSharedUsers(folderId: string, userIds: string[]): Promise<void>;
+	abstract toggleFolderPin(folderId: string, isPinned: boolean): Promise<void>;
 }
