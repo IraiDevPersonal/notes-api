@@ -10,6 +10,7 @@ export class ResourceFolderMapper {
 			id: folderRaw.id,
 			name: folderRaw.name,
 			order: folderRaw.order,
+			isPinned: folderRaw.isPinned,
 			owner: SharedUserMapper.map(folderRaw.owner),
 			sharedWith: SharedUserMapper.toArray(folderRaw.shareFolders.flatMap((f) => f.user)),
 		};

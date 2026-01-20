@@ -10,6 +10,7 @@ export class NoteMapper {
 			title: raw.title,
 			content: raw.content,
 			folderId: raw.folderId,
+			isPinned: raw.isPinned,
 			updatedAt: raw.updatedAt,
 			createdAt: raw.createdAt,
 			comentsCounts: raw._count.comments,

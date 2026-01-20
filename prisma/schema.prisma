@@ -45,6 +45,7 @@ model Folder {
   name        String
   description String?
   order       Int       @default(0)
+  isPinned    Boolean   @default(false) @map("is_pinned")
   createdAt   DateTime  @default(now()) @map("created_at")
   updatedAt   DateTime  @updatedAt @map("updated_at")
   deletedAt   DateTime? @map("deleted_at")
@@ -71,10 +72,11 @@ model Folder {
 }
 
 model Note {
-  id      String @id @default(uuid())
-  title   String
-  content String
-  order   Int    @default(0)
+  id       String  @id @default(uuid())
+  title    String
+  content  String
+  order    Int     @default(0)
+  isPinned Boolean @default(false) @map("is_pinned")
 
   // Relación con carpeta (opcional - puede estar suelta)
   folderId String? @map("folder_id")

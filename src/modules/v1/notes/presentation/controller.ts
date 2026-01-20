@@ -41,7 +41,7 @@ export class NotesController {
 	};
 
 	updateNote = async (req: Request, res: Response) => {
-		const noteId = req.params.id!;
+		const noteId = req.params.id! as string;
 		const userId = "550e8400-e29b-41d4-a716-446655440000";
 		const responseController = new ResponseController(res);
 
@@ -61,7 +61,7 @@ export class NotesController {
 	};
 
 	deleteNote = async (req: Request, res: Response) => {
-		const noteId = req.params.id!;
+		const noteId = req.params.id! as string;
 		const responseController = new ResponseController(res);
 
 		try {
@@ -76,7 +76,7 @@ export class NotesController {
 	};
 
 	getNoteById = async (req: Request, res: Response) => {
-		const noteId = req.params.id!;
+		const noteId = req.params.id! as string;
 		const responseController = new ResponseController(res);
 
 		try {
@@ -91,7 +91,7 @@ export class NotesController {
 	};
 
 	syncNoteSharedUsers = async (req: Request, res: Response) => {
-		const noteId = req.params.id!;
+		const noteId = req.params.id! as string;
 		// const userId = "550e8400-e29b-41d4-a716-446655440000";
 		const userId = "550e8400-e29b-41d4-a716-446655440000";
 		const responseController = new ResponseController(res);

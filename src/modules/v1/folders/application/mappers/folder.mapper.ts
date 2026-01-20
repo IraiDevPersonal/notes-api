@@ -9,6 +9,7 @@ export class FolderMapper {
 			id: raw.id,
 			name: raw.name,
 			order: raw.order,
+			isPinned: raw.isPinned,
 			parentId: raw.parentId,
 			createdAt: raw.createdAt,
 			updatedAt: raw.updatedAt,

@@ -9,6 +9,7 @@ export const RESOURCE_FOLDER_SELECTOR = {
 	updatedAt: true,
 	createdAt: true,
 	description: true,
+	isPinned: true,
 	owner: {
 		select: SHARED_USER_SELECTOR,
 	},

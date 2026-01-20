@@ -52,6 +52,7 @@ export class FoldersRepositoryImpl extends DatabaseClient implements FoldersRepo
 						description: payload.description || null,
 						parentId: null,
 						order: payload.order ?? 0,
+						isPinned: true, // FIXME: quitar esto, es solo para pruebas
 					},
 					select: this.folderSelector,
 				});
@@ -66,6 +67,7 @@ export class FoldersRepositoryImpl extends DatabaseClient implements FoldersRepo
 						description: payload.description || null,
 						parentId: parentId,
 						order: payload.order ?? 0,
+						isPinned: true,
 					},
 					select: this.folderSelector,
 				});

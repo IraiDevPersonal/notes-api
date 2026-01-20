@@ -47,6 +47,7 @@ export class NotesRepositoryImpl extends DatabaseClient implements NotesReposito
 						ownerId: userId,
 						title: payload.title,
 						content: payload.content,
+						isPinned: true, // FIXME: esto es solo para pruebas
 					},
 					select: this.noteSelector,
 				});
@@ -60,6 +61,7 @@ export class NotesRepositoryImpl extends DatabaseClient implements NotesReposito
 						ownerId: userId,
 						title: payload.title,
 						content: payload.content,
+						isPinned: true,
 					},
 					select: this.noteSelector,
 				});

@@ -13,12 +13,15 @@ export class UserRoutesV1 {
 	static get routes(): Router {
 		const router = Router();
 
-		// TODO: obtener id de usuario autenticado cuando se implemente autenticación
+		// FIXME: obtener id de usuario autenticado cuando se implemente autenticación
 		router.get(
 			"/user/:id/resources",
 			[validateRequest({ query: ResourceQuerySchema })],
 			this.controller.getUserResources
 		);
+
+		// TODO: Endpoint para prueba de profundidad de la estructura de carpetas y notas
+		router.get("/user/:id/resources/tree", this.controller.getUserTreeResources);
 
 		return router;
 	}

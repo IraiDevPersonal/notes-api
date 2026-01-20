@@ -9,6 +9,7 @@ export const NOTE_SELECTOR = {
 	folderId: true,
 	createdAt: true,
 	updatedAt: true,
+	isPinned: true,
 	owner: {
 		select: SHARED_USER_SELECTOR,
 	},

@@ -32,6 +32,39 @@ export class UserRepositoryImpl extends DatabaseClient implements UserRepository
 		}
 	};
 
+	getPinnedUserResources = async (
+		userId: string
+	): Promise<UserResourcesDbModel | null> => {
+		try {
+			return await this.db.user.findFirst({
+				where: {
+					id: userId,
+					OR: [
+						{ notes: { some: { isPinned: true } } },
+						{ folders: { some: { isPinned: true } } },
+					],
+				},
+				select: {
+					...this.userResourcesSelector,
+					notes: {
+						...this.userResourcesSelector.notes,
+						where: { isPinned: true },
+					},
+					folders: {
+						...this.userResourcesSelector.folders,
+						where: { isPinned: true },
+					},
+				},
+			});
+		} catch (error) {
+			const { message, statusCode } = HttpError.parseError(
+				error,
+				"Error to get user resources"
+			);
+			throw new HttpError(message, statusCode);
+		}
+	};
+
 	getSharedUserResources = async (
 		userId: string
 	): Promise<SharedUserResourcesDbModel | null> => {

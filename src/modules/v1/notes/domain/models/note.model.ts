@@ -7,6 +7,7 @@ export type NoteModel = {
 	content: string;
 	createdAt: Date;
 	updatedAt: Date;
+	isPinned: boolean;
 	owner: SharedUserModel;
 	comentsCounts: number;
 	folderId: string | null;

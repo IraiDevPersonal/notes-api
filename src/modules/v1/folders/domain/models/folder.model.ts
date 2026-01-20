@@ -5,9 +5,10 @@ export type FolderModel = {
 	id: string;
 	name: string;
 	order: number;
-	notes: NoteModel[];
 	createdAt: Date;
 	updatedAt: Date;
+	isPinned: boolean;
+	notes: NoteModel[];
 	commentsCount: number;
 	owner: SharedUserModel;
 	parentId: string | null;
