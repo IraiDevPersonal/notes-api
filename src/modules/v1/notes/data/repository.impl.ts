@@ -127,4 +127,15 @@ export class NotesRepositoryImpl extends DatabaseClient implements NotesReposito
 			throw DatabaseErrorhandler.toHttpError(error);
 		}
 	};
+
+	toggleNotePin = async (noteId: string, isPinned: boolean): Promise<void> => {
+		try {
+			await this.db.note.update({
+				where: { id: noteId, deletedAt: null },
+				data: { isPinned },
+			});
+		} catch (error) {
+			throw DatabaseErrorhandler.toHttpError(error);
+		}
+	};
 }

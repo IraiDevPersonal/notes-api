@@ -40,10 +40,15 @@ export class NotesRoutesV1 {
 			[validateRequest({ params: IdParamSchema })],
 			this.controller.deleteNote
 		);
-		router.put(
+		router.patch(
 			"/notes/:id/share",
 			[validateRequest({ params: IdParamSchema, body: NoteSharedUsersSchema })],
 			this.controller.syncNoteSharedUsers
+		);
+		router.patch(
+			"/notes/:id/pin",
+			[validateRequest({ params: IdParamSchema })],
+			this.controller.toggleNotePin
 		);
 
 		return router;

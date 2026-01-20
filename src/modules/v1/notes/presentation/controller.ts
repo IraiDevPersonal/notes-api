@@ -3,6 +3,7 @@ import { ResponseController } from "@/lib/controllers/response.controller";
 import { DeleteNoteUseCase } from "../application/use-cases/delete-note.use-case";
 import { GetNoteByIdUseCase } from "../application/use-cases/get-note-by-id.use-case";
 import { SyncNoteSharedUsersUseCase } from "../application/use-cases/sync-note-shared-users.use-case";
+import { ToggleNotePinUseCase } from "../application/use-cases/toggle-note-pin.use-case";
 import { UpsertNoteUseCase } from "../application/use-cases/upsert-note.use-case";
 import type { NotesRepository } from "../domain/repository";
 
@@ -11,12 +12,17 @@ export class NotesController {
 	private readonly deleteNoteUseCase: DeleteNoteUseCase;
 	private readonly getNoteByIdUseCase: GetNoteByIdUseCase;
 	private readonly syncNoteSharedUsersUseCase: SyncNoteSharedUsersUseCase;
+	private readonly toggleNotePinUseCase: ToggleNotePinUseCase;
 
 	constructor(repository: NotesRepository) {
 		this.upsertNoteUseCase = new UpsertNoteUseCase(repository);
 		this.deleteNoteUseCase = new DeleteNoteUseCase(repository);
 		this.getNoteByIdUseCase = new GetNoteByIdUseCase(repository);
 		this.syncNoteSharedUsersUseCase = new SyncNoteSharedUsersUseCase(
+			repository,
+			this.getNoteByIdUseCase
+		);
+		this.toggleNotePinUseCase = new ToggleNotePinUseCase(
 			repository,
 			this.getNoteByIdUseCase
 		);
@@ -107,6 +113,21 @@ export class NotesController {
 			responseController.error(error, {
 				source: "NotesController/syncNoteSharedUsers",
 				defaultMessage: "Failed to sync note shared users",
+			});
+		}
+	};
+
+	toggleNotePin = async (req: Request, res: Response) => {
+		const noteId = req.params.id! as string;
+		const responseController = new ResponseController(res);
+
+		try {
+			await this.toggleNotePinUseCase.execute(noteId);
+			return responseController.noContent();
+		} catch (error) {
+			responseController.error(error, {
+				source: "NotesController/toggleNotePin",
+				defaultMessage: "Failed to toggle note pin",
 			});
 		}
 	};

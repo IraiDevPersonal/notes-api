@@ -11,4 +11,5 @@ export abstract class NotesRepository {
 	abstract getNoteById(noteId: string): Promise<NoteDbModel | null>;
 	abstract deleteNote(noteId: string): Promise<void>;
 	abstract syncNoteSharedUsers(noteId: string, userIds: string[]): Promise<void>;
+	abstract toggleNotePin(noteId: string, isPinned: boolean): Promise<void>;
 }
