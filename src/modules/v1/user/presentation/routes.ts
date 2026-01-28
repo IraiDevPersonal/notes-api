@@ -1,7 +1,5 @@
 import { Router } from "express";
-import {
-	validateRequest,
-} from "@/lib/middlewares/validation.middleware";
+import { validateRequest } from "@/lib/middlewares/validation.middleware";
 import { UserRepositoryImpl } from "../data/repository.impl";
 import { ResourceQuerySchema } from "../domain/schemas/resource-query.schema";
 import { UserController } from "./controller";
@@ -19,6 +17,7 @@ export class UserRoutesV1 {
 			[validateRequest({ query: ResourceQuerySchema })],
 			this.controller.getUserResources
 		);
+		router.get("/me", this.controller.getMe);
 
 		// TODO: Endpoint para prueba de profundidad de la estructura de carpetas y notas
 		router.get("/user/:id/resources/tree", this.controller.getUserTreeResources);

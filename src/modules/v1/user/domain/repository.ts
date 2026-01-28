@@ -1,3 +1,4 @@
+import type { LoggedUserDbModel } from "../data/models/logged-user.model";
 import type {
 	OwnUserResourcesDbModel,
 	SharedUserResourcesDbModel,
@@ -9,4 +10,5 @@ export abstract class UserRepository {
 	abstract getSharedUserResources(id: string): Promise<SharedUserResourcesDbModel | null>;
 	abstract getOwnUserResources(id: string): Promise<OwnUserResourcesDbModel | null>;
 	abstract getPinnedUserResources(id: string): Promise<UserResourcesDbModel | null>;
+	abstract getLoggedUser(id: string): Promise<LoggedUserDbModel | null>;
 }
