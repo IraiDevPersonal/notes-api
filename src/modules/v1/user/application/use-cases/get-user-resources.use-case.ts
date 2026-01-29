@@ -19,23 +19,28 @@ export class GetUserResourcesUseCase {
 		this.respository = respository;
 	}
 
-	execute = async (userId: string, type?: ResoruceQueryModel["type"]): Promise<Data> => {
+	execute = async (userId: string, query: ResoruceQueryModel): Promise<Data> => {
+		const { type, ...restQuery } = query;
+
 		switch (type) {
 			case "shared":
-				return await this.getSharedResources(userId);
+				return await this.getSharedResources(userId, restQuery);
 			case "own":
-				return await this.getOwnResources(userId);
+				return await this.getOwnResources(userId, restQuery);
 			case "pinned":
-				return this.getPinnedResources(userId);
+				return this.getPinnedResources(userId, restQuery);
 			default:
-				return await this.getAllResources(userId);
+				return await this.getAllResources(userId, restQuery);
 		}
 	};
 
-	private getAllResources = async (userId: string): Promise<Data> => {
+	private getAllResources = async (
+		userId: string,
+		query: ResoruceQueryModel
+	): Promise<Data> => {
 		const [ownResources, sharedResources] = await Promise.all([
-			this.getOwnResources(userId),
-			this.getSharedResources(userId),
+			this.getOwnResources(userId, query),
+			this.getSharedResources(userId, query),
 		]);
 
 		const allNotes = ownResources.notes.concat(sharedResources.notes);
@@ -44,11 +49,14 @@ export class GetUserResourcesUseCase {
 		return this.buildRootFolder("all", allNotes, allFolders);
 	};
 
-	private getOwnResources = async (userId: string): Promise<Data> => {
-		const result = await this.respository.getOwnUserResources(userId);
+	private getOwnResources = async (
+		userId: string,
+		query: ResoruceQueryModel
+	): Promise<Data> => {
+		const result = await this.respository.getOwnUserResources(userId, query);
 
 		if (!result) {
-			throw HttpError.notFound("User not found");
+			throw HttpError.notFound("User not found from All Resources");
 		}
 
 		return this.buildRootFolder(
@@ -58,11 +66,14 @@ export class GetUserResourcesUseCase {
 		);
 	};
 
-	private getSharedResources = async (userId: string): Promise<Data> => {
-		const result = await this.respository.getSharedUserResources(userId);
+	private getSharedResources = async (
+		userId: string,
+		query: ResoruceQueryModel
+	): Promise<Data> => {
+		const result = await this.respository.getSharedUserResources(userId, query);
 
 		if (!result) {
-			throw HttpError.notFound("User not found");
+			throw HttpError.notFound("User not found from Shared Resources");
 		}
 
 		const flattenedResources = this.flattenSharedResources(result);
@@ -74,11 +85,14 @@ export class GetUserResourcesUseCase {
 		);
 	};
 
-	private getPinnedResources = async (userId: string): Promise<Data> => {
-		const result = await this.respository.getPinnedUserResources(userId);
+	private getPinnedResources = async (
+		userId: string,
+		query: ResoruceQueryModel
+	): Promise<Data> => {
+		const result = await this.respository.getPinnedUserResources(userId, query);
 
 		if (!result) {
-			throw HttpError.notFound("User not found");
+			throw HttpError.notFound("User not found from Pinned Resources");
 		}
 
 		const flattenedResources = this.flattenSharedResources(result);

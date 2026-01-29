@@ -23,7 +23,7 @@ export class UserController {
 		const responseController = new ResponseController(res);
 
 		try {
-			const resources = await this.getUserResourcesUseCase.execute(userId, query.type);
+			const resources = await this.getUserResourcesUseCase.execute(userId, query);
 			responseController.json({ data: resources }, 200);
 		} catch (error) {
 			responseController.error(error, {

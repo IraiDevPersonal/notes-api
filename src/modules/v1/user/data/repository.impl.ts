@@ -1,5 +1,6 @@
 import { DatabaseClient } from "@/lib/database-client";
 import { HttpError } from "@/lib/errors/http-error";
+import type { ResoruceQueryModel } from "../domain/models/resource-query.model";
 import type { UserRepository } from "../domain/repository";
 import type { LoggedUserDbModel } from "./models/logged-user.model";
 import type {
@@ -38,11 +39,14 @@ export class UserRepositoryImpl extends DatabaseClient implements UserRepository
 		}
 	};
 
-	getUserResources = async (userId: string): Promise<UserResourcesDbModel | null> => {
+	getUserResources = async (
+		userId: string,
+		query?: ResoruceQueryModel
+	): Promise<UserResourcesDbModel | null> => {
 		try {
 			return await this.db.user.findUnique({
 				where: { id: userId },
-				select: this.userResourcesSelector,
+				select: this.userResourcesSelector(query),
 			});
 		} catch (error) {
 			const { message, statusCode } = HttpError.parseError(
@@ -54,7 +58,8 @@ export class UserRepositoryImpl extends DatabaseClient implements UserRepository
 	};
 
 	getPinnedUserResources = async (
-		userId: string
+		userId: string,
+		query?: ResoruceQueryModel
 	): Promise<PinnedUserResourcesDbModel | null> => {
 		try {
 			return await this.db.user.findUnique({
@@ -67,7 +72,7 @@ export class UserRepositoryImpl extends DatabaseClient implements UserRepository
 					// 	{ shareNotes: { some: { note: { isPinned: true, deletedAt: null } } } },
 					// ],
 				},
-				select: this.userPinnedResourcesSelector,
+				select: this.userPinnedResourcesSelector(query),
 			});
 		} catch (error) {
 			const { message, statusCode } = HttpError.parseError(
@@ -79,12 +84,13 @@ export class UserRepositoryImpl extends DatabaseClient implements UserRepository
 	};
 
 	getSharedUserResources = async (
-		userId: string
+		userId: string,
+		query?: ResoruceQueryModel
 	): Promise<SharedUserResourcesDbModel | null> => {
 		try {
 			return await this.db.user.findUnique({
 				where: { id: userId },
-				select: this.sharedUserResourcesSelector,
+				select: this.sharedUserResourcesSelector(query),
 			});
 		} catch (error) {
 			const { message, statusCode } = HttpError.parseError(
@@ -96,12 +102,13 @@ export class UserRepositoryImpl extends DatabaseClient implements UserRepository
 	};
 
 	getOwnUserResources = async (
-		userId: string
+		userId: string,
+		query?: ResoruceQueryModel
 	): Promise<OwnUserResourcesDbModel | null> => {
 		try {
 			return await this.db.user.findUnique({
 				where: { id: userId },
-				select: this.ownUserResourcesSelector,
+				select: this.ownUserResourcesSelector(query),
 			});
 		} catch (error) {
 			const { message, statusCode } = HttpError.parseError(
